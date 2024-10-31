@@ -9,141 +9,54 @@
     android:background="#FFFFFF"
     tools:context=".SettingsActivity">
 
-    <LinearLayout
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:titleTextColor="@color/dark_gray"
+        app:title="@string/settings"
+        app:navigationIcon="@drawable/arrowback"/>
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:gravity="center_vertical">
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/edge"
+        android:paddingVertical="20dp"
+        android:text="@string/dark_theme"
+        android:textColor="@color/black"
+        app:thumbTint="@color/light_gray"
+        app:trackTint="#E6E8EB"
+        android:textSize="@dimen/settings_text_size" />
 
-        <ImageView
-            android:id="@+id/settings_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/arrowback"
-            android:layout_marginLeft="@dimen/edge"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/settings"
-            android:textColor="@color/dark_gray"
-            android:textSize="@dimen/main_text_size"
-            android:layout_marginLeft="24dp"/>
-
-    </LinearLayout>
-
-    <LinearLayout
+    <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
-        android:layout_height="61dp"
-        android:gravity="center_vertical">
+        android:layout_height="wrap_content"
+        android:drawableEnd="@drawable/share"
+        android:paddingHorizontal="@dimen/edge"
+        android:paddingVertical="20dp"
+        android:text="@string/share"
+        android:textColor="@color/black"
+        android:textSize="@dimen/settings_text_size" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/dark_theme"
-            android:textColor="@color/black"
-            android:textSize="@dimen/settings_text_size"
-            android:layout_marginLeft="18dp"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:layout_weight="1"/>
-
-        <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="56dp"
-            android:minHeight="48dp"/>
-
-    </LinearLayout>
-
-    <LinearLayout
+    <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
-        android:layout_height="61dp"
-        android:gravity="center_vertical">
+        android:layout_height="wrap_content"
+        android:drawableEnd="@drawable/support"
+        android:paddingHorizontal="@dimen/edge"
+        android:paddingVertical="20dp"
+        android:text="@string/support"
+        android:textColor="@color/black"
+        android:textSize="@dimen/settings_text_size" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/share"
-            android:textColor="@color/black"
-            android:textSize="@dimen/settings_text_size"
-            android:layout_marginLeft="16dp"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:layout_weight="1"/>
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:scaleType="center"
-            app:tint="@color/light_gray"
-            android:src="@drawable/share"
-            android:layout_marginRight="12dp"/>
-
-    </LinearLayout>
-
-    <LinearLayout
+    <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
-        android:layout_height="61dp"
-        android:gravity="center_vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/support"
-            android:textColor="@color/black"
-            android:textSize="@dimen/settings_text_size"
-            android:layout_marginLeft="16dp"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:layout_weight="1"/>
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:scaleType="center"
-            app:tint="@color/light_gray"
-            android:src="@drawable/support"
-            android:layout_marginRight="12dp"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="61dp"
-        android:gravity="center_vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/user"
-            android:textColor="@color/black"
-            android:textSize="@dimen/settings_text_size"
-            android:layout_marginLeft="16dp"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:layout_weight="1"/>
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:scaleType="center"
-            app:tint="@color/light_gray"
-            android:src="@drawable/arrowforward"
-            android:layout_marginRight="12dp"/>
-
-    </LinearLayout>
-
+        android:layout_height="wrap_content"
+        android:drawableEnd="@drawable/arrowforward"
+        android:paddingHorizontal="@dimen/edge"
+        android:paddingVertical="20dp"
+        android:text="@string/user"
+        android:textColor="@color/black"
+        android:textSize="@dimen/settings_text_size" />
 
 </LinearLayout>

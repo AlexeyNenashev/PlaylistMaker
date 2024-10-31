@@ -19,8 +19,8 @@ class SettingsActivity : AppCompatActivity() {
             insets
         }
 
-        val buttonBack = findViewById<ImageView>(R.id.settings_back)
-        buttonBack.setOnClickListener {
+        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        toolbar.setNavigationOnClickListener {
             val displayIntent = Intent(this, MainActivity::class.java)
             startActivity(displayIntent)
         }
