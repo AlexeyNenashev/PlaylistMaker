@@ -25,8 +25,8 @@
         android:paddingVertical="20dp"
         android:text="@string/dark_theme"
         android:textColor="@color/black"
-        app:thumbTint="@color/light_gray"
-        app:trackTint="#E6E8EB"
+        app:thumbTint="@color/switch_thumb_color"
+        app:trackTint="@color/switch_track_color"
         android:textSize="@dimen/settings_text_size" />
 
     <com.google.android.material.textview.MaterialTextView
