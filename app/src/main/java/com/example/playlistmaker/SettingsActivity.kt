@@ -1,8 +1,11 @@
 package com.example.playlistmaker
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -23,6 +26,32 @@ class SettingsActivity : AppCompatActivity() {
         toolbar.setNavigationOnClickListener {
             val displayIntent = Intent(this, MainActivity::class.java)
             startActivity(displayIntent)
+        }
+
+        val shareIcon = findViewById<com.google.android.material.textview.MaterialTextView>(R.id.share)
+        shareIcon.setOnClickListener {
+            val intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.linkToCourse))
+                type = "text/plain"
+            }
+            startActivity(intent)
+        }
+
+        val supportIcon = findViewById<com.google.android.material.textview.MaterialTextView>(R.id.support)
+        supportIcon.setOnClickListener {
+            val intent = Intent(Intent.ACTION_SENDTO)
+            intent.data = Uri.parse("mailto:")
+            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.myEmail)))
+            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.emailSubject))
+            intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.emailText))
+            startActivity(intent)
+        }
+
+        val userIcon = findViewById<com.google.android.material.textview.MaterialTextView>(R.id.user)
+        userIcon.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.practicumOffer)))
+            startActivity(intent)
         }
 
     }

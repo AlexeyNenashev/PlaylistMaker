@@ -19,22 +19,26 @@
         app:navigationIcon="@drawable/arrowback"/>
 
     <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/night_theme"
         android:text="@string/dark_theme"
         app:thumbTint="@color/switch_thumb_color"
         app:trackTint="@color/switch_track_color"
         style="@style/settingsItem" />
 
     <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/share"
         android:drawableEnd="@drawable/share"
         android:text="@string/share"
         style="@style/settingsItem" />
 
     <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/support"
         android:drawableEnd="@drawable/support"
         android:text="@string/support"
         style="@style/settingsItem" />
 
     <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/user"
         android:drawableEnd="@drawable/arrowforward"
         android:text="@string/user"
         style="@style/settingsItem" />
