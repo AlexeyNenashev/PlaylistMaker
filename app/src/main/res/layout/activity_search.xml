@@ -1,17 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/search"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?attr/colorPrimary"
     tools:context=".SearchActivity">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/search"
-        android:textSize="22sp" />
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ys_display_medium"
+        app:titleTextColor="?attr/colorOnSecondary"
+        app:title="@string/search"
+        app:navigationIcon="@drawable/arrowback"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="8dp"
+        android:background="@drawable/search_edittext_shape">
+        <EditText
+            android:id="@+id/inputEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="12dp"
+            android:drawableLeft="@drawable/search_icon"
+            android:drawablePadding="4dp"
+            android:maxLines="1"
+            android:inputType="text"
+            android:hint="@string/search"
+            android:textSize="@dimen/settings_text_size"
+            android:fontFamily="@font/ys_display_regular"
+            android:textColor="@color/dark_gray"
+            android:textColorHint="?attr/colorTertiary"/>
+        <ImageView
+            android:id="@+id/clearIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:layout_gravity="center_vertical|right"
+            android:src="@drawable/x"
+            android:visibility="gone"/>
+    </FrameLayout>
+
+</LinearLayout>
