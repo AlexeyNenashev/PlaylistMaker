@@ -15,6 +15,9 @@ import androidx.core.view.WindowInsetsCompat
 import android.view.inputmethod.InputMethodManager
 
 class SearchActivity : AppCompatActivity() {
+
+    private var searchValue = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -47,6 +50,7 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.visibility = clearButtonVisibility(s)
+                searchValue = s.toString()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -57,12 +61,29 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(SEARCH_VALUE, searchValue)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        // Вторым параметром мы передаём значение по умолчанию
+        searchValue = savedInstanceState.getString(SEARCH_VALUE, "")
+        val inputEditText = findViewById<EditText>(R.id.inputEditText)
+        inputEditText.setText(searchValue)
+    }
+
     private fun clearButtonVisibility(s: CharSequence?): Int {
         return if (s.isNullOrEmpty()) {
             View.GONE
         } else {
             View.VISIBLE
         }
+    }
+
+    companion object {
+        const val SEARCH_VALUE = "SEARCH_VALUE"
     }
 
 }
