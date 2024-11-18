@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.view.inputmethod.InputMethodManager
+import androidx.core.widget.doOnTextChanged
 
 class SearchActivity : AppCompatActivity() {
 
@@ -30,8 +31,7 @@ class SearchActivity : AppCompatActivity() {
 
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
         toolbar.setNavigationOnClickListener {
-            val displayIntent = Intent(this, MainActivity::class.java)
-            startActivity(displayIntent)
+            finish()
         }
 
         val inputEditText = findViewById<EditText>(R.id.inputEditText)
@@ -43,21 +43,10 @@ class SearchActivity : AppCompatActivity() {
             inputMethodManager?.hideSoftInputFromWindow(clearButton.windowToken, 0)
         }
 
-        val simpleTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // empty
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                clearButton.visibility = clearButtonVisibility(s)
-                searchValue = s.toString()
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                // empty
-            }
+        inputEditText.doOnTextChanged { s, start, before, count ->
+            clearButton.visibility = clearButtonVisibility(s)
+            searchValue = s.toString()
         }
-        inputEditText.addTextChangedListener(simpleTextWatcher)
 
     }
 

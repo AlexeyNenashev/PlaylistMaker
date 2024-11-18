@@ -24,8 +24,7 @@ class SettingsActivity : AppCompatActivity() {
 
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
         toolbar.setNavigationOnClickListener {
-            val displayIntent = Intent(this, MainActivity::class.java)
-            startActivity(displayIntent)
+            finish()
         }
 
         val shareIcon = findViewById<com.google.android.material.textview.MaterialTextView>(R.id.share)
@@ -40,11 +39,12 @@ class SettingsActivity : AppCompatActivity() {
 
         val supportIcon = findViewById<com.google.android.material.textview.MaterialTextView>(R.id.support)
         supportIcon.setOnClickListener {
-            val intent = Intent(Intent.ACTION_SENDTO)
-            intent.data = Uri.parse("mailto:")
-            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.myEmail)))
-            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.emailSubject))
-            intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.emailText))
+            val intent = Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:")
+                putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.myEmail)))
+                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.emailSubject))
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.emailText))
+            }
             startActivity(intent)
         }
 

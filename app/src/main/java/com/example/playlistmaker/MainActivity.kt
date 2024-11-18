@@ -20,13 +20,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         val button1 = findViewById<Button>(R.id.button_search)
-        //val imageClickListener1: View.OnClickListener = object : View.OnClickListener {
-        //override fun onClick(v: View?) {
-        //Toast.makeText(this@MainActivity, "Нажали кнопку Поиск", Toast.LENGTH_SHORT).show()
-        //}
-        //}
-        //button1.setOnClickListener(imageClickListener1)
         button1.setOnClickListener {
+            //Toast.makeText(this@MainActivity, "Нажали кнопку Поиск", Toast.LENGTH_SHORT).show()
             val displayIntent = Intent(this, SearchActivity::class.java)
             startActivity(displayIntent)
         }

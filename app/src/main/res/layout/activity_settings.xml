@@ -20,6 +20,8 @@
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/night_theme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/dark_theme"
         app:thumbTint="@color/switch_thumb_color"
         app:trackTint="@color/switch_track_color"
@@ -27,18 +29,24 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/share"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:drawableEnd="@drawable/share"
         android:text="@string/share"
         style="@style/settingsItem" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/support"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:drawableEnd="@drawable/support"
         android:text="@string/support"
         style="@style/settingsItem" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:drawableEnd="@drawable/arrowforward"
         android:text="@string/user"
         style="@style/settingsItem" />
