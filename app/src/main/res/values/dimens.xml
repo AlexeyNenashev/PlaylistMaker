@@ -3,4 +3,8 @@
     <dimen name="edge">16dp</dimen>
     <dimen name="main_text_size">22sp</dimen>
     <dimen name="settings_text_size">16sp</dimen>
+    <dimen name="search_track_text_size">16sp</dimen>
+    <dimen name="search_author_text_size">11sp</dimen>
+    <dimen name="search_picture_size">45dp</dimen>
+    <dimen name="search_arrow_size">24dp</dimen>
 </resources>

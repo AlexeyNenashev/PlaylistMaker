@@ -49,9 +49,6 @@ class SearchActivity : AppCompatActivity() {
             searchValue = s.toString()
         }
 
-
-
-
         val trackAdapter = TrackAdapter(
             listOf(
                 Track(
@@ -89,14 +86,6 @@ class SearchActivity : AppCompatActivity() {
 
         val rvTrack = findViewById<RecyclerView>(R.id.rvTrack)
         rvTrack.adapter = trackAdapter
-
-
-
-
-
-
-
-
 
     }
 
