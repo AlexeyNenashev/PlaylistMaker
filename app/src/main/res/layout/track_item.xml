@@ -31,7 +31,7 @@
             android:textColor="?attr/colorOnPrimary"
             android:ellipsize="end"
             android:maxLines="1"
-            tools:text="@string/search_title"/>
+            tools:text="Название"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
                 android:textColor="?attr/colorPrimaryVariant"
                 android:ellipsize="end"
                 android:maxLines="1"
-                tools:text="@string/search_author"/>
+                tools:text="Автор"/>
 
             <ImageView
                 android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
                 android:fontFamily="@font/ys_display_regular"
                 android:textSize="@dimen/search_author_text_size"
                 android:textColor="?attr/colorPrimaryVariant"
-                tools:text="@string/search_time"/>
+                tools:text="5:00"/>
 
         </LinearLayout>
 
