@@ -8,6 +8,7 @@
         <item name="colorPrimaryVariant">@color/light_gray</item>
         <item name="colorSecondary">@color/blue</item>
         <item name="colorOnSecondary">@color/dark_gray</item>
+        <item name="colorOnTertiary">@color/white</item>
         <item name="colorTertiary">@color/light_gray</item>
         <item name="colorSecondaryVariant">@color/very_light_gray</item>
     </style>
