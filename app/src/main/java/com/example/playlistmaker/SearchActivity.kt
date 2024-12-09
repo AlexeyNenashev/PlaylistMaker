@@ -29,7 +29,6 @@ class SearchActivity : AppCompatActivity() {
     private val trackAdapter = TrackAdapter(tracks)
     private var searchValue = ""
     private var messageShown = false
-
     private val iTunesBaseUrl = "https://itunes.apple.com"
 
     private val retrofit = Retrofit.Builder()
@@ -84,10 +83,7 @@ class SearchActivity : AppCompatActivity() {
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 makeSearch()
-                Log.d("TestLogTag", searchValue)
-                //true
             }
-            //false
             actionId == EditorInfo.IME_ACTION_DONE
         }
 
@@ -116,31 +112,21 @@ class SearchActivity : AppCompatActivity() {
                     if (response.code() == 200) {
                         tracks.clear()
                         if (response.body()?.results?.isNotEmpty() == true) {
-                            Log.d("TestLogTag", "$searchValue: something found")
                             tracks.addAll(response.body()?.results ?: emptyList<Track>())
-                            Log.d("TestLogTag", "$searchValue: ${tracks.size} found")
                         }
                         trackAdapter.notifyDataSetChanged()
                         if (tracks.isEmpty()) {
                             showOrHideMessage(Msg.NOTHING_FOUND)
-                            //showMessage(getString(R.string.nothing_found), "")
-                            Log.d("TestLogTag", "$searchValue: nothing found")
                         } else {
                             showOrHideMessage(Msg.HIDE)
-                            //showMessage("", "")
-                            Log.d("TestLogTag", "$searchValue: ok")
                         }
                     } else {
                         showOrHideMessage(Msg.SOMETHING_WRONG)
-                        //showMessage(getString(R.string.something_went_wrong), response.code().toString())
-                        Log.d("TestLogTag", "$searchValue: something went wrong, ${response.code()}")
                     }
                 }
 
                 override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
                     showOrHideMessage(Msg.SOMETHING_WRONG)
-                    //showMessage(getString(R.string.something_went_wrong), t.message.toString())
-                    Log.d("TestLogTag", "$searchValue: something went wrong, ${t.message}")
                 }
 
             })
