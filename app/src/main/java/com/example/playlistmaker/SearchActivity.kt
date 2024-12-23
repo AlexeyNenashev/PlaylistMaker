@@ -20,8 +20,6 @@ import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
 
@@ -29,14 +27,7 @@ class SearchActivity : AppCompatActivity() {
     private val trackAdapter = TrackAdapter(tracks)
     private var searchValue = ""
     private var messageShown = false
-    private val iTunesBaseUrl = "https://itunes.apple.com"
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(iTunesBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val iTunesService = retrofit.create(ItunesApi::class.java)
+    private val iTunesService = RetrofitClient().getITunesService()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,6 +69,11 @@ class SearchActivity : AppCompatActivity() {
         inputEditText.doOnTextChanged { s, start, before, count ->
             clearButton.visibility = clearButtonVisibility(s)
             searchValue = s.toString()
+            if (searchValue.isEmpty()) {
+                tracks.clear()
+                trackAdapter.notifyDataSetChanged()
+                showOrHideMessage(Msg.HIDE)
+            }
         }
 
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
@@ -96,7 +92,6 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        // Вторым параметром мы передаём значение по умолчанию
         searchValue = savedInstanceState.getString(SEARCH_VALUE, "")
         val inputEditText = findViewById<EditText>(R.id.inputEditText)
         inputEditText.setText(searchValue)
