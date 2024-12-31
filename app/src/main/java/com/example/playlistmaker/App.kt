@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatDelegate
 
 const val PREFERENCES = "preferences"
 const val DARK_THEME_KEY = "dark_theme"
+val searchHistoryItems = ArrayList<Track>()
 
 class App : Application() {
 
     var darkTheme = false
+    //val searchHistoryItems = ArrayList<Track>()
 
     override fun onCreate() {
         super.onCreate()

@@ -24,7 +24,9 @@ import retrofit2.Response
 class SearchActivity : AppCompatActivity() {
 
     private val tracks = ArrayList<Track>()
-    private val trackAdapter = TrackAdapter(tracks)
+    private val trackAdapter = TrackAdapter(tracks, true)
+    //private val historyAdapter = TrackAdapter((applicationContext as App).searchHistoryItems, false)
+    private val historyAdapter = TrackAdapter(searchHistoryItems, false)
     private var searchValue = ""
     private var messageShown = false
     private val iTunesService = RetrofitClient().getITunesService()
@@ -47,10 +49,13 @@ class SearchActivity : AppCompatActivity() {
         val inputEditText = findViewById<EditText>(R.id.inputEditText)
         val clearButton = findViewById<ImageView>(R.id.clearIcon)
         val refreshButton = findViewById<Button>(R.id.messageButton)
-
+        val clearHistoryButton = findViewById<Button>(R.id.clearHistoryButton)
 
         val rvTrack = findViewById<RecyclerView>(R.id.rvTrack)
         rvTrack.adapter = trackAdapter
+
+        val historyTracks = findViewById<RecyclerView>(R.id.historyTracks)
+        historyTracks.adapter = historyAdapter
 
         clearButton.setOnClickListener {
             inputEditText.setText("")
@@ -58,12 +63,17 @@ class SearchActivity : AppCompatActivity() {
             inputMethodManager?.hideSoftInputFromWindow(clearButton.windowToken, 0)
             tracks.clear()
             trackAdapter.notifyDataSetChanged()
-            showOrHideMessage(Msg.HIDE)
+            showOrHideMessage(Msg.HISTORY)
         }
 
         refreshButton.setOnClickListener {
             showOrHideMessage(Msg.HIDE)
             makeSearch()
+        }
+
+        clearHistoryButton.setOnClickListener {
+            searchHistoryItems.clear()
+            showOrHideMessage(Msg.HISTORY)
         }
 
         inputEditText.doOnTextChanged { s, start, before, count ->
@@ -131,7 +141,8 @@ class SearchActivity : AppCompatActivity() {
     private enum class Msg{
         NOTHING_FOUND,
         SOMETHING_WRONG,
-        HIDE;
+        HIDE,
+        HISTORY;
     }
 
     private fun showOrHideMessage(msg: Msg) {
@@ -139,25 +150,34 @@ class SearchActivity : AppCompatActivity() {
         val icon = findViewById<ImageView>(R.id.messageIcon)
         val text = findViewById<TextView>(R.id.messageText)
         val button = findViewById<Button>(R.id.messageButton)
+        val history = findViewById<View>(R.id.historyLayout)
         when(msg) {
             Msg.NOTHING_FOUND -> {
                 icon.setImageDrawable(getDrawable(R.drawable.nothing_found))
                 text.text = getString(R.string.message_nothing_found)
                 button.visibility = View.GONE
                 layout.visibility = View.VISIBLE
+                history.visibility = View.GONE
             }
             Msg.SOMETHING_WRONG -> {
                 icon.setImageDrawable(getDrawable(R.drawable.something_wrong))
                 text.text = getString(R.string.message_something_wrong)
                 button.visibility = View.VISIBLE
                 layout.visibility = View.VISIBLE
+                history.visibility = View.GONE
             }
             Msg.HIDE -> {
                 if (messageShown)
                     layout.visibility = View.GONE
+                history.visibility = View.GONE
+            }
+            Msg.HISTORY -> {
+                historyAdapter.notifyDataSetChanged()
+                layout.visibility = View.GONE
+                history.visibility = View.VISIBLE
             }
         }
-        messageShown = (msg != Msg.HIDE)
+        messageShown = (msg != Msg.HIDE && msg != Msg.HISTORY)
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
