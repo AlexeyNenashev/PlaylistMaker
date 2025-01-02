@@ -2,7 +2,6 @@ package com.example.playlistmaker
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -13,7 +12,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
-
 import android.widget.TextView
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.RecyclerView
@@ -25,7 +23,6 @@ class SearchActivity : AppCompatActivity() {
 
     private val tracks = ArrayList<Track>()
     private val trackAdapter = TrackAdapter(tracks, true)
-    //private val historyAdapter = TrackAdapter((applicationContext as App).searchHistoryItems, false)
     private val historyAdapter = TrackAdapter(searchHistoryItems, false)
     private var searchValue = ""
     private var messageShown = false
@@ -61,9 +58,6 @@ class SearchActivity : AppCompatActivity() {
             inputEditText.setText("")
             val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(clearButton.windowToken, 0)
-            tracks.clear()
-            trackAdapter.notifyDataSetChanged()
-            showOrHideMessage(Msg.HISTORY)
         }
 
         refreshButton.setOnClickListener {
@@ -73,17 +67,21 @@ class SearchActivity : AppCompatActivity() {
 
         clearHistoryButton.setOnClickListener {
             searchHistoryItems.clear()
-            (applicationContext as App).saveSearchHistory()
-            showOrHideMessage(Msg.HISTORY)
+            saveSearchHistory()
+            showOrHideMessage(Msg.HIDE)
         }
 
         inputEditText.doOnTextChanged { s, start, before, count ->
             clearButton.visibility = clearButtonVisibility(s)
             searchValue = s.toString()
-            if (searchValue.isEmpty()) {
-                tracks.clear()
-                trackAdapter.notifyDataSetChanged()
-                showOrHideMessage(Msg.HIDE)
+            if (searchValue.isEmpty() && inputEditText.hasFocus()) {
+                showHistoryIfItIsNotEmpty()
+            }
+        }
+
+        inputEditText.setOnFocusChangeListener { view, hasFocus ->
+            if (inputEditText.text.isEmpty() && hasFocus) {
+                showHistoryIfItIsNotEmpty()
             }
         }
 
@@ -144,6 +142,12 @@ class SearchActivity : AppCompatActivity() {
         SOMETHING_WRONG,
         HIDE,
         HISTORY;
+    }
+
+    private fun showHistoryIfItIsNotEmpty() {
+        tracks.clear()
+        trackAdapter.notifyDataSetChanged()
+        showOrHideMessage(if (searchHistoryItems.isEmpty()) Msg.HIDE else Msg.HISTORY)
     }
 
     private fun showOrHideMessage(msg: Msg) {

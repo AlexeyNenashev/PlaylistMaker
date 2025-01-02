@@ -29,10 +29,6 @@ class SettingsActivity : AppCompatActivity() {
         themeSwitcher.isChecked = (applicationContext as App).darkTheme
         themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
             (applicationContext as App).switchTheme(checked)
-            //val sharedPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
-            //sharedPrefs.edit()
-            //    .putBoolean(DARK_THEME_KEY, checked)
-            //    .apply()
         }
 
         val shareIcon = findViewById<com.google.android.material.textview.MaterialTextView>(R.id.share)

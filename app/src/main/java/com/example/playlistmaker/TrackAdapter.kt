@@ -18,7 +18,7 @@ class TrackAdapter (
         if (clickable) {
             holder.trackView.setOnClickListener { view ->
                 updateTrackHistory(data[position])
-                (view.context.applicationContext as App).saveSearchHistory()
+                saveSearchHistory()
             }
         }
     }
