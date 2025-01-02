@@ -73,6 +73,7 @@ class SearchActivity : AppCompatActivity() {
 
         clearHistoryButton.setOnClickListener {
             searchHistoryItems.clear()
+            (applicationContext as App).saveSearchHistory()
             showOrHideMessage(Msg.HISTORY)
         }
 

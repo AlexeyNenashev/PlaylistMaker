@@ -17,12 +17,8 @@ class TrackAdapter (
         holder.bind(data[position])
         if (clickable) {
             holder.trackView.setOnClickListener { view ->
-                //Toast.makeText(view.context, "name = ${data[position].trackName}", Toast.LENGTH_SHORT).show()
-                updateTrackHistory(
-                    //(view.context.applicationContext as App).searchHistoryItems,
-                    //searchHistoryItems,
-                    data[position]
-                )
+                updateTrackHistory(data[position])
+                (view.context.applicationContext as App).saveSearchHistory()
             }
         }
     }
@@ -32,6 +28,10 @@ class TrackAdapter (
     }
 
     private fun updateTrackHistory(newTrack: Track) {
+        searchHistoryItems.removeAll { it.trackId == newTrack.trackId }
         searchHistoryItems.add(0, newTrack)
+        while (searchHistoryItems.size > 10) {
+            searchHistoryItems.removeLast()
+        }
     }
 }
