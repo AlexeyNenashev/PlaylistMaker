@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
 class TrackAdapter (
-    private val data: List<Track>
+    private val data: List<Track>, private val clickable: Boolean
 ) : RecyclerView.Adapter<TrackViewHolder> () {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
@@ -15,9 +15,16 @@ class TrackAdapter (
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(data[position])
+        if (clickable) {
+            holder.trackView.setOnClickListener { view ->
+                SearchHistory.update(data[position])
+                saveSearchHistory()
+            }
+        }
     }
 
     override fun getItemCount(): Int {
         return data.size
     }
+
 }
