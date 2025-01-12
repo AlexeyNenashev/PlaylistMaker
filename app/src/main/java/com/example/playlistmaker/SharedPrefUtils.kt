@@ -5,8 +5,12 @@ import com.google.gson.Gson
 val DARK_THEME_KEY = "dark_theme"
 val HISTORY_KEY = "history"
 
-fun isDarkTheme(): Boolean {
-    return sharedPrefs?.getBoolean(DARK_THEME_KEY, false) ?: false
+fun isDarkTheme(darkThemeDefaultValue: Boolean): Boolean {
+    return if (sharedPrefs?.contains(DARK_THEME_KEY) == true) {
+        sharedPrefs?.getBoolean(DARK_THEME_KEY, false) ?: false
+    } else {
+        darkThemeDefaultValue
+    }
 }
 
 fun saveDarkTheme(darkTheme: Boolean) {
@@ -21,7 +25,7 @@ fun getSearchHistory(): Array<Track> {
 }
 
 fun saveSearchHistory() {
-    val json: String = Gson().toJson(searchHistoryItems.toArray())
+    val json: String = Gson().toJson(SearchHistory.items.toArray())
     sharedPrefs?.edit()
         ?.putString(HISTORY_KEY, json)
         ?.apply()

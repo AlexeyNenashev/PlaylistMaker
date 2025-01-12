@@ -17,7 +17,7 @@ class TrackAdapter (
         holder.bind(data[position])
         if (clickable) {
             holder.trackView.setOnClickListener { view ->
-                updateTrackHistory(data[position])
+                SearchHistory.update(data[position])
                 saveSearchHistory()
             }
         }
@@ -27,11 +27,4 @@ class TrackAdapter (
         return data.size
     }
 
-    private fun updateTrackHistory(newTrack: Track) {
-        searchHistoryItems.removeAll { it.trackId == newTrack.trackId }
-        searchHistoryItems.add(0, newTrack)
-        while (searchHistoryItems.size > 10) {
-            searchHistoryItems.removeLast()
-        }
-    }
 }

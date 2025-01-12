@@ -23,7 +23,7 @@ class SearchActivity : AppCompatActivity() {
 
     private val tracks = ArrayList<Track>()
     private val trackAdapter = TrackAdapter(tracks, true)
-    private val historyAdapter = TrackAdapter(searchHistoryItems, false)
+    private val historyAdapter = TrackAdapter(SearchHistory.items, false)
     private var searchValue = ""
     private var messageShown = false
     private val iTunesService = RetrofitClient().getITunesService()
@@ -66,7 +66,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         clearHistoryButton.setOnClickListener {
-            searchHistoryItems.clear()
+            SearchHistory.clear()
             saveSearchHistory()
             showOrHideMessage(Msg.HIDE)
         }
@@ -147,7 +147,7 @@ class SearchActivity : AppCompatActivity() {
     private fun showHistoryIfItIsNotEmpty() {
         tracks.clear()
         trackAdapter.notifyDataSetChanged()
-        showOrHideMessage(if (searchHistoryItems.isEmpty()) Msg.HIDE else Msg.HISTORY)
+        showOrHideMessage(if (SearchHistory.items.isEmpty()) Msg.HIDE else Msg.HISTORY)
     }
 
     private fun showOrHideMessage(msg: Msg) {
