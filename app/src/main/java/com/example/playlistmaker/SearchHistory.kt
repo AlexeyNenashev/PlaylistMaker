@@ -8,7 +8,7 @@ class SearchHistory {
 
         fun read() {
             items.clear()
-            items += getSearchHistory()
+            items += SharedPrefUtils.getSearchHistory()
         }
 
         fun clear() {

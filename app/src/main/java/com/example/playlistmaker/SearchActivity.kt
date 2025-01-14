@@ -16,6 +16,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,7 +25,7 @@ class SearchActivity : AppCompatActivity() {
 
     private val tracks = ArrayList<Track>()
     private val trackAdapter = TrackAdapter(tracks, true)
-    private val historyAdapter = TrackAdapter(SearchHistory.items, true)
+    private val historyAdapter = TrackAdapter(SearchHistory.items, false)
     private var searchValue = ""
     private var messageShown = false
     private val iTunesService = RetrofitClient().getITunesService()
@@ -68,7 +69,7 @@ class SearchActivity : AppCompatActivity() {
 
         clearHistoryButton.setOnClickListener {
             SearchHistory.clear()
-            saveSearchHistory()
+            SharedPrefUtils.saveSearchHistory()
             showOrHideMessage(Msg.HIDE)
         }
 
@@ -199,11 +200,14 @@ class SearchActivity : AppCompatActivity() {
         private const val SEARCH_VALUE = "SEARCH_VALUE"
         const val EXTRA_TRACK = "EXTRA_TRACK"
 
-        fun processClickOnSearchResult(track: Track, view: View) {
-            SearchHistory.update(track)
-            saveSearchHistory()
+        fun processClickOnSearchResult(track: Track, view: View, clickable: Boolean) {
+            if (clickable) {
+                SearchHistory.update(track)
+                SharedPrefUtils.saveSearchHistory()
+            }
+            val json: String = Gson().toJson(track)
             val displayIntent = Intent(view.context, AudioPlayerActivity::class.java)
-            displayIntent.putExtra(EXTRA_TRACK, "Ha ha ha!")
+            displayIntent.putExtra(EXTRA_TRACK, json)
             view.context.startActivity(displayIntent)
         }
 
