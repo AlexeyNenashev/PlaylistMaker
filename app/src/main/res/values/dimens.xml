@@ -7,4 +7,7 @@
     <dimen name="search_author_text_size">11sp</dimen>
     <dimen name="search_picture_size">45dp</dimen>
     <dimen name="search_arrow_size">24dp</dimen>
+    <dimen name="audio_player_small_text_size">13sp</dimen>
+    <dimen name="audio_player_medium_text_size">14sp</dimen>
+    <dimen name="audio_player_big_text_size">22sp</dimen>
 </resources>

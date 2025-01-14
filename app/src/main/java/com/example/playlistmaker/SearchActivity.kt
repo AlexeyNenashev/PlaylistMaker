@@ -1,6 +1,7 @@
 package com.example.playlistmaker
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -23,7 +24,7 @@ class SearchActivity : AppCompatActivity() {
 
     private val tracks = ArrayList<Track>()
     private val trackAdapter = TrackAdapter(tracks, true)
-    private val historyAdapter = TrackAdapter(SearchHistory.items, false)
+    private val historyAdapter = TrackAdapter(SearchHistory.items, true)
     private var searchValue = ""
     private var messageShown = false
     private val iTunesService = RetrofitClient().getITunesService()
@@ -193,8 +194,19 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private companion object {
-        const val SEARCH_VALUE = "SEARCH_VALUE"
+    companion object {
+
+        private const val SEARCH_VALUE = "SEARCH_VALUE"
+        const val EXTRA_TRACK = "EXTRA_TRACK"
+
+        fun processClickOnSearchResult(track: Track, view: View) {
+            SearchHistory.update(track)
+            saveSearchHistory()
+            val displayIntent = Intent(view.context, AudioPlayerActivity::class.java)
+            displayIntent.putExtra(EXTRA_TRACK, "Ha ha ha!")
+            view.context.startActivity(displayIntent)
+        }
+
     }
 
 }
