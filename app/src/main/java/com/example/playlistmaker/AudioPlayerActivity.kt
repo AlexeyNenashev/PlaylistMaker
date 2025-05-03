@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -22,13 +23,14 @@ class AudioPlayerActivity : AppCompatActivity() {
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
+        private const val STATE_NO_URL = 4
     }
 
     private var playerState = STATE_DEFAULT
 
     private lateinit var play: ImageButton
     private var mediaPlayer = MediaPlayer()
-    private var url: String? = "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/ac/c7/d1/acc7d13f-6634-495f-caf6-491eccb505e8/mzaf_4002676889906514534.plus.aac.p.m4a"
+    private var url: String? = ""
 
 
 
@@ -56,6 +58,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         val year = findViewById<TextView>(R.id.year)
         val genre = findViewById<TextView>(R.id.genre)
         val country = findViewById<TextView>(R.id.country)
+        play = findViewById(R.id.play_button)
 
         val json = intent.getStringExtra(SearchActivity.EXTRA_TRACK)
         if (json != null) {
@@ -84,14 +87,17 @@ class AudioPlayerActivity : AppCompatActivity() {
             year.text = track.getYear()
             genre.text = track.primaryGenreName
             country.text = track.country
-        }
 
-        play = findViewById(R.id.play_button)
+            if (track.previewUrl.isNullOrEmpty()) {
+                playerState = STATE_NO_URL
+            } else {
+                url = track.previewUrl
+                preparePlayer()
+                play.setOnClickListener {
+                    playbackControl()
+                }
+            }
 
-        preparePlayer()
-
-        play.setOnClickListener {
-            playbackControl()
         }
 
     }
@@ -99,7 +105,9 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        pausePlayer()
+        if (playerState != STATE_NO_URL) {
+            pausePlayer()
+        }
     }
 
     override fun onDestroy() {
@@ -129,20 +137,20 @@ class AudioPlayerActivity : AppCompatActivity() {
             playerState = STATE_PREPARED
         }
         mediaPlayer.setOnCompletionListener {
-            //play.text = "PLAY"
+            play.setImageResource(R.drawable.button_play)
             playerState = STATE_PREPARED
         }
     }
 
     private fun startPlayer() {
         mediaPlayer.start()
-        //play.text = "PAUSE"
+        play.setImageResource(R.drawable.button_pause)
         playerState = STATE_PLAYING
     }
 
     private fun pausePlayer() {
         mediaPlayer.pause()
-        //play.text = "PLAY"
+        play.setImageResource(R.drawable.button_play)
         playerState = STATE_PAUSED
     }
 

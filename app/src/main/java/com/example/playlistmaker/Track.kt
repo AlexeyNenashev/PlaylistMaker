@@ -13,6 +13,7 @@ data class Track(
     val releaseDate: String, // Год релиза трека
     val primaryGenreName: String, // Жанр трека
     val country: String, // Страна исполнителя
+    val previewUrl: String, // Ссылка на аудио
 ) {
     fun getCoverArtwork(): String = artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")
     fun trackTime(): String = SimpleDateFormat("mm:ss", Locale.getDefault()).format((trackTimeMillis + "").toLongOrNull() ?: 0L)
