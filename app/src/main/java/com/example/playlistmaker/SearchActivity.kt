@@ -13,6 +13,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.RecyclerView
@@ -27,7 +28,7 @@ class SearchActivity : AppCompatActivity() {
     private val trackAdapter = TrackAdapter(tracks, true)
     private val historyAdapter = TrackAdapter(SearchHistory.items, false)
     private var searchValue = ""
-    private var messageShown = false
+    //private var messageShown = false
     private val iTunesService = RetrofitClient().getITunesService()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -110,6 +111,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun makeSearch() {
         if (searchValue.isNotEmpty()) {
+            showOrHideMessage(Msg.PROGRESS)
             iTunesService.search(searchValue).enqueue(object :
                 Callback<TrackResponse> {
                 override fun onResponse(call: Call<TrackResponse>,
@@ -143,7 +145,8 @@ class SearchActivity : AppCompatActivity() {
         NOTHING_FOUND,
         SOMETHING_WRONG,
         HIDE,
-        HISTORY;
+        HISTORY,
+        PROGRESS;
     }
 
     private fun showHistoryIfItIsNotEmpty() {
@@ -158,6 +161,7 @@ class SearchActivity : AppCompatActivity() {
         val text = findViewById<TextView>(R.id.messageText)
         val button = findViewById<Button>(R.id.messageButton)
         val history = findViewById<View>(R.id.historyLayout)
+        val progress = findViewById<ProgressBar>(R.id.progressBar)
         when(msg) {
             Msg.NOTHING_FOUND -> {
                 icon.setImageDrawable(getDrawable(R.drawable.nothing_found))
@@ -165,6 +169,7 @@ class SearchActivity : AppCompatActivity() {
                 button.visibility = View.GONE
                 layout.visibility = View.VISIBLE
                 history.visibility = View.GONE
+                progress.visibility = View.GONE
             }
             Msg.SOMETHING_WRONG -> {
                 icon.setImageDrawable(getDrawable(R.drawable.something_wrong))
@@ -172,19 +177,27 @@ class SearchActivity : AppCompatActivity() {
                 button.visibility = View.VISIBLE
                 layout.visibility = View.VISIBLE
                 history.visibility = View.GONE
+                progress.visibility = View.GONE
             }
             Msg.HIDE -> {
-                if (messageShown)
-                    layout.visibility = View.GONE
+                //if (messageShown)
+                layout.visibility = View.GONE
                 history.visibility = View.GONE
+                progress.visibility = View.GONE
             }
             Msg.HISTORY -> {
                 historyAdapter.notifyDataSetChanged()
                 layout.visibility = View.GONE
                 history.visibility = View.VISIBLE
+                progress.visibility = View.GONE
+            }
+            Msg.PROGRESS -> {
+                layout.visibility = View.GONE
+                history.visibility = View.GONE
+                progress.visibility = View.VISIBLE
             }
         }
-        messageShown = (msg != Msg.HIDE && msg != Msg.HISTORY)
+        //messageShown = (msg != Msg.HIDE && msg != Msg.HISTORY)
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
