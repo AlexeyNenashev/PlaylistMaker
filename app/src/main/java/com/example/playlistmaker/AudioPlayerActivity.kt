@@ -1,7 +1,10 @@
 package com.example.playlistmaker
 
+import android.icu.text.SimpleDateFormat
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.TypedValue
 import android.view.View
 import android.widget.ImageButton
@@ -14,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.gson.Gson
+import java.util.Locale
 
 class AudioPlayerActivity : AppCompatActivity() {
 
@@ -28,9 +32,11 @@ class AudioPlayerActivity : AppCompatActivity() {
     private var playerState = STATE_DEFAULT
 
     private lateinit var play: ImageButton
+    private lateinit var seconds: TextView
     private var mediaPlayer = MediaPlayer()
     private var url: String? = ""
 
+    private var mainThreadHandler: Handler? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +54,8 @@ class AudioPlayerActivity : AppCompatActivity() {
             finish()
         }
 
+        mainThreadHandler = Handler(Looper.getMainLooper())
+
         val cover = findViewById<ImageView>(R.id.cover)
         val title = findViewById<TextView>(R.id.title)
         val author = findViewById<TextView>(R.id.author)
@@ -58,6 +66,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         val genre = findViewById<TextView>(R.id.genre)
         val country = findViewById<TextView>(R.id.country)
         play = findViewById(R.id.play_button)
+        seconds = findViewById(R.id.time_now)
 
         val json = intent.getStringExtra(SearchActivity.EXTRA_TRACK)
         if (json != null) {
@@ -65,7 +74,8 @@ class AudioPlayerActivity : AppCompatActivity() {
             val radius: Int = TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
                 10.0F,
-                cover.resources.displayMetrics).toInt()
+                cover.resources.displayMetrics
+            ).toInt()
             Glide.with(this)
                 .load(track.getCoverArtwork())
                 .placeholder(R.drawable.placeholder_big)
@@ -112,16 +122,16 @@ class AudioPlayerActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mediaPlayer.release()
+        mainThreadHandler?.removeCallbacks(createUpdateTimerTask())
     }
 
 
-
-
     private fun playbackControl() {
-        when(playerState) {
+        when (playerState) {
             STATE_PLAYING -> {
                 pausePlayer()
             }
+
             STATE_PREPARED, STATE_PAUSED -> {
                 startPlayer()
             }
@@ -138,6 +148,8 @@ class AudioPlayerActivity : AppCompatActivity() {
         mediaPlayer.setOnCompletionListener {
             play.setImageResource(R.drawable.button_play)
             playerState = STATE_PREPARED
+            mainThreadHandler?.removeCallbacks(createUpdateTimerTask())
+            seconds.text = "00:00"
         }
     }
 
@@ -145,14 +157,27 @@ class AudioPlayerActivity : AppCompatActivity() {
         mediaPlayer.start()
         play.setImageResource(R.drawable.button_pause)
         playerState = STATE_PLAYING
+        mainThreadHandler?.post(
+            createUpdateTimerTask()
+        )
     }
 
     private fun pausePlayer() {
         mediaPlayer.pause()
         play.setImageResource(R.drawable.button_play)
         playerState = STATE_PAUSED
+        mainThreadHandler?.removeCallbacks(createUpdateTimerTask())
     }
 
-
+    private fun createUpdateTimerTask(): Runnable {
+        return object : Runnable {
+            override fun run() {
+                if (playerState == STATE_PLAYING) {
+                    seconds.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+                    mainThreadHandler?.postDelayed(this, 500)
+                }
+            }
+        }
+    }
 
 }
