@@ -3,8 +3,9 @@ package com.example.playlistmaker
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
@@ -28,7 +29,6 @@ class SearchActivity : AppCompatActivity() {
     private val trackAdapter = TrackAdapter(tracks, true)
     private val historyAdapter = TrackAdapter(SearchHistory.items, false)
     private var searchValue = ""
-    //private var messageShown = false
     private val iTunesService = RetrofitClient().getITunesService()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +57,9 @@ class SearchActivity : AppCompatActivity() {
         val historyTracks = findViewById<RecyclerView>(R.id.historyTracks)
         historyTracks.adapter = historyAdapter
 
+        handler = Handler(Looper.getMainLooper())
+        isClickAllowed = true
+
         clearButton.setOnClickListener {
             inputEditText.setText("")
             val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
@@ -80,19 +83,13 @@ class SearchActivity : AppCompatActivity() {
             if (searchValue.isEmpty() && inputEditText.hasFocus()) {
                 showHistoryIfItIsNotEmpty()
             }
+            searchDebounce()
         }
 
         inputEditText.setOnFocusChangeListener { view, hasFocus ->
             if (inputEditText.text.isEmpty() && hasFocus) {
                 showHistoryIfItIsNotEmpty()
             }
-        }
-
-        inputEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                makeSearch()
-            }
-            actionId == EditorInfo.IME_ACTION_DONE
         }
 
     }
@@ -111,6 +108,8 @@ class SearchActivity : AppCompatActivity() {
 
     private fun makeSearch() {
         if (searchValue.isNotEmpty()) {
+            tracks.clear()
+            trackAdapter.notifyDataSetChanged()
             showOrHideMessage(Msg.PROGRESS)
             iTunesService.search(searchValue).enqueue(object :
                 Callback<TrackResponse> {
@@ -180,7 +179,6 @@ class SearchActivity : AppCompatActivity() {
                 progress.visibility = View.GONE
             }
             Msg.HIDE -> {
-                //if (messageShown)
                 layout.visibility = View.GONE
                 history.visibility = View.GONE
                 progress.visibility = View.GONE
@@ -197,7 +195,6 @@ class SearchActivity : AppCompatActivity() {
                 progress.visibility = View.VISIBLE
             }
         }
-        //messageShown = (msg != Msg.HIDE && msg != Msg.HISTORY)
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
@@ -208,20 +205,42 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    private val searchRunnable = Runnable { makeSearch() }
+
+    private fun searchDebounce() {
+        handler?.removeCallbacks(searchRunnable)
+        handler?.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
     companion object {
 
         private const val SEARCH_VALUE = "SEARCH_VALUE"
         const val EXTRA_TRACK = "EXTRA_TRACK"
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private var isClickAllowed = true
+        private var handler: Handler? = null
 
         fun processClickOnSearchResult(track: Track, view: View, clickable: Boolean) {
-            if (clickable) {
-                SearchHistory.update(track)
-                SharedPrefUtils.saveSearchHistory()
+            if (clickDebounce()) {
+                if (clickable) {
+                    SearchHistory.update(track)
+                    SharedPrefUtils.saveSearchHistory()
+                }
+                val json: String = Gson().toJson(track)
+                val displayIntent = Intent(view.context, AudioPlayerActivity::class.java)
+                displayIntent.putExtra(EXTRA_TRACK, json)
+                view.context.startActivity(displayIntent)
             }
-            val json: String = Gson().toJson(track)
-            val displayIntent = Intent(view.context, AudioPlayerActivity::class.java)
-            displayIntent.putExtra(EXTRA_TRACK, json)
-            view.context.startActivity(displayIntent)
+        }
+
+        private fun clickDebounce() : Boolean {
+            val current = isClickAllowed
+            if (isClickAllowed) {
+                isClickAllowed = false
+                handler?.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+            }
+            return current
         }
 
     }

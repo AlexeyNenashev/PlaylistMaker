@@ -27,6 +27,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
         private const val STATE_NO_URL = 4
+        private const val COUNTER_DELAY = 500L
     }
 
     private var playerState = STATE_DEFAULT
@@ -174,7 +175,7 @@ class AudioPlayerActivity : AppCompatActivity() {
             override fun run() {
                 if (playerState == STATE_PLAYING) {
                     seconds.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
-                    mainThreadHandler?.postDelayed(this, 500)
+                    mainThreadHandler?.postDelayed(this, COUNTER_DELAY)
                 }
             }
         }
