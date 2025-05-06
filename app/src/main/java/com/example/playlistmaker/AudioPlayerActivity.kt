@@ -22,15 +22,23 @@ import java.util.Locale
 class AudioPlayerActivity : AppCompatActivity() {
 
     companion object {
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
-        private const val STATE_NO_URL = 4
         private const val COUNTER_DELAY = 500L
     }
 
-    private var playerState = STATE_DEFAULT
+    private enum class PlayerState {
+        DEFAULT,
+        PREPARED,
+        PLAYING,
+        PAUSED,
+        NO_URL;
+    }
+
+    private enum class PlayButtonState {
+        PLAY,
+        PAUSE;
+    }
+
+    private var playerState = PlayerState.DEFAULT
 
     private lateinit var play: ImageButton
     private lateinit var seconds: TextView
@@ -99,7 +107,7 @@ class AudioPlayerActivity : AppCompatActivity() {
             country.text = track.country
 
             if (track.previewUrl.isNullOrEmpty()) {
-                playerState = STATE_NO_URL
+                playerState = PlayerState.NO_URL
             } else {
                 url = track.previewUrl
                 preparePlayer()
@@ -115,7 +123,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        if (playerState != STATE_NO_URL) {
+        if (playerState != PlayerState.NO_URL) {
             pausePlayer()
         }
     }
@@ -129,13 +137,13 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private fun playbackControl() {
         when (playerState) {
-            STATE_PLAYING -> {
+            PlayerState.PLAYING -> {
                 pausePlayer()
             }
-
-            STATE_PREPARED, STATE_PAUSED -> {
+            PlayerState.PREPARED, PlayerState.PAUSED -> {
                 startPlayer()
             }
+            else -> {}
         }
     }
 
@@ -144,11 +152,11 @@ class AudioPlayerActivity : AppCompatActivity() {
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
             play.isEnabled = true
-            playerState = STATE_PREPARED
+            playerState = PlayerState.PREPARED
         }
         mediaPlayer.setOnCompletionListener {
-            play.setImageResource(R.drawable.button_play)
-            playerState = STATE_PREPARED
+            setPlayButtonState(PlayButtonState.PLAY)
+            playerState = PlayerState.PREPARED
             mainThreadHandler?.removeCallbacks(createUpdateTimerTask())
             seconds.text = "00:00"
         }
@@ -156,8 +164,8 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private fun startPlayer() {
         mediaPlayer.start()
-        play.setImageResource(R.drawable.button_pause)
-        playerState = STATE_PLAYING
+        setPlayButtonState(PlayButtonState.PAUSE)
+        playerState = PlayerState.PLAYING
         mainThreadHandler?.post(
             createUpdateTimerTask()
         )
@@ -165,18 +173,29 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private fun pausePlayer() {
         mediaPlayer.pause()
-        play.setImageResource(R.drawable.button_play)
-        playerState = STATE_PAUSED
+        setPlayButtonState(PlayButtonState.PLAY)
+        playerState = PlayerState.PAUSED
         mainThreadHandler?.removeCallbacks(createUpdateTimerTask())
     }
 
     private fun createUpdateTimerTask(): Runnable {
         return object : Runnable {
             override fun run() {
-                if (playerState == STATE_PLAYING) {
+                if (playerState == PlayerState.PLAYING) {
                     seconds.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
                     mainThreadHandler?.postDelayed(this, COUNTER_DELAY)
                 }
+            }
+        }
+    }
+
+    private fun setPlayButtonState(state: PlayButtonState) {
+        when (state) {
+            PlayButtonState.PLAY -> {
+                play.setImageResource(R.drawable.button_play)
+            }
+            PlayButtonState.PAUSE -> {
+                play.setImageResource(R.drawable.button_pause)
             }
         }
     }
