@@ -2,6 +2,7 @@ package com.example.playlistmaker
 
 import android.content.SharedPreferences
 import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.presentation.SearchHistory
 import com.google.gson.Gson
 
 class SharedPrefUtils {

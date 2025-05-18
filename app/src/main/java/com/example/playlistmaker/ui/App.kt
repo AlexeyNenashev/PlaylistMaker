@@ -1,8 +1,10 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import android.content.res.Configuration
+import com.example.playlistmaker.SharedPrefUtils
+import com.example.playlistmaker.presentation.SearchHistory
 
 class App : Application() {
 

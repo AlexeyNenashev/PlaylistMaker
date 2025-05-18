@@ -21,16 +21,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.Creator
 import com.example.playlistmaker.ui.player.AudioPlayerActivity
 import com.example.playlistmaker.R
-import com.example.playlistmaker.RetrofitClient
-import com.example.playlistmaker.SearchHistory
+import com.example.playlistmaker.presentation.SearchHistory
 import com.example.playlistmaker.SharedPrefUtils
-import com.example.playlistmaker.data.dto.TracksSearchResponse
 import com.example.playlistmaker.domain.api.TracksInteractor
 import com.example.playlistmaker.domain.models.Track
 import com.google.gson.Gson
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class SearchActivity : AppCompatActivity() {
 
