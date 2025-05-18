@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.search
 
 import android.content.Context
 import android.content.Intent
@@ -18,6 +18,15 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.Creator
+import com.example.playlistmaker.ui.player.AudioPlayerActivity
+import com.example.playlistmaker.R
+import com.example.playlistmaker.RetrofitClient
+import com.example.playlistmaker.SearchHistory
+import com.example.playlistmaker.SharedPrefUtils
+import com.example.playlistmaker.data.dto.TracksSearchResponse
+import com.example.playlistmaker.domain.api.TracksInteractor
+import com.example.playlistmaker.domain.models.Track
 import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
@@ -29,7 +38,9 @@ class SearchActivity : AppCompatActivity() {
     private val trackAdapter = TrackAdapter(tracks, true)
     private val historyAdapter = TrackAdapter(SearchHistory.items, false)
     private var searchValue = ""
-    private val iTunesService = RetrofitClient().getITunesService()
+    //private val iTunesService = RetrofitClient().getITunesService()
+    private val tracksInteractor = Creator.provideTracksInteractor()
+    //private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -111,32 +122,49 @@ class SearchActivity : AppCompatActivity() {
             tracks.clear()
             trackAdapter.notifyDataSetChanged()
             showOrHideMessage(Msg.PROGRESS)
-            iTunesService.search(searchValue).enqueue(object :
-                Callback<TrackResponse> {
-                override fun onResponse(call: Call<TrackResponse>,
-                                        response: Response<TrackResponse>
-                ) {
-                    if (response.code() == 200) {
-                        tracks.clear()
-                        if (response.body()?.results?.isNotEmpty() == true) {
-                            tracks.addAll(response.body()?.results ?: emptyList<Track>())
+
+            tracksInteractor.searchTracks(searchValue,
+                object : TracksInteractor.TracksConsumer {
+                    override fun consume(foundTracks: List<Track>) {
+                        handler?.post {
+                            if (foundTracks.isEmpty()) {
+                                showOrHideMessage(Msg.NOTHING_FOUND)
+                            } else {
+                                tracks.addAll(foundTracks)
+                                trackAdapter.notifyDataSetChanged()
+                                showOrHideMessage(Msg.HIDE)
+                            }
+                            //TODO("showOrHideMessage(Msg.SOMETHING_WRONG)")
                         }
-                        trackAdapter.notifyDataSetChanged()
-                        if (tracks.isEmpty()) {
-                            showOrHideMessage(Msg.NOTHING_FOUND)
-                        } else {
-                            showOrHideMessage(Msg.HIDE)
-                        }
-                    } else {
-                        showOrHideMessage(Msg.SOMETHING_WRONG)
                     }
-                }
+                })
 
-                override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-                    showOrHideMessage(Msg.SOMETHING_WRONG)
-                }
 
-            })
+
+
+
+        //    iTunesService.search(searchValue).enqueue(object :
+        //        Callback<TracksSearchResponse> {
+        //        override fun onResponse(call: Call<TracksSearchResponse>,
+        //                                response: Response<TracksSearchResponse>
+        //        ) {
+        //            if (response.code() == 200) {
+        //                tracks.clear()
+        //                if (response.body()?.results?.isNotEmpty() == true) {
+        //                    tracks.addAll(response.body()?.results ?: emptyList<Track>())
+        //                }
+        //                trackAdapter.notifyDataSetChanged()
+        //
+        //            } else {
+        //                showOrHideMessage(Msg.SOMETHING_WRONG)
+        //            }
+        //        }
+        //
+        //        override fun onFailure(call: Call<TracksSearchResponse>, t: Throwable) {
+        //            showOrHideMessage(Msg.SOMETHING_WRONG)
+        //        }
+        //
+        //    })
         }
     }
 

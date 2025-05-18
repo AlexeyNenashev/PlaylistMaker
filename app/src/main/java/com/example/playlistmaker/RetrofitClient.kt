@@ -1,5 +1,6 @@
 package com.example.playlistmaker
 
+import com.example.playlistmaker.data.network.ItunesApiService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -9,8 +10,8 @@ class RetrofitClient() {
         .baseUrl(iTunesBaseUrl)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-    private val iTunesService = retrofit.create(ItunesApi::class.java)
-    fun getITunesService(): ItunesApi {
+    private val iTunesService = retrofit.create(ItunesApiService::class.java)
+    fun getITunesService(): ItunesApiService {
         return iTunesService
     }
 }

@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.settings
 
 import android.content.Intent
 import android.net.Uri
@@ -7,6 +7,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.playlistmaker.App
+import com.example.playlistmaker.R
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {

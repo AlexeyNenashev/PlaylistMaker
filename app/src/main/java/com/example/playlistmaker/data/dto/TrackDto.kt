@@ -1,9 +1,9 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.data.dto
 
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-data class Track(
+data class TrackDto(
     val trackId: Int,
     val trackName: String, // Название композиции
     val artistName: String, // Имя исполнителя
@@ -19,3 +19,4 @@ data class Track(
     fun trackTime(): String = SimpleDateFormat("mm:ss", Locale.getDefault()).format((trackTimeMillis + "").toLongOrNull() ?: 0L)
     fun getYear(): String = if (releaseDate.length >= 4) releaseDate.substring(0,4) else ""
 }
+
