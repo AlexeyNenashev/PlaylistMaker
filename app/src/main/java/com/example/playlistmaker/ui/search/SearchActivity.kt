@@ -16,13 +16,15 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.Creator
 import com.example.playlistmaker.ui.player.AudioPlayerActivity
 import com.example.playlistmaker.R
-import com.example.playlistmaker.presentation.SearchHistory
-import com.example.playlistmaker.SharedPrefUtils
+import com.example.playlistmaker.domain.api.HistoryInteractor
+//import com.example.playlistmaker.presentation.SearchHistory
+//import com.example.playlistmaker.SharedPrefUtils
 import com.example.playlistmaker.domain.api.TracksInteractor
 import com.example.playlistmaker.domain.models.Track
 import com.google.gson.Gson
@@ -30,11 +32,13 @@ import com.google.gson.Gson
 class SearchActivity : AppCompatActivity() {
 
     private val tracks = ArrayList<Track>()
-    private val trackAdapter = TrackAdapter(tracks, true)
-    private val historyAdapter = TrackAdapter(SearchHistory.items, false)
+    private val history = ArrayList<Track>()
+    private lateinit var tracksInteractor: TracksInteractor //= Creator.provideTracksInteractor()
+    private lateinit var historyInteractor: HistoryInteractor //= Creator.provideHistoryInteractor(this)
+    private lateinit var trackAdapter: TrackAdapter //= TrackAdapter(tracks, true, history, historyInteractor)
+    private lateinit var historyAdapter: TrackAdapter //= TrackAdapter(history, false, history, historyInteractor)
     private var searchValue = ""
     //private val iTunesService = RetrofitClient().getITunesService()
-    private val tracksInteractor = Creator.provideTracksInteractor()
     //private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,6 +55,11 @@ class SearchActivity : AppCompatActivity() {
         toolbar.setNavigationOnClickListener {
             finish()
         }
+
+        tracksInteractor = Creator.provideTracksInteractor()
+        historyInteractor = Creator.provideHistoryInteractor(this)
+        trackAdapter = TrackAdapter(tracks, true, history, historyInteractor)
+        historyAdapter = TrackAdapter(history, false, history, historyInteractor)
 
         val inputEditText = findViewById<EditText>(R.id.inputEditText)
         val clearButton = findViewById<ImageView>(R.id.clearIcon)
@@ -78,8 +87,8 @@ class SearchActivity : AppCompatActivity() {
         }
 
         clearHistoryButton.setOnClickListener {
-            SearchHistory.clear()
-            SharedPrefUtils.saveSearchHistory()
+            history.clear()
+            historyInteractor.save(history)
             showOrHideMessage(Msg.HIDE)
         }
 
@@ -174,7 +183,7 @@ class SearchActivity : AppCompatActivity() {
     private fun showHistoryIfItIsNotEmpty() {
         tracks.clear()
         trackAdapter.notifyDataSetChanged()
-        showOrHideMessage(if (SearchHistory.items.isEmpty()) Msg.HIDE else Msg.HISTORY)
+        showOrHideMessage(if (history.isEmpty()) Msg.HIDE else Msg.HISTORY)
     }
 
     private fun showOrHideMessage(msg: Msg) {
@@ -244,11 +253,12 @@ class SearchActivity : AppCompatActivity() {
         private var isClickAllowed = true
         private var handler: Handler? = null
 
-        fun processClickOnSearchResult(track: Track, view: View, clickable: Boolean) {
+        fun processClickOnSearchResult(track: Track, view: View, clickable: Boolean, history: ArrayList<Track>, historyInteractor: HistoryInteractor) {
             if (clickDebounce()) {
                 if (clickable) {
-                    SearchHistory.update(track)
-                    SharedPrefUtils.saveSearchHistory()
+                    historyInteractor.update(history, track)
+                    historyInteractor.save(history)
+                    //Toast.makeText(this@Companion, "save history", Toast.LENGTH_SHORT).show()
                 }
                 val json: String = Gson().toJson(track)
                 val displayIntent = Intent(view.context, AudioPlayerActivity::class.java)

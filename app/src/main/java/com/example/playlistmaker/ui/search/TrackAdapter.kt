@@ -4,10 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
+import com.example.playlistmaker.domain.api.HistoryInteractor
 import com.example.playlistmaker.domain.models.Track
 
 class TrackAdapter (
-    private val data: List<Track>, private val clickable: Boolean
+    private val data: List<Track>, private val clickable: Boolean, private val history: ArrayList<Track>, private val historyInteractor: HistoryInteractor
 ) : RecyclerView.Adapter<TrackViewHolder> () {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
@@ -18,7 +19,7 @@ class TrackAdapter (
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(data[position])
         holder.trackView.setOnClickListener { view ->
-                SearchActivity.processClickOnSearchResult(data[position], view, clickable)
+                SearchActivity.processClickOnSearchResult(data[position], view, clickable, history, historyInteractor)
         }
     }
 
