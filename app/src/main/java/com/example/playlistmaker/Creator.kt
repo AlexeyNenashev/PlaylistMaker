@@ -25,19 +25,19 @@ object Creator {
         return TracksInteractorImpl(getTracksRepository())
     }
 
-    private fun getMySharedPreferences(context: Context): SharedPreferences {
+    private fun getMySharedPreferences(): SharedPreferences {
         //return context.getSharedPreferences(PREFERENCES, MODE_PRIVATE)
         return App.sharedPrefs
     }
 
-    private fun getHistoryRepository(context: Context): HistoryRepository {
-        return HistoryRepositoryImpl(SharedPreferencesImpl(getMySharedPreferences(context)))
+    private fun getHistoryRepository(): HistoryRepository {
+        return HistoryRepositoryImpl(SharedPreferencesImpl(getMySharedPreferences()))
     }
 
-    fun provideHistoryInteractor(context: Context): HistoryInteractor {
-        return HistoryInteractorImpl(getHistoryRepository(context))
+    fun provideHistoryInteractor(): HistoryInteractor {
+        return HistoryInteractorImpl(getHistoryRepository())
     }
 
-    private const val PREFERENCES = "preferences"
+    //private const val PREFERENCES = "preferences"
 
 }

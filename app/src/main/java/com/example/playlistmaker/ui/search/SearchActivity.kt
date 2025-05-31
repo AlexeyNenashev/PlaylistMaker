@@ -16,7 +16,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.Creator
@@ -31,12 +30,12 @@ import com.google.gson.Gson
 
 class SearchActivity : AppCompatActivity() {
 
-    private val tracks = ArrayList<Track>()
-    private val history = ArrayList<Track>()
-    private lateinit var tracksInteractor: TracksInteractor //= Creator.provideTracksInteractor()
-    private lateinit var historyInteractor: HistoryInteractor //= Creator.provideHistoryInteractor(this)
-    private lateinit var trackAdapter: TrackAdapter //= TrackAdapter(tracks, true, history, historyInteractor)
-    private lateinit var historyAdapter: TrackAdapter //= TrackAdapter(history, false, history, historyInteractor)
+    //private val tracks = ArrayList<Track>()
+    //private val history = ArrayList<Track>()
+    //private lateinit var tracksInteractor: TracksInteractor //= Creator.provideTracksInteractor()
+    //private lateinit var historyInteractor: HistoryInteractor //= Creator.provideHistoryInteractor(this)
+    //private lateinit var trackAdapter: TrackAdapter //= TrackAdapter(tracks, true, history, historyInteractor)
+    //private lateinit var historyAdapter: TrackAdapter //= TrackAdapter(history, false, history, historyInteractor)
     private var searchValue = ""
     //private val iTunesService = RetrofitClient().getITunesService()
     //private val handler = Handler(Looper.getMainLooper())
@@ -57,9 +56,11 @@ class SearchActivity : AppCompatActivity() {
         }
 
         tracksInteractor = Creator.provideTracksInteractor()
-        historyInteractor = Creator.provideHistoryInteractor(this)
+        historyInteractor = Creator.provideHistoryInteractor()
         trackAdapter = TrackAdapter(tracks, true, history, historyInteractor)
         historyAdapter = TrackAdapter(history, false, history, historyInteractor)
+
+        historyInteractor.read(history)
 
         val inputEditText = findViewById<EditText>(R.id.inputEditText)
         val clearButton = findViewById<ImageView>(R.id.clearIcon)
@@ -253,7 +254,15 @@ class SearchActivity : AppCompatActivity() {
         private var isClickAllowed = true
         private var handler: Handler? = null
 
-        fun processClickOnSearchResult(track: Track, view: View, clickable: Boolean, history: ArrayList<Track>, historyInteractor: HistoryInteractor) {
+        private val tracks = ArrayList<Track>()
+        private val history = ArrayList<Track>()
+        private lateinit var tracksInteractor: TracksInteractor //= Creator.provideTracksInteractor()
+        private lateinit var historyInteractor: HistoryInteractor //= Creator.provideHistoryInteractor(this)
+        private lateinit var trackAdapter: TrackAdapter //= TrackAdapter(tracks, true, history, historyInteractor)
+        private lateinit var historyAdapter: TrackAdapter //= TrackAdapter(history, false, history, historyInteractor)
+
+
+        fun processClickOnSearchResult(track: Track, view: View, clickable: Boolean) {
             if (clickDebounce()) {
                 if (clickable) {
                     historyInteractor.update(history, track)

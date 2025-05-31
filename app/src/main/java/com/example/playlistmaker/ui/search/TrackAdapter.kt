@@ -19,7 +19,7 @@ class TrackAdapter (
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(data[position])
         holder.trackView.setOnClickListener { view ->
-                SearchActivity.processClickOnSearchResult(data[position], view, clickable, history, historyInteractor)
+                SearchActivity.processClickOnSearchResult(data[position], view, clickable)
         }
     }
 

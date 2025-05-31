@@ -16,7 +16,7 @@ class App : Application() {
         sharedPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
         darkTheme = (resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES)
         switchTheme(SharedPrefUtils.isDarkTheme(darkTheme))
-        SearchHistory.read()
+        //SearchHistory.read()
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {
