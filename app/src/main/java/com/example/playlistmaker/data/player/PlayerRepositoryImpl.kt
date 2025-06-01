@@ -1,23 +1,33 @@
 package com.example.playlistmaker.data.player
 
+import android.media.MediaPlayer
 import com.example.playlistmaker.domain.api.PlayerRepository
 
 class PlayerRepositoryImpl : PlayerRepository {
 
+    private val mediaPlayer = MediaPlayer()
+
     override fun play() {
-        TODO("Not yet implemented")
+        mediaPlayer.start()
     }
 
     override fun pause() {
-        TODO("Not yet implemented")
+        mediaPlayer.pause()
     }
 
-    override fun prepare() {
-        TODO("Not yet implemented")
+    override fun prepare(url: String, onPreparedListener: (MediaPlayer) -> Unit, onCompletionListener: (MediaPlayer) -> Unit) {
+        mediaPlayer.setDataSource(url)
+        mediaPlayer.prepareAsync()
+        mediaPlayer.setOnPreparedListener(onPreparedListener)
+        mediaPlayer.setOnCompletionListener(onCompletionListener)
     }
 
     override fun release() {
-        TODO("Not yet implemented")
+        mediaPlayer.release()
+    }
+
+    override fun getCurrentPosition(): Int {
+        return mediaPlayer.currentPosition
     }
 
 }

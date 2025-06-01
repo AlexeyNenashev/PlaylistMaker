@@ -16,7 +16,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.Creator
 import com.example.playlistmaker.R
+import com.example.playlistmaker.domain.api.PlayerInteractor
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.ui.search.SearchActivity
 import com.google.gson.Gson
@@ -45,8 +47,9 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private lateinit var play: ImageButton
     private lateinit var seconds: TextView
-    private var mediaPlayer = MediaPlayer()
+    //private var mediaPlayer = MediaPlayer()
     private var url: String? = ""
+    private lateinit var playerInteractor: PlayerInteractor
 
     private var mainThreadHandler: Handler? = null
 
@@ -67,6 +70,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         }
 
         mainThreadHandler = Handler(Looper.getMainLooper())
+        playerInteractor = Creator.providePlayerInteractor()
 
         val cover = findViewById<ImageView>(R.id.cover)
         val title = findViewById<TextView>(R.id.title)
@@ -133,7 +137,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.release()
+        playerInteractor.release()
         mainThreadHandler?.removeCallbacks(createUpdateTimerTask())
     }
 
@@ -151,22 +155,36 @@ class AudioPlayerActivity : AppCompatActivity() {
     }
 
     private fun preparePlayer() {
-        mediaPlayer.setDataSource(url)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            play.isEnabled = true
-            playerState = PlayerState.PREPARED
+        url?.let {
+            playerInteractor.prepare(it,
+                {
+                    play.isEnabled = true
+                    playerState = PlayerState.PREPARED
+                },
+                {
+                    setPlayButtonState(PlayButtonState.PLAY)
+                    playerState = PlayerState.PREPARED
+                    mainThreadHandler?.removeCallbacks(createUpdateTimerTask())
+                    seconds.text = "00:00"
+                }
+            )
         }
-        mediaPlayer.setOnCompletionListener {
-            setPlayButtonState(PlayButtonState.PLAY)
-            playerState = PlayerState.PREPARED
-            mainThreadHandler?.removeCallbacks(createUpdateTimerTask())
-            seconds.text = "00:00"
-        }
+        //mediaPlayer.setDataSource(url)
+        //mediaPlayer.prepareAsync()
+        //mediaPlayer.setOnPreparedListener {
+        //    play.isEnabled = true
+        //    playerState = PlayerState.PREPARED
+        //}
+        //mediaPlayer.setOnCompletionListener {
+        //    setPlayButtonState(PlayButtonState.PLAY)
+        //    playerState = PlayerState.PREPARED
+        //    mainThreadHandler?.removeCallbacks(createUpdateTimerTask())
+        //    seconds.text = "00:00"
+        //}
     }
 
     private fun startPlayer() {
-        mediaPlayer.start()
+        playerInteractor.play()
         setPlayButtonState(PlayButtonState.PAUSE)
         playerState = PlayerState.PLAYING
         mainThreadHandler?.post(
@@ -175,7 +193,7 @@ class AudioPlayerActivity : AppCompatActivity() {
     }
 
     private fun pausePlayer() {
-        mediaPlayer.pause()
+        playerInteractor.pause()
         setPlayButtonState(PlayButtonState.PLAY)
         playerState = PlayerState.PAUSED
         mainThreadHandler?.removeCallbacks(createUpdateTimerTask())
@@ -185,7 +203,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         return object : Runnable {
             override fun run() {
                 if (playerState == PlayerState.PLAYING) {
-                    seconds.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+                    seconds.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(playerInteractor.getCurrentPosition())
                     mainThreadHandler?.postDelayed(this, COUNTER_DELAY)
                 }
             }
