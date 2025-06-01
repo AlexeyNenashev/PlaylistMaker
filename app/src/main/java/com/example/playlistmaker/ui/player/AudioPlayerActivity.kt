@@ -91,15 +91,15 @@ class AudioPlayerActivity : AppCompatActivity() {
                 cover.resources.displayMetrics
             ).toInt()
             Glide.with(this)
-                .load(track.getCoverArtwork())
+                .load(track.artworkUrlCover)
                 .placeholder(R.drawable.placeholder_big)
                 .fitCenter()
                 .transform(RoundedCorners(radius))
                 .into(cover)
             title.text = track.trackName
             author.text = track.artistName
-            duration.text = track.trackTime()
-            if ((track.collectionName + "").isEmpty() || track.collectionName + "" == "null") {
+            duration.text = track.trackTime
+            if (track.collectionName.isEmpty()) {
                 album.visibility = View.GONE
                 albumHeader.visibility = View.GONE
             } else {
@@ -107,11 +107,11 @@ class AudioPlayerActivity : AppCompatActivity() {
                 album.visibility = View.VISIBLE
                 albumHeader.visibility = View.VISIBLE
             }
-            year.text = track.getYear()
+            year.text = track.year
             genre.text = track.primaryGenreName
             country.text = track.country
 
-            if (track.previewUrl.isNullOrEmpty()) {
+            if (track.previewUrl.isEmpty()) {
                 playerState = PlayerState.NO_URL
             } else {
                 url = track.previewUrl

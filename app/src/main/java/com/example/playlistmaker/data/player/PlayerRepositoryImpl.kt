@@ -15,11 +15,11 @@ class PlayerRepositoryImpl : PlayerRepository {
         mediaPlayer.pause()
     }
 
-    override fun prepare(url: String, onPreparedListener: (MediaPlayer) -> Unit, onCompletionListener: (MediaPlayer) -> Unit) {
+    override fun prepare(url: String, onPreparedListener: () -> Unit, onCompletionListener: () -> Unit) {
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener(onPreparedListener)
-        mediaPlayer.setOnCompletionListener(onCompletionListener)
+        mediaPlayer.setOnPreparedListener { onPreparedListener() }
+        mediaPlayer.setOnCompletionListener { onCompletionListener() }
     }
 
     override fun release() {

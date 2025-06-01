@@ -1,6 +1,5 @@
 package com.example.playlistmaker.domain.impl
 
-import android.media.MediaPlayer
 import com.example.playlistmaker.domain.api.PlayerInteractor
 import com.example.playlistmaker.domain.api.PlayerRepository
 
@@ -15,7 +14,7 @@ class PlayerInteractorImpl(private val repository: PlayerRepository) : PlayerInt
         repository.pause()
     }
 
-    override fun prepare(url: String, onPreparedListener: (MediaPlayer) -> Unit, onCompletionListener: (MediaPlayer) -> Unit) {
+    override fun prepare(url: String, onPreparedListener: () -> Unit, onCompletionListener: () -> Unit) {
         repository.prepare(url, onPreparedListener, onCompletionListener)
     }
 

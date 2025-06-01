@@ -15,8 +15,26 @@ data class TrackDto(
     val country: String, // Страна исполнителя
     val previewUrl: String, // Ссылка на аудио
 ) {
-    fun getCoverArtwork(): String = artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")
-    fun trackTime(): String = SimpleDateFormat("mm:ss", Locale.getDefault()).format((trackTimeMillis + "").toLongOrNull() ?: 0L)
-    fun getYear(): String = if (releaseDate.length >= 4) releaseDate.substring(0,4) else ""
-}
 
+    fun getCoverArtwork(): String {
+        if (artworkUrl100.isNullOrEmpty()) {
+            return ""
+        }
+        return artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")
+    }
+
+    fun trackTime(): String {
+        if (trackTimeMillis.isNullOrEmpty()) {
+            return "00:00"
+        }
+        return SimpleDateFormat("mm:ss", Locale.getDefault()).format((trackTimeMillis + "").toLongOrNull() ?: 0L)
+    }
+
+    fun getYear(): String {
+        if (releaseDate.isNullOrEmpty()) {
+            return ""
+        }
+        return if (releaseDate.length >= 4) releaseDate.substring(0,4) else ""
+    }
+
+}

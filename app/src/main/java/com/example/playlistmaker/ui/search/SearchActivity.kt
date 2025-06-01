@@ -23,6 +23,7 @@ import com.example.playlistmaker.ui.player.AudioPlayerActivity
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.api.HistoryInteractor
 import com.example.playlistmaker.domain.api.TracksInteractor
+import com.example.playlistmaker.domain.models.SearchResult
 import com.example.playlistmaker.domain.models.Track
 import com.google.gson.Gson
 
@@ -119,46 +120,21 @@ class SearchActivity : AppCompatActivity() {
 
             tracksInteractor.searchTracks(searchValue,
                 object : TracksInteractor.TracksConsumer {
-                    override fun consume(foundTracks: List<Track>) {
+                    override fun consume(searchResult: SearchResult) {
                         handler?.post {
-                            if (foundTracks.isEmpty()) {
+                            if (!searchResult.success) {
+                                showOrHideMessage(Msg.SOMETHING_WRONG)
+                            }
+                            else if (searchResult.tracks.isEmpty()) {
                                 showOrHideMessage(Msg.NOTHING_FOUND)
                             } else {
-                                tracks.addAll(foundTracks)
+                                tracks.addAll(searchResult.tracks)
                                 trackAdapter.notifyDataSetChanged()
                                 showOrHideMessage(Msg.HIDE)
                             }
-                            //TODO("showOrHideMessage(Msg.SOMETHING_WRONG)")
                         }
                     }
                 })
-
-
-
-
-
-        //    iTunesService.search(searchValue).enqueue(object :
-        //        Callback<TracksSearchResponse> {
-        //        override fun onResponse(call: Call<TracksSearchResponse>,
-        //                                response: Response<TracksSearchResponse>
-        //        ) {
-        //            if (response.code() == 200) {
-        //                tracks.clear()
-        //                if (response.body()?.results?.isNotEmpty() == true) {
-        //                    tracks.addAll(response.body()?.results ?: emptyList<Track>())
-        //                }
-        //                trackAdapter.notifyDataSetChanged()
-        //
-        //            } else {
-        //                showOrHideMessage(Msg.SOMETHING_WRONG)
-        //            }
-        //        }
-        //
-        //        override fun onFailure(call: Call<TracksSearchResponse>, t: Throwable) {
-        //            showOrHideMessage(Msg.SOMETHING_WRONG)
-        //        }
-        //
-        //    })
         }
     }
 

@@ -13,7 +13,7 @@ class SharedPreferencesImpl(private val sharedPrefs: SharedPreferences) {
 
     fun isDarkTheme(darkThemeDefaultValue: Boolean): Boolean {
         return if (sharedPrefs.contains(DARK_THEME_KEY)) {
-            sharedPrefs.getBoolean(DARK_THEME_KEY, false) ?: false
+            sharedPrefs.getBoolean(DARK_THEME_KEY, false)
         } else {
             darkThemeDefaultValue
         }
