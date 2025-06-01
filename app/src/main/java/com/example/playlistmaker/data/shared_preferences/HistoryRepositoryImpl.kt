@@ -1,6 +1,5 @@
-package com.example.playlistmaker.data.search_history
+package com.example.playlistmaker.data.shared_preferences
 
-import com.example.playlistmaker.data.shared_preferences.SharedPreferencesImpl
 import com.example.playlistmaker.domain.api.HistoryRepository
 import com.example.playlistmaker.domain.models.Track
 
