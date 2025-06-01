@@ -11,9 +11,6 @@ class SharedPreferencesImpl(private val sharedPrefs: SharedPreferences) {
         private const val HISTORY_KEY = "history"
     }
 
-    //var sharedPrefs: SharedPreferences? = null
-    //val sharedPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
-
     fun isDarkTheme(darkThemeDefaultValue: Boolean): Boolean {
         return if (sharedPrefs.contains(DARK_THEME_KEY)) {
             sharedPrefs.getBoolean(DARK_THEME_KEY, false) ?: false

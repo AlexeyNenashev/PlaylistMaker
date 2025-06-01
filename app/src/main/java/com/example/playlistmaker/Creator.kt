@@ -12,7 +12,6 @@ import com.example.playlistmaker.domain.api.DarkThemeRepository
 import com.example.playlistmaker.domain.api.HistoryInteractor
 import com.example.playlistmaker.domain.api.HistoryRepository
 import com.example.playlistmaker.domain.api.PlayerInteractor
-import com.example.playlistmaker.domain.api.PlayerRepository
 import com.example.playlistmaker.domain.api.TracksInteractor
 import com.example.playlistmaker.domain.api.TracksRepository
 import com.example.playlistmaker.domain.impl.DarkThemeInteractorImpl
@@ -32,7 +31,6 @@ object Creator {
     }
 
     private fun getMySharedPreferences(): SharedPreferences {
-        //return context.getSharedPreferences(PREFERENCES, MODE_PRIVATE)
         return App.sharedPrefs
     }
 
@@ -55,8 +53,5 @@ object Creator {
     fun providePlayerInteractor(): PlayerInteractor {
         return PlayerInteractorImpl(PlayerRepositoryImpl())
     }
-
-
-    //private const val PREFERENCES = "preferences"
 
 }

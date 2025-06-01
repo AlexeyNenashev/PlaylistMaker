@@ -5,9 +5,7 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 import android.content.res.Configuration
 import com.example.playlistmaker.Creator
-//import com.example.playlistmaker.SharedPrefUtils
 import com.example.playlistmaker.domain.api.DarkThemeInteractor
-//import com.example.playlistmaker.presentation.SearchHistory
 
 class App : Application() {
 
@@ -19,7 +17,6 @@ class App : Application() {
         darkThemeInteractor = Creator.provideDarkThemeInteractor()
         darkTheme = (resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES)
         switchTheme(darkThemeInteractor.isDarkTheme(darkTheme))
-        //SearchHistory.read()
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {

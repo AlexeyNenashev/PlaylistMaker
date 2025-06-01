@@ -22,23 +22,13 @@ import com.example.playlistmaker.Creator
 import com.example.playlistmaker.ui.player.AudioPlayerActivity
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.api.HistoryInteractor
-//import com.example.playlistmaker.presentation.SearchHistory
-//import com.example.playlistmaker.SharedPrefUtils
 import com.example.playlistmaker.domain.api.TracksInteractor
 import com.example.playlistmaker.domain.models.Track
 import com.google.gson.Gson
 
 class SearchActivity : AppCompatActivity() {
 
-    //private val tracks = ArrayList<Track>()
-    //private val history = ArrayList<Track>()
-    //private lateinit var tracksInteractor: TracksInteractor //= Creator.provideTracksInteractor()
-    //private lateinit var historyInteractor: HistoryInteractor //= Creator.provideHistoryInteractor(this)
-    //private lateinit var trackAdapter: TrackAdapter //= TrackAdapter(tracks, true, history, historyInteractor)
-    //private lateinit var historyAdapter: TrackAdapter //= TrackAdapter(history, false, history, historyInteractor)
     private var searchValue = ""
-    //private val iTunesService = RetrofitClient().getITunesService()
-    //private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +49,6 @@ class SearchActivity : AppCompatActivity() {
         historyInteractor = Creator.provideHistoryInteractor()
         trackAdapter = TrackAdapter(tracks, true, history, historyInteractor)
         historyAdapter = TrackAdapter(history, false, history, historyInteractor)
-
         historyInteractor.read(history)
 
         val inputEditText = findViewById<EditText>(R.id.inputEditText)
@@ -256,10 +245,10 @@ class SearchActivity : AppCompatActivity() {
 
         private val tracks = ArrayList<Track>()
         private val history = ArrayList<Track>()
-        private lateinit var tracksInteractor: TracksInteractor //= Creator.provideTracksInteractor()
-        private lateinit var historyInteractor: HistoryInteractor //= Creator.provideHistoryInteractor(this)
-        private lateinit var trackAdapter: TrackAdapter //= TrackAdapter(tracks, true, history, historyInteractor)
-        private lateinit var historyAdapter: TrackAdapter //= TrackAdapter(history, false, history, historyInteractor)
+        private lateinit var tracksInteractor: TracksInteractor
+        private lateinit var historyInteractor: HistoryInteractor
+        private lateinit var trackAdapter: TrackAdapter
+        private lateinit var historyAdapter: TrackAdapter
 
 
         fun processClickOnSearchResult(track: Track, view: View, clickable: Boolean) {
@@ -267,7 +256,6 @@ class SearchActivity : AppCompatActivity() {
                 if (clickable) {
                     historyInteractor.update(history, track)
                     historyInteractor.save(history)
-                    //Toast.makeText(this@Companion, "save history", Toast.LENGTH_SHORT).show()
                 }
                 val json: String = Gson().toJson(track)
                 val displayIntent = Intent(view.context, AudioPlayerActivity::class.java)

@@ -1,7 +1,6 @@
 package com.example.playlistmaker.ui.player
 
 import android.icu.text.SimpleDateFormat
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -47,7 +46,6 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private lateinit var play: ImageButton
     private lateinit var seconds: TextView
-    //private var mediaPlayer = MediaPlayer()
     private var url: String? = ""
     private lateinit var playerInteractor: PlayerInteractor
 
@@ -169,18 +167,6 @@ class AudioPlayerActivity : AppCompatActivity() {
                 }
             )
         }
-        //mediaPlayer.setDataSource(url)
-        //mediaPlayer.prepareAsync()
-        //mediaPlayer.setOnPreparedListener {
-        //    play.isEnabled = true
-        //    playerState = PlayerState.PREPARED
-        //}
-        //mediaPlayer.setOnCompletionListener {
-        //    setPlayButtonState(PlayButtonState.PLAY)
-        //    playerState = PlayerState.PREPARED
-        //    mainThreadHandler?.removeCallbacks(createUpdateTimerTask())
-        //    seconds.text = "00:00"
-        //}
     }
 
     private fun startPlayer() {
