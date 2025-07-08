@@ -33,7 +33,7 @@ class SearchViewModel(private val context: Context): ViewModel() {
         }
     }
 
-    private val tracksInteractor = Creator.provideTracksInteractor(context)
+    private val tracksInteractor = Creator.provideTracksInteractor()
 
     private val stateLiveData = MutableLiveData<TracksState>()
     fun observeState(): LiveData<TracksState> = stateLiveData

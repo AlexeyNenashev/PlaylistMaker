@@ -10,6 +10,7 @@ class TracksInteractorImpl(private val repository: TracksRepository) : TracksInt
 
     override fun searchTracks(expression: String, consumer: TracksInteractor.TracksConsumer) {
         executor.execute {
+            //consumer.consume(repository.searchTracks(expression))
             consumer.consume(repository.searchTracks(expression))
         }
     }

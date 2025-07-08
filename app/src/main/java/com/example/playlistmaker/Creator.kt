@@ -27,7 +27,7 @@ object Creator {
         return TracksRepositoryImpl(RetrofitNetworkClient())
     }
 
-    fun provideTracksInteractor(context: Context): TracksInteractor {
+    fun provideTracksInteractor(): TracksInteractor {
         return TracksInteractorImpl(getTracksRepository())
     }
 
