@@ -7,9 +7,10 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.api.HistoryInteractor
 import com.example.playlistmaker.domain.models.Track
 
-class TrackAdapter (
-    private val data: List<Track>, private val clickable: Boolean, private val history: ArrayList<Track>, private val historyInteractor: HistoryInteractor
-) : RecyclerView.Adapter<TrackViewHolder> () {
+class TrackAdapter (private val clickListener: TrackClickListener) :
+    RecyclerView.Adapter<TrackViewHolder> () {
+
+    var tracks = ArrayList<Track>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.track_item, parent, false)
@@ -17,14 +18,14 @@ class TrackAdapter (
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(data[position])
-        holder.trackView.setOnClickListener { view ->
-                SearchActivity.processClickOnSearchResult(data[position], view, clickable)
-        }
+        holder.bind(tracks.get(position))
+        holder.trackView.setOnClickListener { clickListener.onTrackClick(tracks.get(position)) }
     }
 
-    override fun getItemCount(): Int {
-        return data.size
+    override fun getItemCount(): Int = tracks.size
+
+    fun interface TrackClickListener {
+        fun onTrackClick(movie: Track)
     }
 
 }

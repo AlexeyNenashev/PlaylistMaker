@@ -1,5 +1,6 @@
 package com.example.playlistmaker
 
+import android.content.Context
 import android.content.SharedPreferences
 import com.example.playlistmaker.data.network.RetrofitNetworkClient
 import com.example.playlistmaker.data.network.TracksRepositoryImpl
@@ -26,7 +27,7 @@ object Creator {
         return TracksRepositoryImpl(RetrofitNetworkClient())
     }
 
-    fun provideTracksInteractor(): TracksInteractor {
+    fun provideTracksInteractor(context: Context): TracksInteractor {
         return TracksInteractorImpl(getTracksRepository())
     }
 
