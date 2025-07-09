@@ -7,58 +7,64 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.ui.App
 import com.example.playlistmaker.R
+import com.example.playlistmaker.databinding.ActivitySettingsBinding
+import com.example.playlistmaker.ui.search.SearchViewModel
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
+
+    private var viewModel: SettingsViewModel? = null
+    private lateinit var binding: ActivitySettingsBinding
+
+
+
+
+
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_settings)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.settings)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        //enableEdgeToEdge()
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        //ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.settings)) { v, insets ->
+        //    val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+        //    v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+        //    insets
+        //}
+
+        viewModel = ViewModelProvider(this, SettingsViewModel.getFactory())
+            .get(SettingsViewModel::class.java)
+
+        viewModel?.observeDarkTheme()?.observe(this) {
+            (applicationContext as App).switchTheme(it)
+            binding.nightTheme.isChecked = it
         }
 
-        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
-        toolbar.setNavigationOnClickListener {
-            finish()
+        //val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        binding.toolbar.setNavigationOnClickListener { finish() }
+
+
+
+        //val themeSwitcher = findViewById<SwitchMaterial>(R.id.night_theme)
+        //binding.nightTheme.isChecked = (applicationContext as App).darkTheme  // тоже через LiveData?
+        binding.nightTheme.setOnCheckedChangeListener { switcher, checked ->
+            //(applicationContext as App).switchTheme(checked)  // сделать через LiveData
+            viewModel?.rememberDarkTheme(checked)
         }
 
-        val themeSwitcher = findViewById<SwitchMaterial>(R.id.night_theme)
-        themeSwitcher.isChecked = (applicationContext as App).darkTheme
-        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
-            (applicationContext as App).switchTheme(checked)
-        }
+        //val shareIcon = findViewById<com.google.android.material.textview.MaterialTextView>(R.id.share)
+        binding.share.setOnClickListener { viewModel?.shareApp() }
 
-        val shareIcon = findViewById<com.google.android.material.textview.MaterialTextView>(R.id.share)
-        shareIcon.setOnClickListener {
-            val intent = Intent().apply {
-                action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, getString(R.string.linkToCourse))
-                type = "text/plain"
-            }
-            startActivity(intent)
-        }
+        //val supportIcon = findViewById<com.google.android.material.textview.MaterialTextView>(R.id.support)
+        binding.support.setOnClickListener { viewModel?.openSupport() }
 
-        val supportIcon = findViewById<com.google.android.material.textview.MaterialTextView>(R.id.support)
-        supportIcon.setOnClickListener {
-            val intent = Intent(Intent.ACTION_SENDTO).apply {
-                data = Uri.parse("mailto:")
-                putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.myEmail)))
-                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.emailSubject))
-                putExtra(Intent.EXTRA_TEXT, getString(R.string.emailText))
-            }
-            startActivity(intent)
-        }
-
-        val userIcon = findViewById<com.google.android.material.textview.MaterialTextView>(R.id.user)
-        userIcon.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.practicumOffer)))
-            startActivity(intent)
-        }
+        //val userIcon = findViewById<com.google.android.material.textview.MaterialTextView>(R.id.user)
+        binding.user.setOnClickListener { viewModel?.openTerms() }
 
     }
 }
