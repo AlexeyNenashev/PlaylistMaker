@@ -1,7 +1,7 @@
-package com.example.playlistmaker.domain.impl
+package com.example.playlistmaker.domain.search.impl
 
-import com.example.playlistmaker.domain.api.SearchHistoryInteractor
-import com.example.playlistmaker.domain.api.SearchHistoryRepository
+import com.example.playlistmaker.domain.search.SearchHistoryInteractor
+import com.example.playlistmaker.domain.search.SearchHistoryRepository
 import com.example.playlistmaker.domain.search.model.Track
 
 class SearchHistoryInteractorImpl(

@@ -1,28 +1,18 @@
-package com.example.playlistmaker.ui.player
+package com.example.playlistmaker.ui.player.activity
 
-import android.icu.text.SimpleDateFormat
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.TypedValue
 import android.view.View
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
 import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.ui.search.SearchActivity
+import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
+import com.example.playlistmaker.ui.search.activity.SearchActivity
 import com.google.gson.Gson
-import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
 
@@ -38,7 +28,7 @@ class PlayerActivity : AppCompatActivity() {
 
         var url: String? = ""
 
-        val json = intent.getStringExtra(SearchActivity.EXTRA_TRACK)
+        val json = intent.getStringExtra(SearchActivity.Companion.EXTRA_TRACK)
         if (json != null) {
             val track: Track = Gson().fromJson(json, Track::class.java)
             val radius: Int = TypedValue.applyDimension(
@@ -71,11 +61,11 @@ class PlayerActivity : AppCompatActivity() {
 
                 url = track.previewUrl
 
-                viewModel = ViewModelProvider(this, PlayerViewModel.getFactory(url))
+                viewModel = ViewModelProvider(this, PlayerViewModel.Companion.getFactory(url))
                     .get(PlayerViewModel::class.java)
 
                 viewModel?.observePlayerState()?.observe(this) {
-                    setPlayButtonState(it == PlayerViewModel.STATE_PLAYING)
+                    setPlayButtonState(it == PlayerViewModel.Companion.STATE_PLAYING)
                 }
 
                 viewModel?.observeProgressTime()?.observe(this) {

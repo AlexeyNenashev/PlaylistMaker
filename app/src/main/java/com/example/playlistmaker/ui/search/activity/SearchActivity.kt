@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.search
+package com.example.playlistmaker.ui.search.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,13 +7,14 @@ import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.example.playlistmaker.ui.player.PlayerActivity
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.presentation.TracksState
+import com.example.playlistmaker.ui.player.activity.PlayerActivity
+import com.example.playlistmaker.ui.search.view_model.SearchViewModel
 import com.google.gson.Gson
 
 class SearchActivity : AppCompatActivity() {
@@ -118,7 +119,7 @@ class SearchActivity : AppCompatActivity() {
         binding.rvTrack.adapter = trackAdapter
         binding.historyTracks.adapter = historyAdapter
 
-        viewModel = ViewModelProvider(this, SearchViewModel.getFactory())
+        viewModel = ViewModelProvider(this, SearchViewModel.Companion.getFactory())
             .get(SearchViewModel::class.java)
 
         viewModel?.observeState()?.observe(this) {
@@ -356,7 +357,11 @@ class SearchActivity : AppCompatActivity() {
 
     fun render(state: TracksState) {
         when (state) {
-            is TracksState.Loading -> showOrHideMessage(Msg.PROGRESS)
+            is TracksState.Loading -> {
+                trackAdapter.tracks.clear()
+                trackAdapter.notifyDataSetChanged()
+                showOrHideMessage(Msg.PROGRESS)
+            }
             is TracksState.Error -> showOrHideMessage(Msg.SOMETHING_WRONG)   //(state.errorMessage)
             is TracksState.Empty -> showOrHideMessage(Msg.NOTHING_FOUND)  //(state.message)
             is TracksState.Content -> {

@@ -1,4 +1,4 @@
-package com.example.playlistmaker.domain.api
+package com.example.playlistmaker.domain.sharing
 
 import android.content.Context
 import com.example.playlistmaker.domain.sharing.model.EmailData

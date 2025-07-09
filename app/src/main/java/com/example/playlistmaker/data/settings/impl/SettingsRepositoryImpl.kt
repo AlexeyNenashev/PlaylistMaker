@@ -1,7 +1,7 @@
 package com.example.playlistmaker.data.settings.impl
 
 import com.example.playlistmaker.data.search.StorageClient
-import com.example.playlistmaker.domain.api.SettingsRepository
+import com.example.playlistmaker.domain.settings.SettingsRepository
 import com.example.playlistmaker.domain.settings.model.ThemeSettings
 
 class SettingsRepositoryImpl (private val storage: StorageClient<ThemeSettings>) :

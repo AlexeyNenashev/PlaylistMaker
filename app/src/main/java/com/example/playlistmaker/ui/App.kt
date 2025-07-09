@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import android.content.res.Configuration
 import com.example.playlistmaker.creator.Creator
-import com.example.playlistmaker.domain.api.SettingsInteractor
+import com.example.playlistmaker.domain.settings.SettingsInteractor
 import com.example.playlistmaker.domain.settings.model.ThemeSettings
 
 class App : Application() {

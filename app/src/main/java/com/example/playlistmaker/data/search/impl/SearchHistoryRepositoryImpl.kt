@@ -1,9 +1,9 @@
 package com.example.playlistmaker.data.search.impl
 
 import com.example.playlistmaker.data.search.StorageClient
-import com.example.playlistmaker.domain.api.SearchHistoryRepository
+import com.example.playlistmaker.domain.search.SearchHistoryRepository
 import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.domain.util.Resource
+import com.example.playlistmaker.domain.search.util.Resource
 
 class SearchHistoryRepositoryImpl(
     private val storage: StorageClient<ArrayList<Track>>

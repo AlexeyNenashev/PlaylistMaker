@@ -1,18 +1,11 @@
-package com.example.playlistmaker.ui.settings
+package com.example.playlistmaker.ui.settings.activity
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
-import com.example.playlistmaker.ui.App
-import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
-import com.example.playlistmaker.ui.search.SearchViewModel
-import com.google.android.material.switchmaterial.SwitchMaterial
+import com.example.playlistmaker.ui.App
+import com.example.playlistmaker.ui.settings.view_model.SettingsViewModel
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -37,7 +30,7 @@ class SettingsActivity : AppCompatActivity() {
         //    insets
         //}
 
-        viewModel = ViewModelProvider(this, SettingsViewModel.getFactory())
+        viewModel = ViewModelProvider(this, SettingsViewModel.Companion.getFactory())
             .get(SettingsViewModel::class.java)
 
         viewModel?.observeDarkTheme()?.observe(this) {

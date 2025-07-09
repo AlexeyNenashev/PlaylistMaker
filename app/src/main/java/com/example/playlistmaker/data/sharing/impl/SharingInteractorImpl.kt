@@ -2,8 +2,8 @@ package com.example.playlistmaker.data.sharing.impl
 
 import android.content.Context
 import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.api.ExternalNavigator
-import com.example.playlistmaker.domain.api.SharingInteractor
+import com.example.playlistmaker.domain.sharing.ExternalNavigator
+import com.example.playlistmaker.domain.sharing.SharingInteractor
 import com.example.playlistmaker.domain.sharing.model.EmailData
 
 class SharingInteractorImpl(

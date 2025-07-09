@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.search
+package com.example.playlistmaker.ui.search.view_model
 
 import android.content.Context
 import android.os.Handler
@@ -10,15 +10,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.Creator
-import com.example.playlistmaker.domain.api.TracksInteractor
+import com.example.playlistmaker.domain.search.SearchHistoryInteractor
+import com.example.playlistmaker.domain.search.TracksInteractor
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.presentation.TracksState
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.api.SearchHistoryInteractor
 import com.example.playlistmaker.ui.App
-
 
 class SearchViewModel(private val context: Context): ViewModel() {
 
@@ -28,7 +26,8 @@ class SearchViewModel(private val context: Context): ViewModel() {
 
         fun getFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val app = (this[APPLICATION_KEY] as App)
+                val app =
+                    (this[ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY] as App)
                 SearchViewModel(app)
             }
         }

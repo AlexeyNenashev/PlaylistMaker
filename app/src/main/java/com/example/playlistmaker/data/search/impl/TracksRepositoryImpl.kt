@@ -3,9 +3,9 @@ package com.example.playlistmaker.data.search.impl
 import com.example.playlistmaker.data.search.NetworkClient
 import com.example.playlistmaker.data.search.network.TracksSearchRequest
 import com.example.playlistmaker.data.search.network.TracksSearchResponse
-import com.example.playlistmaker.domain.api.TracksRepository
+import com.example.playlistmaker.domain.search.TracksRepository
 import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.domain.util.Resource
+import com.example.playlistmaker.domain.search.util.Resource
 
 class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRepository {
 
