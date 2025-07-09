@@ -65,11 +65,8 @@ class PlayerActivity : AppCompatActivity() {
                     .get(PlayerViewModel::class.java)
 
                 viewModel?.observePlayerState()?.observe(this) {
-                    setPlayButtonState(it == PlayerViewModel.Companion.STATE_PLAYING)
-                }
-
-                viewModel?.observeProgressTime()?.observe(this) {
-                    binding.timeNow.text = it
+                    setPlayButtonState(it.isPlaying)
+                    binding.timeNow.text = it.progressTime
                 }
 
                 binding.playButton.setOnClickListener {

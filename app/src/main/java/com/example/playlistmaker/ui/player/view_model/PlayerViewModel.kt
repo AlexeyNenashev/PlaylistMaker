@@ -10,18 +10,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.playlistmaker.ui.player.PlayerState
 import java.util.Locale
 
 class PlayerViewModel(private val url: String) : ViewModel() {
 
     companion object {
 
-        const val STATE_DEFAULT = 0
-        const val STATE_PREPARED = 1
-        const val STATE_PLAYING = 2
-        const val STATE_PAUSED = 3
-
         private const val COUNTER_DELAY = 500L
+        private const val ZERO_TIME = "00:00"
 
         fun getFactory(trackUrl: String): ViewModelProvider.Factory = viewModelFactory {
             initializer {
@@ -31,18 +28,27 @@ class PlayerViewModel(private val url: String) : ViewModel() {
 
     }
 
-    private val playerStateLiveData = MutableLiveData(STATE_DEFAULT)
-    fun observePlayerState(): LiveData<Int> = playerStateLiveData
+    enum class PlayerMode {
+        DEFAULT,
+        PREPARED,
+        PLAYING,
+        PAUSED
+    }
 
-    private val progressTimeLiveData = MutableLiveData("00:00")
-    fun observeProgressTime(): LiveData<String> = progressTimeLiveData
+
+
+    private var playerMode = PlayerMode.DEFAULT
+    private var progressTime = ZERO_TIME
+    private val playerStateLiveData = MutableLiveData(PlayerState(false, progressTime))
+    fun observePlayerState(): LiveData<PlayerState> = playerStateLiveData
+
 
     private val mediaPlayer = MediaPlayer()
 
     private val handler = Handler(Looper.getMainLooper())
 
     private val timerRunnable = Runnable {
-        if (playerStateLiveData.value == STATE_PLAYING) {
+        if (playerMode == PlayerMode.PLAYING) {
             startTimerUpdate()
         }
     }
@@ -58,9 +64,10 @@ class PlayerViewModel(private val url: String) : ViewModel() {
     }
 
     fun onPlayButtonClicked() {
-        when(playerStateLiveData.value) {
-            STATE_PLAYING -> pausePlayer()
-            STATE_PREPARED, STATE_PAUSED -> startPlayer()
+        when(playerMode) {
+            PlayerMode.PLAYING -> pausePlayer()
+            PlayerMode.PREPARED, PlayerMode.PAUSED -> startPlayer()
+            PlayerMode.DEFAULT -> {}
         }
     }
 
@@ -68,28 +75,33 @@ class PlayerViewModel(private val url: String) : ViewModel() {
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            playerStateLiveData.postValue(STATE_PREPARED)
+            playerMode = PlayerMode.PREPARED
+            renderState()
         }
         mediaPlayer.setOnCompletionListener {
-            playerStateLiveData.postValue(STATE_PREPARED)
+            playerMode = PlayerMode.PREPARED
+            renderState()
             resetTimer()
         }
     }
 
     private fun startPlayer() {
         mediaPlayer.start()
-        playerStateLiveData.postValue(STATE_PLAYING)
+        playerMode = PlayerMode.PLAYING
+        renderState()
         startTimerUpdate()
     }
 
     private fun pausePlayer() {
         pauseTimer()
         mediaPlayer.pause()
-        playerStateLiveData.postValue(STATE_PAUSED)
+        playerMode = PlayerMode.PAUSED
+        renderState()
     }
 
     private fun startTimerUpdate() {
-        progressTimeLiveData.postValue(SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition))
+        progressTime = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+        renderState()
         handler.postDelayed(timerRunnable, COUNTER_DELAY)
     }
 
@@ -99,11 +111,16 @@ class PlayerViewModel(private val url: String) : ViewModel() {
 
     private fun resetTimer() {
         handler.removeCallbacks(timerRunnable)
-        progressTimeLiveData.postValue("00:00")
+        progressTime = ZERO_TIME
+        renderState()
     }
 
     fun onPause() {
         pausePlayer()
+    }
+
+    private fun renderState() {
+        playerStateLiveData.postValue(PlayerState(playerMode == PlayerMode.PLAYING, progressTime))
     }
 
 }
