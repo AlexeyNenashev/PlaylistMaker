@@ -15,7 +15,6 @@ class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRep
             if (response.resultCode != 200) {
                 return Resource.Error("Server error")
             }
-            //val success = (response.resultCode == 200)
             val tracks = (response as TracksSearchResponse).results.map {
                 Track(
                     it.trackId ?: 0,
@@ -31,7 +30,6 @@ class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRep
                     it.previewUrl ?: ""
                 )
             }
-            //return SearchResult(tracks, success)
             return Resource.Success(tracks)
         }
         catch (e: Exception) {

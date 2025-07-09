@@ -15,7 +15,7 @@ import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.domain.search.SearchHistoryInteractor
 import com.example.playlistmaker.domain.search.TracksInteractor
 import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.presentation.TracksState
+import com.example.playlistmaker.ui.search.TracksState
 import com.example.playlistmaker.ui.App
 
 class SearchViewModel(private val context: Context): ViewModel() {
@@ -70,7 +70,7 @@ class SearchViewModel(private val context: Context): ViewModel() {
             tracksInteractor.searchTracks(newSearchText, object : TracksInteractor.TracksConsumer {
                 override fun consume(foundTracks: List<Track>?, errorMessage: String?) {
                     handler.post {
-                        // Готовим список найденных фильмов для передачи в конструктор MoviesState
+
                         val tracks = mutableListOf<Track>()
                         if (foundTracks != null) {
                             tracks.addAll(foundTracks)
@@ -135,10 +135,6 @@ class SearchViewModel(private val context: Context): ViewModel() {
         historyInteractor.getHistory(object : SearchHistoryInteractor.HistoryConsumer {
             override fun consume(searchHistory: List<Track>?) {
                 handler.post {
-                    //val tracks = mutableListOf<Track>()
-                    //if (searchHistory != null) {
-                    //    tracks.addAll(searchHistory)
-                    //}
                     renderState(
                         TracksState.History(
                             searchHistory ?: listOf<Track>()
@@ -146,9 +142,7 @@ class SearchViewModel(private val context: Context): ViewModel() {
                     )
                 }
             }
-
         })
     }
-
 
 }

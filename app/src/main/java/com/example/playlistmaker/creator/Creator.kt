@@ -37,8 +37,7 @@ object Creator {
     }
 
     private fun getSearchHistoryRepository(context: Context): SearchHistoryRepository {
-        return SearchHistoryRepositoryImpl(
-            PrefsStorageClient<ArrayList<Track>>(
+        return SearchHistoryRepositoryImpl(PrefsStorageClient<ArrayList<Track>>(
                 context,
                 HISTORY_KEY,
                 object : TypeToken<ArrayList<Track>>() {}.type
@@ -56,8 +55,7 @@ object Creator {
 
 
     private fun getSettingsRepository(context: Context): SettingsRepository {
-        return SettingsRepositoryImpl(
-            PrefsStorageClient<ThemeSettings>(
+        return SettingsRepositoryImpl(PrefsStorageClient<ThemeSettings>(
                 context,
                 DARK_THEME_KEY,
                 object : TypeToken<ThemeSettings>() {}.type
@@ -68,45 +66,5 @@ object Creator {
     fun provideSettingsInteractor(context: Context): SettingsInteractor {
         return SettingsInteractorImpl(getSettingsRepository(context))
     }
-
-
-
-
-
-
-
-
-
-    //private val sharingInteractor: SharingInteractor = Creator.ProvideSharingInteractor()
-    //private val settingsInteractor: SettingsInteractor = Creator.ProvideSettingsInteractor()
-
-
-
-
-
-
-    //private fun getMySharedPreferences(): SharedPreferences {
-    //    return App.sharedPrefs
-    //}
-
-    //private fun getHistoryRepository(): HistoryRepository {
-    //    return HistoryRepositoryImpl(SharedPreferencesImpl(getMySharedPreferences()))
-    //}
-
-    //fun provideHistoryInteractor(): HistoryInteractor {
-    //    return HistoryInteractorImpl(getHistoryRepository())
-    //}
-
-    //private fun getDarkThemeRepository(): DarkThemeRepository {
-    //    return DarkThemeRepositoryImpl(SharedPreferencesImpl(getMySharedPreferences()))
-    //}
-
-    //fun provideDarkThemeInteractor(): DarkThemeInteractor {
-    //    return DarkThemeInteractorImpl(getDarkThemeRepository())
-    //}
-
-    //fun providePlayerInteractor(): PlayerInteractor {
-    //    return PlayerInteractorImpl(PlayerRepositoryImpl())
-    //}
 
 }

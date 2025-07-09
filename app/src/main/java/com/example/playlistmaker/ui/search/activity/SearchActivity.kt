@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
-import com.example.playlistmaker.presentation.TracksState
+import com.example.playlistmaker.ui.search.TracksState
 import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
 import com.google.gson.Gson
@@ -20,56 +20,9 @@ import com.google.gson.Gson
 class SearchActivity : AppCompatActivity() {
 
     companion object {
-
         private const val CLICK_DEBOUNCE_DELAY = 1000L
-        //private const val SEARCH_VALUE = "SEARCH_VALUE"
         const val EXTRA_TRACK = "EXTRA_TRACK"
     }
-
-
-
-
-
-
-
-        //private const val SEARCH_DEBOUNCE_DELAY = 2000L
-        //private var isClickAllowed = true
-        //private var handler: Handler? = null
-
-        //private val tracks = ArrayList<Track>()
-        //private val history = ArrayList<Track>()
-        //private lateinit var tracksInteractor: TracksInteractor
-        //private lateinit var historyInteractor: HistoryInteractor
-        //private lateinit var trackAdapter: TrackAdapter
-        //private lateinit var historyAdapter: TrackAdapter
-
-
-        //fun processClickOnSearchResult(track: Track, view: View, clickable: Boolean) {
-        //    if (clickDebounce()) {
-        //        if (clickable) {
-        //            historyInteractor.update(history, track)
-        //            historyInteractor.save(history)
-        //        }
-        //        val json: String = Gson().toJson(track)
-        //        val displayIntent = Intent(view.context, AudioPlayerActivity::class.java)
-        //        displayIntent.putExtra(EXTRA_TRACK, json)
-        //        view.context.startActivity(displayIntent)
-        //    }
-        //}
-
-        //private fun clickDebounce() : Boolean {
-        //    val current = isClickAllowed
-        //    if (isClickAllowed) {
-        //        isClickAllowed = false
-        //        handler?.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-        //    }
-        //    return current
-        //}
-
-
-
-
-
 
     private var viewModel: SearchViewModel? = null
     private lateinit var binding: ActivitySearchBinding
@@ -77,8 +30,6 @@ class SearchActivity : AppCompatActivity() {
     private val trackAdapter = TrackAdapter {
         if (clickDebounce()) {
             viewModel?.addToHistory(it)
-            //historyInteractor.update(history, it) // !!!!!
-            //historyInteractor.save(history)  // !!!!!
             val json: String = Gson().toJson(it)
             val displayIntent = Intent(this, PlayerActivity::class.java)
             displayIntent.putExtra(EXTRA_TRACK, json)
@@ -89,8 +40,6 @@ class SearchActivity : AppCompatActivity() {
     private val historyAdapter = TrackAdapter {
         if (clickDebounce()) {
             viewModel?.addToHistory(it)
-            //historyInteractor.update(history, it) // !!!!!
-            //historyInteractor.save(history)  // !!!!!
             val json: String = Gson().toJson(it)
             val displayIntent = Intent(this, PlayerActivity::class.java)
             displayIntent.putExtra(EXTRA_TRACK, json)
@@ -106,14 +55,8 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //enableEdgeToEdge()
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.search)) { v, insets ->
-        //    val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-        //    v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-        //    insets
-        //}
 
         binding.toolbar.setNavigationOnClickListener { finish() }
         binding.rvTrack.adapter = trackAdapter
@@ -139,30 +82,6 @@ class SearchActivity : AppCompatActivity() {
         }
         textWatcher?.let { binding.inputEditText.addTextChangedListener(it) }
 
-
-
-
-
-
-
-
-
-
-
-        //tracksInteractor = Creator.provideTracksInteractor()
-        //historyInteractor = Creator.provideHistoryInteractor()
-        //trackAdapter = TrackAdapter(tracks, true, history, historyInteractor)
-        //historyAdapter = TrackAdapter(history, false, history, historyInteractor)
-        //historyInteractor.read(history)
-
-        //val inputEditText = findViewById<EditText>(R.id.inputEditText)
-        //val clearButton = findViewById<ImageView>(R.id.clearIcon)
-        //val refreshButton = findViewById<Button>(R.id.messageButton)
-        //val clearHistoryButton = findViewById<Button>(R.id.clearHistoryButton)
-
-        //handler = Handler(Looper.getMainLooper())
-        //isClickAllowed = true
-
         binding.clearIcon.setOnClickListener {
             binding.inputEditText.setText("")
             val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager
@@ -177,19 +96,8 @@ class SearchActivity : AppCompatActivity() {
         }
 
         binding.clearHistoryButton.setOnClickListener {
-            //historyAdapter.tracks.clear()
             viewModel?.clearHistory()
-            //showOrHideMessage(Msg.HIDE)
         }
-
-        //binding.inputEditText.doOnTextChanged { s, start, before, count ->
-        //    binding.clearIcon.visibility = clearButtonVisibility(s)
-        //    searchValue = s.toString()
-        //    if (searchValue.isEmpty() && binding.inputEditText.hasFocus()) {
-        //        showHistoryIfItIsNotEmpty()
-        //    }
-        //    searchDebounce()
-        //}
 
         binding.inputEditText.setOnFocusChangeListener { view, hasFocus ->
             if (binding.inputEditText.text.isEmpty() && hasFocus) {
@@ -204,33 +112,6 @@ class SearchActivity : AppCompatActivity() {
         textWatcher?.let { binding.inputEditText.removeTextChangedListener(it) }
     }
 
-
-    //override fun onSaveInstanceState(outState: Bundle) {
-    //    super.onSaveInstanceState(outState)
-    //    outState.putString(SEARCH_VALUE, searchValue)
-    //}
-
-    //override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-    //    super.onRestoreInstanceState(savedInstanceState)
-    //    searchValue = savedInstanceState.getString(SEARCH_VALUE, "")
-    //    val inputEditText = findViewById<EditText>(R.id.inputEditText)
-    //    inputEditText.setText(searchValue)
-    //}
-
-
-
-
-
-
-
-    //private lateinit var tracksInteractor: TracksInteractor
-    //private lateinit var historyInteractor: HistoryInteractor
-    //private val tracks = ArrayList<Track>()
-    //private val history = ArrayList<Track>()
-
-
-    //private var searchValue = ""
-
     private fun clickDebounce() : Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
@@ -239,38 +120,6 @@ class SearchActivity : AppCompatActivity() {
         }
         return current
     }
-
-
-
-
-
-
-
-    //private fun makeSearch() {
-    //    if (searchValue.isNotEmpty()) {
-    //        tracks.clear()
-    //        trackAdapter.notifyDataSetChanged()
-    //        showOrHideMessage(Msg.PROGRESS)
-    //
-    //        tracksInteractor.searchTracks(searchValue,
-    //            object : TracksInteractor.TracksConsumer {
-    //                override fun consume(searchResult: SearchResult) {
-    //                    handler?.post {
-    //                        if (!searchResult.success) {
-    //                            showOrHideMessage(Msg.SOMETHING_WRONG)
-    //                        }
-    //                        else if (searchResult.tracks.isEmpty()) {
-    //                            showOrHideMessage(Msg.NOTHING_FOUND)
-    //                        } else {
-    //                            tracks.addAll(searchResult.tracks)
-    //                            trackAdapter.notifyDataSetChanged()
-    //                            showOrHideMessage(Msg.HIDE)
-    //                        }
-    //                    }
-    //                }
-    //            })
-    //    }
-    //}
 
     private enum class Msg{
         NOTHING_FOUND,
@@ -283,17 +132,10 @@ class SearchActivity : AppCompatActivity() {
     private fun showHistoryIfItIsNotEmpty() {
         trackAdapter.tracks.clear()
         trackAdapter.notifyDataSetChanged()
-        //showOrHideMessage(if (historyAdapter.tracks.isEmpty()) Msg.HIDE else Msg.HISTORY)
         viewModel?.showHistory()
     }
 
     private fun showOrHideMessage(msg: Msg) {
-        //val layout = findViewById<View>(R.id.messageLayout)
-        //val icon = findViewById<ImageView>(R.id.messageIcon)
-        //val text = findViewById<TextView>(R.id.messageText)
-        //val button = findViewById<Button>(R.id.messageButton)
-        //val history = findViewById<View>(R.id.historyLayout)
-        //val progress = findViewById<ProgressBar>(R.id.progressBar)
         when(msg) {
             Msg.NOTHING_FOUND -> {
                 binding.apply {
@@ -348,13 +190,6 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    //private val searchRunnable = Runnable { makeSearch() }
-
-    //private fun searchDebounce() {
-    //    handler?.removeCallbacks(searchRunnable)
-    //    handler?.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
-    //}
-
     fun render(state: TracksState) {
         when (state) {
             is TracksState.Loading -> {
@@ -362,8 +197,8 @@ class SearchActivity : AppCompatActivity() {
                 trackAdapter.notifyDataSetChanged()
                 showOrHideMessage(Msg.PROGRESS)
             }
-            is TracksState.Error -> showOrHideMessage(Msg.SOMETHING_WRONG)   //(state.errorMessage)
-            is TracksState.Empty -> showOrHideMessage(Msg.NOTHING_FOUND)  //(state.message)
+            is TracksState.Error -> showOrHideMessage(Msg.SOMETHING_WRONG)
+            is TracksState.Empty -> showOrHideMessage(Msg.NOTHING_FOUND)
             is TracksState.Content -> {
                 trackAdapter.tracks.clear()
                 trackAdapter.tracks.addAll(state.tracks)
@@ -373,12 +208,9 @@ class SearchActivity : AppCompatActivity() {
             is TracksState.History -> {
                 historyAdapter.tracks.clear()
                 historyAdapter.tracks.addAll(state.tracks)
-                //historyAdapter.notifyDataSetChanged()
-                //showOrHideMessage(Msg.HISTORY)
                 showOrHideMessage(if (historyAdapter.tracks.isEmpty()) Msg.HIDE else Msg.HISTORY)
             }
         }
     }
-
 
 }

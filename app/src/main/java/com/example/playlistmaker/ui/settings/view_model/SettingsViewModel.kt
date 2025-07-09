@@ -36,7 +36,6 @@ class SettingsViewModel(context: Context) : ViewModel() {
     fun observeDarkTheme(): LiveData<Boolean> = darkThemeLiveData
 
     fun rememberDarkTheme(isDarkTheme: Boolean) {
-        //themeSettings.darkTheme = isDarkTheme
         settingsInteractor.updateThemeSetting(ThemeSettings(isDarkTheme))
         darkThemeLiveData.postValue(isDarkTheme)
     }
