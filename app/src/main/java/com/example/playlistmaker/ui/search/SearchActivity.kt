@@ -27,7 +27,6 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.domain.api.HistoryInteractor
 import com.example.playlistmaker.domain.api.TracksInteractor
-import com.example.playlistmaker.domain.models.SearchResult
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.presentation.TracksState
 import com.google.gson.Gson

@@ -4,15 +4,18 @@ import com.example.playlistmaker.data.NetworkClient
 import com.example.playlistmaker.data.dto.TracksSearchResponse
 import com.example.playlistmaker.data.dto.TracksSearchRequest
 import com.example.playlistmaker.domain.api.TracksRepository
-import com.example.playlistmaker.domain.models.SearchResult
 import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.domain.util.Resource
 
 class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRepository {
 
-    override fun searchTracks(expression: String): SearchResult {
+    override fun searchTracks(expression: String): Resource<List<Track>> {
         try {
             val response = networkClient.doRequest(TracksSearchRequest(expression))
-            val success = (response.resultCode == 200)
+            if (response.resultCode != 200) {
+                return Resource.Error("Server error")
+            }
+            //val success = (response.resultCode == 200)
             val tracks = (response as TracksSearchResponse).results.map {
                 Track(
                     it.trackId ?: 0,
@@ -28,10 +31,11 @@ class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRep
                     it.previewUrl ?: ""
                 )
             }
-            return SearchResult(tracks, success)
+            //return SearchResult(tracks, success)
+            return Resource.Success(tracks)
         }
         catch (e: Exception) {
-            return SearchResult(ArrayList(), false)
+            return Resource.Error("No internet connection")
         }
     }
 }
