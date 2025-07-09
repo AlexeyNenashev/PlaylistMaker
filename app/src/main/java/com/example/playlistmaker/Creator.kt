@@ -4,8 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.example.playlistmaker.data.network.RetrofitNetworkClient
 import com.example.playlistmaker.data.network.TracksRepositoryImpl
-import com.example.playlistmaker.data.shared_preferences.DarkThemeRepositoryImpl
-import com.example.playlistmaker.data.shared_preferences.SharedPreferencesImpl
 import com.example.playlistmaker.data.sharing.ExternalNavigatorImpl
 import com.example.playlistmaker.data.sharing.SharingInteractorImpl
 import com.example.playlistmaker.data.storage.PrefsStorageClient
@@ -59,7 +57,7 @@ object Creator {
     }
 
     fun provideSharingInteractor(context: Context): SharingInteractor {
-        return SharingInteractorImpl(ExternalNavigatorImpl(context), context)
+        return SharingInteractorImpl(ExternalNavigatorImpl(), context)
     }
 
 
