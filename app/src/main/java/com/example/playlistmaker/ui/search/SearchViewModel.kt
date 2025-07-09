@@ -16,6 +16,7 @@ import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.presentation.TracksState
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import com.example.playlistmaker.R
+import com.example.playlistmaker.domain.api.SearchHistoryInteractor
 import com.example.playlistmaker.ui.App
 
 
@@ -34,6 +35,7 @@ class SearchViewModel(private val context: Context): ViewModel() {
     }
 
     private val tracksInteractor = Creator.provideTracksInteractor()
+    private val historyInteractor = Creator.provideSearchHistoryInteractor(context)
 
     private val stateLiveData = MutableLiveData<TracksState>()
     fun observeState(): LiveData<TracksState> = stateLiveData
@@ -60,7 +62,7 @@ class SearchViewModel(private val context: Context): ViewModel() {
         )
     }
 
-    private fun searchRequest(newSearchText: String) {
+    fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
             renderState(
                 TracksState.Loading
@@ -116,4 +118,38 @@ class SearchViewModel(private val context: Context): ViewModel() {
         super.onCleared()
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
     }
+
+    fun addToHistory(t: Track) {
+        historyInteractor.saveToHistory(t)
+    }
+
+    fun clearHistory() {
+        historyInteractor.clearHistory()
+        renderState(
+            TracksState.History(
+                listOf<Track>()
+            )
+        )
+    }
+
+    fun showHistory() {
+        historyInteractor.getHistory(object : SearchHistoryInteractor.HistoryConsumer {
+            override fun consume(searchHistory: List<Track>?) {
+                handler.post {
+                    //val tracks = mutableListOf<Track>()
+                    //if (searchHistory != null) {
+                    //    tracks.addAll(searchHistory)
+                    //}
+                    renderState(
+                        TracksState.History(
+                            searchHistory ?: listOf<Track>()
+                        )
+                    )
+                }
+            }
+
+        })
+    }
+
+
 }

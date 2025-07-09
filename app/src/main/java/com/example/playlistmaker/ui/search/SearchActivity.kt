@@ -90,6 +90,7 @@ class SearchActivity : AppCompatActivity() {
 
     private val trackAdapter = TrackAdapter {
         if (clickDebounce()) {
+            viewModel?.addToHistory(it)
             //historyInteractor.update(history, it) // !!!!!
             //historyInteractor.save(history)  // !!!!!
             val json: String = Gson().toJson(it)
@@ -101,6 +102,7 @@ class SearchActivity : AppCompatActivity() {
 
     private val historyAdapter = TrackAdapter {
         if (clickDebounce()) {
+            viewModel?.addToHistory(it)
             //historyInteractor.update(history, it) // !!!!!
             //historyInteractor.save(history)  // !!!!!
             val json: String = Gson().toJson(it)
@@ -182,14 +184,16 @@ class SearchActivity : AppCompatActivity() {
         }
 
         binding.messageButton.setOnClickListener {
-            showOrHideMessage(Msg.HIDE)
-            viewModel?.searchDebounce(binding.inputEditText.text.toString())   // clickDebounce()  ???
+            if (clickDebounce()) {
+                showOrHideMessage(Msg.HIDE)
+                viewModel?.searchRequest(binding.inputEditText.text.toString())
+            }
         }
 
         binding.clearHistoryButton.setOnClickListener {
-            historyAdapter.tracks.clear()
-            //historyInteractor.save(history)  // !!!!!!!
-            showOrHideMessage(Msg.HIDE)
+            //historyAdapter.tracks.clear()
+            viewModel?.clearHistory()
+            //showOrHideMessage(Msg.HIDE)
         }
 
         //binding.inputEditText.doOnTextChanged { s, start, before, count ->
@@ -293,7 +297,8 @@ class SearchActivity : AppCompatActivity() {
     private fun showHistoryIfItIsNotEmpty() {
         trackAdapter.tracks.clear()
         trackAdapter.notifyDataSetChanged()
-        showOrHideMessage(if (historyAdapter.tracks.isEmpty()) Msg.HIDE else Msg.HISTORY)
+        //showOrHideMessage(if (historyAdapter.tracks.isEmpty()) Msg.HIDE else Msg.HISTORY)
+        viewModel?.showHistory()
     }
 
     private fun showOrHideMessage(msg: Msg) {
@@ -379,7 +384,8 @@ class SearchActivity : AppCompatActivity() {
                 historyAdapter.tracks.clear()
                 historyAdapter.tracks.addAll(state.tracks)
                 //historyAdapter.notifyDataSetChanged()
-                showOrHideMessage(Msg.HISTORY)
+                //showOrHideMessage(Msg.HISTORY)
+                showOrHideMessage(if (historyAdapter.tracks.isEmpty()) Msg.HIDE else Msg.HISTORY)
             }
         }
     }

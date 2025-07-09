@@ -8,18 +8,25 @@ import com.example.playlistmaker.data.player.PlayerRepositoryImpl
 import com.example.playlistmaker.data.shared_preferences.DarkThemeRepositoryImpl
 import com.example.playlistmaker.data.shared_preferences.HistoryRepositoryImpl
 import com.example.playlistmaker.data.shared_preferences.SharedPreferencesImpl
+import com.example.playlistmaker.data.storage.PrefsStorageClient
+import com.example.playlistmaker.data.storage.SearchHistoryRepositoryImpl
 import com.example.playlistmaker.domain.api.DarkThemeInteractor
 import com.example.playlistmaker.domain.api.DarkThemeRepository
 import com.example.playlistmaker.domain.api.HistoryInteractor
 import com.example.playlistmaker.domain.api.HistoryRepository
 import com.example.playlistmaker.domain.api.PlayerInteractor
+import com.example.playlistmaker.domain.api.SearchHistoryInteractor
+import com.example.playlistmaker.domain.api.SearchHistoryRepository
 import com.example.playlistmaker.domain.api.TracksInteractor
 import com.example.playlistmaker.domain.api.TracksRepository
 import com.example.playlistmaker.domain.impl.DarkThemeInteractorImpl
 import com.example.playlistmaker.domain.impl.HistoryInteractorImpl
 import com.example.playlistmaker.domain.impl.PlayerInteractorImpl
+import com.example.playlistmaker.domain.impl.SearchHistoryInteractorImpl
 import com.example.playlistmaker.domain.impl.TracksInteractorImpl
+import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.ui.App
+import com.google.gson.reflect.TypeToken
 
 object Creator {
 
@@ -31,17 +38,37 @@ object Creator {
         return TracksInteractorImpl(getTracksRepository())
     }
 
+    private fun getSearchHistoryRepository(context: Context): SearchHistoryRepository {
+        return SearchHistoryRepositoryImpl(
+            PrefsStorageClient<ArrayList<Track>>(
+                context,
+                "history",
+                object : TypeToken<ArrayList<Track>>() {}.type
+            )
+        )
+    }
+
+    fun provideSearchHistoryInteractor(context: Context): SearchHistoryInteractor {
+        return SearchHistoryInteractorImpl(getSearchHistoryRepository(context))
+    }
+
+
+
+
+
+
+
     private fun getMySharedPreferences(): SharedPreferences {
         return App.sharedPrefs
     }
 
-    private fun getHistoryRepository(): HistoryRepository {
-        return HistoryRepositoryImpl(SharedPreferencesImpl(getMySharedPreferences()))
-    }
+    //private fun getHistoryRepository(): HistoryRepository {
+    //    return HistoryRepositoryImpl(SharedPreferencesImpl(getMySharedPreferences()))
+    //}
 
-    fun provideHistoryInteractor(): HistoryInteractor {
-        return HistoryInteractorImpl(getHistoryRepository())
-    }
+    //fun provideHistoryInteractor(): HistoryInteractor {
+    //    return HistoryInteractorImpl(getHistoryRepository())
+    //}
 
     private fun getDarkThemeRepository(): DarkThemeRepository {
         return DarkThemeRepositoryImpl(SharedPreferencesImpl(getMySharedPreferences()))
