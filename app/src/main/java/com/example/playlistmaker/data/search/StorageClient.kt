@@ -1,4 +1,4 @@
-package com.example.playlistmaker.data
+package com.example.playlistmaker.data.search
 
 interface StorageClient<T> {
     fun storeData(data: T)

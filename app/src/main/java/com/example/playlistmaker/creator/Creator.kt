@@ -1,17 +1,13 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.creator
 
 import android.content.Context
-import android.content.SharedPreferences
-import com.example.playlistmaker.data.network.RetrofitNetworkClient
-import com.example.playlistmaker.data.network.TracksRepositoryImpl
-import com.example.playlistmaker.data.sharing.ExternalNavigatorImpl
-import com.example.playlistmaker.data.sharing.SharingInteractorImpl
-import com.example.playlistmaker.data.storage.PrefsStorageClient
-import com.example.playlistmaker.data.storage.SearchHistoryRepositoryImpl
-import com.example.playlistmaker.data.storage.SettingsRepositoryImpl
-import com.example.playlistmaker.domain.api.DarkThemeInteractor
-import com.example.playlistmaker.domain.api.DarkThemeRepository
-import com.example.playlistmaker.domain.api.ExternalNavigator
+import com.example.playlistmaker.data.search.network.RetrofitNetworkClient
+import com.example.playlistmaker.data.search.impl.TracksRepositoryImpl
+import com.example.playlistmaker.data.sharing.impl.ExternalNavigatorImpl
+import com.example.playlistmaker.data.sharing.impl.SharingInteractorImpl
+import com.example.playlistmaker.data.search.storage.PrefsStorageClient
+import com.example.playlistmaker.data.search.impl.SearchHistoryRepositoryImpl
+import com.example.playlistmaker.data.settings.impl.SettingsRepositoryImpl
 import com.example.playlistmaker.domain.api.SearchHistoryInteractor
 import com.example.playlistmaker.domain.api.SearchHistoryRepository
 import com.example.playlistmaker.domain.api.SettingsInteractor
@@ -19,13 +15,11 @@ import com.example.playlistmaker.domain.api.SettingsRepository
 import com.example.playlistmaker.domain.api.SharingInteractor
 import com.example.playlistmaker.domain.api.TracksInteractor
 import com.example.playlistmaker.domain.api.TracksRepository
-import com.example.playlistmaker.domain.impl.DarkThemeInteractorImpl
 import com.example.playlistmaker.domain.impl.SearchHistoryInteractorImpl
 import com.example.playlistmaker.domain.impl.SettingsInteractorImpl
 import com.example.playlistmaker.domain.impl.TracksInteractorImpl
-import com.example.playlistmaker.domain.models.ThemeSettings
-import com.example.playlistmaker.domain.models.Track
-import com.example.playlistmaker.ui.App
+import com.example.playlistmaker.domain.settings.model.ThemeSettings
+import com.example.playlistmaker.domain.search.model.Track
 import com.google.gson.reflect.TypeToken
 
 object Creator {

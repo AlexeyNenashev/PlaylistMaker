@@ -1,6 +1,6 @@
 package com.example.playlistmaker.presentation
 
-import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.domain.search.model.Track
 
 sealed interface TracksState {
 

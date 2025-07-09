@@ -1,10 +1,10 @@
-package com.example.playlistmaker.data.sharing
+package com.example.playlistmaker.data.sharing.impl
 
 import android.content.Context
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.api.ExternalNavigator
 import com.example.playlistmaker.domain.api.SharingInteractor
-import com.example.playlistmaker.domain.models.EmailData
+import com.example.playlistmaker.domain.sharing.model.EmailData
 
 class SharingInteractorImpl(
     private val externalNavigator: ExternalNavigator,

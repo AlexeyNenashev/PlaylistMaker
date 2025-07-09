@@ -1,9 +1,8 @@
-package com.example.playlistmaker.data.storage
+package com.example.playlistmaker.data.search.storage
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.playlistmaker.data.StorageClient
-import com.example.playlistmaker.domain.api.DarkThemeInteractor
+import com.example.playlistmaker.data.search.StorageClient
 import com.google.gson.Gson
 import java.lang.reflect.Type
 

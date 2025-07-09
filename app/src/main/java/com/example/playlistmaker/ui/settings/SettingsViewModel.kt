@@ -8,10 +8,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.Creator
+import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.domain.api.SettingsInteractor
 import com.example.playlistmaker.domain.api.SharingInteractor
-import com.example.playlistmaker.domain.models.ThemeSettings
+import com.example.playlistmaker.domain.settings.model.ThemeSettings
 import com.example.playlistmaker.ui.App
 
 class SettingsViewModel(context: Context) : ViewModel() {

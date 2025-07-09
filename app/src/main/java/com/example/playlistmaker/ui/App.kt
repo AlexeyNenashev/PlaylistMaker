@@ -1,13 +1,11 @@
 package com.example.playlistmaker.ui
 
 import android.app.Application
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 import android.content.res.Configuration
-import com.example.playlistmaker.Creator
-import com.example.playlistmaker.domain.api.DarkThemeInteractor
+import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.domain.api.SettingsInteractor
-import com.example.playlistmaker.domain.models.ThemeSettings
+import com.example.playlistmaker.domain.settings.model.ThemeSettings
 
 class App : Application() {
 
