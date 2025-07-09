@@ -11,16 +11,16 @@ class SharingInteractorImpl(
     private val context: Context
 ) : SharingInteractor {
 
-    override fun shareApp() {
-        externalNavigator.shareLink(getShareAppLink())
+    override fun shareApp(c: Context) {
+        externalNavigator.shareLink(getShareAppLink(), c)
     }
 
-    override fun openTerms() {
-        externalNavigator.openLink(getTermsLink())
+    override fun openTerms(c: Context) {
+        externalNavigator.openLink(getTermsLink(), c)
     }
 
-    override fun openSupport() {
-        externalNavigator.openEmail(getSupportEmailData())
+    override fun openSupport(c: Context) {
+        externalNavigator.openEmail(getSupportEmailData(), c)
     }
 
     private fun getShareAppLink(): String {

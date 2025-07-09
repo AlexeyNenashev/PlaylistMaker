@@ -39,16 +39,16 @@ class SettingsViewModel(context: Context) : ViewModel() {
         darkThemeLiveData.postValue(isDarkTheme)
     }
 
-    fun shareApp() {
-        sharingInteractor.shareApp()
+    fun shareApp(c: Context) {
+        sharingInteractor.shareApp(c)
     }
 
-    fun openTerms() {
-        sharingInteractor.openTerms()
+    fun openTerms(c: Context) {
+        sharingInteractor.openTerms(c)
     }
 
-    fun openSupport() {
-        sharingInteractor.openSupport()
+    fun openSupport(c: Context) {
+        sharingInteractor.openSupport(c)
     }
 
 }

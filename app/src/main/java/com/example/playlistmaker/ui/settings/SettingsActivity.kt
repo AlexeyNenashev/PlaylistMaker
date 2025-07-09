@@ -58,13 +58,13 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         //val shareIcon = findViewById<com.google.android.material.textview.MaterialTextView>(R.id.share)
-        binding.share.setOnClickListener { viewModel?.shareApp() }
+        binding.share.setOnClickListener { viewModel?.shareApp(this) }
 
         //val supportIcon = findViewById<com.google.android.material.textview.MaterialTextView>(R.id.support)
-        binding.support.setOnClickListener { viewModel?.openSupport() }
+        binding.support.setOnClickListener { viewModel?.openSupport(this) }
 
         //val userIcon = findViewById<com.google.android.material.textview.MaterialTextView>(R.id.user)
-        binding.user.setOnClickListener { viewModel?.openTerms() }
+        binding.user.setOnClickListener { viewModel?.openTerms(this) }
 
     }
 }
