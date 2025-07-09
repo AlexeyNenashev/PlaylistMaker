@@ -11,16 +11,13 @@ import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.domain.settings.SettingsInteractor
 import com.example.playlistmaker.domain.settings.model.ThemeSettings
 import com.example.playlistmaker.domain.sharing.SharingInteractor
-import com.example.playlistmaker.ui.App
 
 class SettingsViewModel(context: Context) : ViewModel() {
 
     companion object {
-        fun getFactory(): ViewModelProvider.Factory = viewModelFactory {
+        fun getFactory(contextFromActivity: Context): ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val app =
-                    (this[ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY] as App)
-                SettingsViewModel(app)
+                SettingsViewModel(contextFromActivity)
             }
         }
     }
@@ -40,16 +37,16 @@ class SettingsViewModel(context: Context) : ViewModel() {
         darkThemeLiveData.postValue(isDarkTheme)
     }
 
-    fun shareApp(c: Context) {
-        sharingInteractor.shareApp(c)
+    fun shareApp() {
+        sharingInteractor.shareApp()
     }
 
-    fun openTerms(c: Context) {
-        sharingInteractor.openTerms(c)
+    fun openTerms() {
+        sharingInteractor.openTerms()
     }
 
-    fun openSupport(c: Context) {
-        sharingInteractor.openSupport(c)
+    fun openSupport() {
+        sharingInteractor.openSupport()
     }
 
 }

@@ -17,7 +17,7 @@ class SettingsActivity : AppCompatActivity() {
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this, SettingsViewModel.Companion.getFactory())
+        viewModel = ViewModelProvider(this, SettingsViewModel.Companion.getFactory(this))
             .get(SettingsViewModel::class.java)
 
         viewModel?.observeDarkTheme()?.observe(this) {
@@ -31,11 +31,11 @@ class SettingsActivity : AppCompatActivity() {
             viewModel?.rememberDarkTheme(checked)
         }
 
-        binding.share.setOnClickListener { viewModel?.shareApp(this) }
+        binding.share.setOnClickListener { viewModel?.shareApp() }
 
-        binding.support.setOnClickListener { viewModel?.openSupport(this) }
+        binding.support.setOnClickListener { viewModel?.openSupport() }
 
-        binding.user.setOnClickListener { viewModel?.openTerms(this) }
+        binding.user.setOnClickListener { viewModel?.openTerms() }
 
     }
 }

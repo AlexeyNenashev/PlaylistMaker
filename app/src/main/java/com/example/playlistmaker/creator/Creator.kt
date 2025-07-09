@@ -50,7 +50,7 @@ object Creator {
     }
 
     fun provideSharingInteractor(context: Context): SharingInteractor {
-        return SharingInteractorImpl(ExternalNavigatorImpl(), context)
+        return SharingInteractorImpl(ExternalNavigatorImpl(context), context)
     }
 
 
