@@ -1,6 +1,5 @@
 package com.example.playlistmaker.ui.search
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -8,26 +7,12 @@ import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.widget.EditText
-import android.widget.ImageView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.ProgressBar
-import android.widget.TextView
-import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.Creator
-import com.example.playlistmaker.ui.player.AudioPlayerActivity
+import com.example.playlistmaker.ui.player.PlayerActivity
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
-import com.example.playlistmaker.domain.api.HistoryInteractor
-import com.example.playlistmaker.domain.api.TracksInteractor
-import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.presentation.TracksState
 import com.google.gson.Gson
 
@@ -94,7 +79,7 @@ class SearchActivity : AppCompatActivity() {
             //historyInteractor.update(history, it) // !!!!!
             //historyInteractor.save(history)  // !!!!!
             val json: String = Gson().toJson(it)
-            val displayIntent = Intent(this, AudioPlayerActivity::class.java)
+            val displayIntent = Intent(this, PlayerActivity::class.java)
             displayIntent.putExtra(EXTRA_TRACK, json)
             startActivity(displayIntent)
         }
@@ -106,7 +91,7 @@ class SearchActivity : AppCompatActivity() {
             //historyInteractor.update(history, it) // !!!!!
             //historyInteractor.save(history)  // !!!!!
             val json: String = Gson().toJson(it)
-            val displayIntent = Intent(this, AudioPlayerActivity::class.java)
+            val displayIntent = Intent(this, PlayerActivity::class.java)
             displayIntent.putExtra(EXTRA_TRACK, json)
             startActivity(displayIntent)
         }
