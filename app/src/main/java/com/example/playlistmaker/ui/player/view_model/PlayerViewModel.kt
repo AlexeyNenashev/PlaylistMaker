@@ -20,11 +20,11 @@ class PlayerViewModel(private val url: String) : ViewModel() {
         private const val COUNTER_DELAY = 500L
         private const val ZERO_TIME = "00:00"
 
-        fun getFactory(trackUrl: String): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                PlayerViewModel(trackUrl)
-            }
-        }
+        //fun getFactory(trackUrl: String): ViewModelProvider.Factory = viewModelFactory {
+            //initializer {
+            //    PlayerViewModel(trackUrl)
+            //}
+        //}
 
     }
 

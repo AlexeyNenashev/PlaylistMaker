@@ -22,49 +22,49 @@ import com.example.playlistmaker.domain.settings.model.ThemeSettings
 import com.example.playlistmaker.domain.search.model.Track
 import com.google.gson.reflect.TypeToken
 
-object Creator {
+//object Creator {
 
-    private const val DARK_THEME_KEY = "dark_theme"
-    private const val HISTORY_KEY = "history"
-
-
-    private fun getTracksRepository(): TracksRepository {
-        return TracksRepositoryImpl(RetrofitNetworkClient())
-    }
-
-    fun provideTracksInteractor(): TracksInteractor {
-        return TracksInteractorImpl(getTracksRepository())
-    }
-
-    private fun getSearchHistoryRepository(context: Context): SearchHistoryRepository {
-        return SearchHistoryRepositoryImpl(PrefsStorageClient<ArrayList<Track>>(
-                context,
-                HISTORY_KEY,
-                object : TypeToken<ArrayList<Track>>() {}.type
-            )
-        )
-    }
-
-    fun provideSearchHistoryInteractor(context: Context): SearchHistoryInteractor {
-        return SearchHistoryInteractorImpl(getSearchHistoryRepository(context))
-    }
-
-    fun provideSharingInteractor(context: Context): SharingInteractor {
-        return SharingInteractorImpl(ExternalNavigatorImpl(context), context)
-    }
+    //private const val DARK_THEME_KEY = "dark_theme"
+    //private const val HISTORY_KEY = "history"
 
 
-    private fun getSettingsRepository(context: Context): SettingsRepository {
-        return SettingsRepositoryImpl(PrefsStorageClient<ThemeSettings>(
-                context,
-                DARK_THEME_KEY,
-                object : TypeToken<ThemeSettings>() {}.type
-            )
-        )
-    }
+    //private fun getTracksRepository(): TracksRepository {
+    //    return TracksRepositoryImpl(RetrofitNetworkClient())
+    //}
 
-    fun provideSettingsInteractor(context: Context): SettingsInteractor {
-        return SettingsInteractorImpl(getSettingsRepository(context))
-    }
+    //fun provideTracksInteractor(): TracksInteractor {
+    //    return TracksInteractorImpl(getTracksRepository())
+    //}
 
-}
+    //private fun getSearchHistoryRepository(context: Context): SearchHistoryRepository {
+    //    return SearchHistoryRepositoryImpl(PrefsStorageClient<ArrayList<Track>>(
+    //            context,
+    //            HISTORY_KEY,
+    //            object : TypeToken<ArrayList<Track>>() {}.type
+    //        )
+    //    )
+    //}
+
+    //fun provideSearchHistoryInteractor(context: Context): SearchHistoryInteractor {
+    //    return SearchHistoryInteractorImpl(getSearchHistoryRepository(context))
+    //}
+
+    //fun provideSharingInteractor(context: Context): SharingInteractor {
+    //    return SharingInteractorImpl(ExternalNavigatorImpl(context), context)
+    //}
+
+
+    //private fun getSettingsRepository(context: Context): SettingsRepository {
+    //    return SettingsRepositoryImpl(PrefsStorageClient<ThemeSettings>(
+    //            context,
+    //            DARK_THEME_KEY,
+    //            object : TypeToken<ThemeSettings>() {}.type
+    //        )
+    //    )
+    //}
+
+    //fun provideSettingsInteractor(context: Context): SettingsInteractor {
+    //    return SettingsInteractorImpl(getSettingsRepository(context))
+    //}
+
+//}

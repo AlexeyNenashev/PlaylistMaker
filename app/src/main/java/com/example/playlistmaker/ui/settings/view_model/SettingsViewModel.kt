@@ -12,18 +12,19 @@ import com.example.playlistmaker.domain.settings.SettingsInteractor
 import com.example.playlistmaker.domain.settings.model.ThemeSettings
 import com.example.playlistmaker.domain.sharing.SharingInteractor
 
-class SettingsViewModel(context: Context) : ViewModel() {
+class SettingsViewModel(private val sharingInteractor: SharingInteractor,
+                        private val settingsInteractor: SettingsInteractor) : ViewModel() {
 
-    companion object {
-        fun getFactory(contextFromActivity: Context): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SettingsViewModel(contextFromActivity)
-            }
-        }
-    }
+    //companion object {
+    //    fun getFactory(contextFromActivity: Context): ViewModelProvider.Factory = viewModelFactory {
+    //        initializer {
+    //            SettingsViewModel(contextFromActivity)
+    //        }
+    //    }
+    //}
 
-    private val sharingInteractor: SharingInteractor = Creator.provideSharingInteractor(context)
-    private val settingsInteractor: SettingsInteractor = Creator.provideSettingsInteractor(context)
+    //private val sharingInteractor: SharingInteractor = Creator.provideSharingInteractor(context)
+    //private val settingsInteractor: SettingsInteractor = Creator.provideSettingsInteractor(context)
 
     private var initialThemeSettings = settingsInteractor.getThemeSettings() ?: ThemeSettings(
         darkTheme = false

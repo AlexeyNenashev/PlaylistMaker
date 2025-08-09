@@ -18,23 +18,25 @@ import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.search.TracksState
 import com.example.playlistmaker.ui.App
 
-class SearchViewModel(private val context: Context): ViewModel() {
+class SearchViewModel(private val tracksInteractor: TracksInteractor,
+                      private val historyInteractor: SearchHistoryInteractor,
+                      private val context: Context): ViewModel() {
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private val SEARCH_REQUEST_TOKEN = Any()
 
-        fun getFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val app =
-                    (this[ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY] as App)
-                SearchViewModel(app)
-            }
-        }
+        //fun getFactory(): ViewModelProvider.Factory = viewModelFactory {
+        //    initializer {
+        //        val app =
+        //            (this[ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY] as App)
+        //        SearchViewModel(app)
+        //    }
+        //}
     }
 
-    private val tracksInteractor = Creator.provideTracksInteractor()
-    private val historyInteractor = Creator.provideSearchHistoryInteractor(context)
+    //private val tracksInteractor = Creator.provideTracksInteractor()
+    //private val historyInteractor = Creator.provideSearchHistoryInteractor(context)
 
     private val stateLiveData = MutableLiveData<TracksState>()
     fun observeState(): LiveData<TracksState> = stateLiveData

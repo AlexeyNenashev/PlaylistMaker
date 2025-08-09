@@ -13,10 +13,16 @@ import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
 import com.example.playlistmaker.ui.search.activity.SearchActivity
 import com.google.gson.Gson
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class PlayerActivity : AppCompatActivity() {
 
-    private var viewModel: PlayerViewModel? = null
+    var url: String? = ""
+    //private var viewModel: PlayerViewModel? = null
+    private val viewModel by viewModel<PlayerViewModel> {
+        parametersOf(url)
+    }
     private lateinit var binding: ActivityPlayerBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +32,6 @@ class PlayerActivity : AppCompatActivity() {
 
         binding.menuButton.setOnClickListener { finish() }
 
-        var url: String? = ""
 
         val json = intent.getStringExtra(SearchActivity.Companion.EXTRA_TRACK)
         if (json != null) {
@@ -61,16 +66,16 @@ class PlayerActivity : AppCompatActivity() {
 
                 url = track.previewUrl
 
-                viewModel = ViewModelProvider(this, PlayerViewModel.Companion.getFactory(url))
-                    .get(PlayerViewModel::class.java)
+                //viewModel = ViewModelProvider(this, PlayerViewModel.Companion.getFactory(url))
+                //    .get(PlayerViewModel::class.java)
 
-                viewModel?.observePlayerState()?.observe(this) {
+                viewModel.observePlayerState().observe(this) {
                     setPlayButtonState(it.isPlaying)
                     binding.timeNow.text = it.progressTime
                 }
 
                 binding.playButton.setOnClickListener {
-                    viewModel?.onPlayButtonClicked()
+                    viewModel.onPlayButtonClicked()
                 }
 
              }
@@ -79,7 +84,7 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        viewModel?.onPause()
+        viewModel.onPause()
     }
 
     private fun setPlayButtonState(isPlaying: Boolean) {

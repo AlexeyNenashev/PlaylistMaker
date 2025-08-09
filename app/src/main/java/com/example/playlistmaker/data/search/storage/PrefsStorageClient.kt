@@ -7,13 +7,15 @@ import com.google.gson.Gson
 import java.lang.reflect.Type
 
 class PrefsStorageClient<T>(
-    private val context: Context,
+    private val prefs: SharedPreferences,
+    private val gson: Gson,
+    //private val context: Context,
     private val dataKey: String,
     private val type: Type
 ) : StorageClient<T> {
 
-    private val prefs: SharedPreferences = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE)
-    private val gson = Gson()
+    //private val prefs: SharedPreferences = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE)
+    //private val gson = Gson()
 
     override fun storeData(data: T) {
         prefs.edit().putString(dataKey, gson.toJson(data, type)).apply()
@@ -28,7 +30,7 @@ class PrefsStorageClient<T>(
         }
     }
 
-    companion object {
-        private const val PREFERENCES = "preferences"
-    }
+    //companion object {
+    //    private const val PREFERENCES = "preferences"
+    //}
 }

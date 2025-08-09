@@ -6,10 +6,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
 import com.example.playlistmaker.ui.App
 import com.example.playlistmaker.ui.settings.view_model.SettingsViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
 
-    private var viewModel: SettingsViewModel? = null
+    //private var viewModel: SettingsViewModel? = null
+    private val viewModel by viewModel<SettingsViewModel>()
     private lateinit var binding: ActivitySettingsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,10 +19,10 @@ class SettingsActivity : AppCompatActivity() {
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this, SettingsViewModel.Companion.getFactory(this))
-            .get(SettingsViewModel::class.java)
+        //viewModel = ViewModelProvider(this, SettingsViewModel.Companion.getFactory(this))
+        //    .get(SettingsViewModel::class.java)
 
-        viewModel?.observeDarkTheme()?.observe(this) {
+        viewModel.observeDarkTheme().observe(this) {
             (applicationContext as App).switchTheme(it)
             binding.nightTheme.isChecked = it
         }
@@ -28,14 +30,14 @@ class SettingsActivity : AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener { finish() }
 
         binding.nightTheme.setOnCheckedChangeListener { switcher, checked ->
-            viewModel?.rememberDarkTheme(checked)
+            viewModel.rememberDarkTheme(checked)
         }
 
-        binding.share.setOnClickListener { viewModel?.shareApp() }
+        binding.share.setOnClickListener { viewModel.shareApp() }
 
-        binding.support.setOnClickListener { viewModel?.openSupport() }
+        binding.support.setOnClickListener { viewModel.openSupport() }
 
-        binding.user.setOnClickListener { viewModel?.openTerms() }
+        binding.user.setOnClickListener { viewModel.openTerms() }
 
     }
 }

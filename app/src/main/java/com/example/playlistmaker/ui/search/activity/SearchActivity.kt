@@ -16,6 +16,7 @@ import com.example.playlistmaker.ui.search.TracksState
 import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
 import com.google.gson.Gson
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
@@ -24,7 +25,8 @@ class SearchActivity : AppCompatActivity() {
         const val EXTRA_TRACK = "EXTRA_TRACK"
     }
 
-    private var viewModel: SearchViewModel? = null
+    //private var viewModel: SearchViewModel? = null
+    private val viewModel by viewModel<SearchViewModel>()
     private lateinit var binding: ActivitySearchBinding
 
     private val trackAdapter = TrackAdapter {
@@ -62,10 +64,10 @@ class SearchActivity : AppCompatActivity() {
         binding.rvTrack.adapter = trackAdapter
         binding.historyTracks.adapter = historyAdapter
 
-        viewModel = ViewModelProvider(this, SearchViewModel.Companion.getFactory())
-            .get(SearchViewModel::class.java)
+        //viewModel = ViewModelProvider(this, SearchViewModel.Companion.getFactory())
+        //    .get(SearchViewModel::class.java)
 
-        viewModel?.observeState()?.observe(this) {
+        viewModel.observeState().observe(this) {
             render(it)
         }
 
@@ -77,7 +79,7 @@ class SearchActivity : AppCompatActivity() {
                 if (s.isNullOrEmpty() && binding.inputEditText.hasFocus()) {
                     showHistoryIfItIsNotEmpty()
                 }
-                viewModel?.searchDebounce(s?.toString() ?: "")
+                viewModel.searchDebounce(s?.toString() ?: "")
             }
         }
         textWatcher?.let { binding.inputEditText.addTextChangedListener(it) }
@@ -91,12 +93,12 @@ class SearchActivity : AppCompatActivity() {
         binding.messageButton.setOnClickListener {
             if (clickDebounce()) {
                 showOrHideMessage(Msg.HIDE)
-                viewModel?.searchRequest(binding.inputEditText.text.toString())
+                viewModel.searchRequest(binding.inputEditText.text.toString())
             }
         }
 
         binding.clearHistoryButton.setOnClickListener {
-            viewModel?.clearHistory()
+            viewModel.clearHistory()
         }
 
         binding.inputEditText.setOnFocusChangeListener { view, hasFocus ->
@@ -132,7 +134,7 @@ class SearchActivity : AppCompatActivity() {
     private fun showHistoryIfItIsNotEmpty() {
         trackAdapter.tracks.clear()
         trackAdapter.notifyDataSetChanged()
-        viewModel?.showHistory()
+        viewModel.showHistory()
     }
 
     private fun showOrHideMessage(msg: Msg) {
