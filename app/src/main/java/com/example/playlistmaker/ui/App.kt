@@ -23,9 +23,7 @@ class App : Application() {
             modules(dataModule, repositoryModule, interactorModule, viewModelModule)
         }
 
-        //val settingsInteractor: SettingsInteractor = Creator.provideSettingsInteractor(this)
         val settingsInteractor: SettingsInteractor by inject()
-
         val darkTheme = (resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES)
         val themeSettingsDefault = ThemeSettings(darkTheme)
         val themeSettings = settingsInteractor.getThemeSettings() ?: themeSettingsDefault

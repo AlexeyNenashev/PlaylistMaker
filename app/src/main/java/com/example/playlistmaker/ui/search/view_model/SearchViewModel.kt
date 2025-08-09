@@ -7,15 +7,11 @@ import android.os.SystemClock
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.search.SearchHistoryInteractor
 import com.example.playlistmaker.domain.search.TracksInteractor
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.search.TracksState
-import com.example.playlistmaker.ui.App
 
 class SearchViewModel(private val tracksInteractor: TracksInteractor,
                       private val historyInteractor: SearchHistoryInteractor,
@@ -24,18 +20,7 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor,
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private val SEARCH_REQUEST_TOKEN = Any()
-
-        //fun getFactory(): ViewModelProvider.Factory = viewModelFactory {
-        //    initializer {
-        //        val app =
-        //            (this[ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY] as App)
-        //        SearchViewModel(app)
-        //    }
-        //}
     }
-
-    //private val tracksInteractor = Creator.provideTracksInteractor()
-    //private val historyInteractor = Creator.provideSearchHistoryInteractor(context)
 
     private val stateLiveData = MutableLiveData<TracksState>()
     fun observeState(): LiveData<TracksState> = stateLiveData

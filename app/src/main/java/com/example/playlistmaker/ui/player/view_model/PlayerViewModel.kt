@@ -7,25 +7,14 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.ui.player.PlayerState
 import java.util.Locale
 
-class PlayerViewModel(private val url: String) : ViewModel() {
+class PlayerViewModel(private val url: String, private val mediaPlayer: MediaPlayer) : ViewModel() {
 
     companion object {
-
         private const val COUNTER_DELAY = 500L
         private const val ZERO_TIME = "00:00"
-
-        //fun getFactory(trackUrl: String): ViewModelProvider.Factory = viewModelFactory {
-            //initializer {
-            //    PlayerViewModel(trackUrl)
-            //}
-        //}
-
     }
 
     enum class PlayerMode {
@@ -35,15 +24,10 @@ class PlayerViewModel(private val url: String) : ViewModel() {
         PAUSED
     }
 
-
-
     private var playerMode = PlayerMode.DEFAULT
     private var progressTime = ZERO_TIME
     private val playerStateLiveData = MutableLiveData(PlayerState(false, progressTime))
     fun observePlayerState(): LiveData<PlayerState> = playerStateLiveData
-
-
-    private val mediaPlayer = MediaPlayer()
 
     private val handler = Handler(Looper.getMainLooper())
 

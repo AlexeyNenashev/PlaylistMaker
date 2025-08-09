@@ -10,7 +10,7 @@ import org.koin.core.module.dsl.viewModel
 val viewModelModule = module {
 
     viewModel { (url: String) ->
-        PlayerViewModel(url)
+        PlayerViewModel(url, get())
     }
 
     viewModel {

@@ -9,7 +9,6 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.ui.search.TracksState
@@ -25,13 +24,12 @@ class SearchActivity : AppCompatActivity() {
         const val EXTRA_TRACK = "EXTRA_TRACK"
     }
 
-    //private var viewModel: SearchViewModel? = null
     private val viewModel by viewModel<SearchViewModel>()
     private lateinit var binding: ActivitySearchBinding
 
     private val trackAdapter = TrackAdapter {
         if (clickDebounce()) {
-            viewModel?.addToHistory(it)
+            viewModel.addToHistory(it)
             val json: String = Gson().toJson(it)
             val displayIntent = Intent(this, PlayerActivity::class.java)
             displayIntent.putExtra(EXTRA_TRACK, json)
@@ -41,7 +39,7 @@ class SearchActivity : AppCompatActivity() {
 
     private val historyAdapter = TrackAdapter {
         if (clickDebounce()) {
-            viewModel?.addToHistory(it)
+            viewModel.addToHistory(it)
             val json: String = Gson().toJson(it)
             val displayIntent = Intent(this, PlayerActivity::class.java)
             displayIntent.putExtra(EXTRA_TRACK, json)
@@ -63,9 +61,6 @@ class SearchActivity : AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener { finish() }
         binding.rvTrack.adapter = trackAdapter
         binding.historyTracks.adapter = historyAdapter
-
-        //viewModel = ViewModelProvider(this, SearchViewModel.Companion.getFactory())
-        //    .get(SearchViewModel::class.java)
 
         viewModel.observeState().observe(this) {
             render(it)

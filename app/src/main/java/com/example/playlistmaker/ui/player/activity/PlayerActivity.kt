@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
@@ -19,7 +18,6 @@ import org.koin.core.parameter.parametersOf
 class PlayerActivity : AppCompatActivity() {
 
     var url: String? = ""
-    //private var viewModel: PlayerViewModel? = null
     private val viewModel by viewModel<PlayerViewModel> {
         parametersOf(url)
     }
@@ -63,22 +61,15 @@ class PlayerActivity : AppCompatActivity() {
             binding.country.text = track.country
 
             if (track.previewUrl.isNotEmpty()) {
-
                 url = track.previewUrl
-
-                //viewModel = ViewModelProvider(this, PlayerViewModel.Companion.getFactory(url))
-                //    .get(PlayerViewModel::class.java)
-
                 viewModel.observePlayerState().observe(this) {
                     setPlayButtonState(it.isPlaying)
                     binding.timeNow.text = it.progressTime
                 }
-
                 binding.playButton.setOnClickListener {
                     viewModel.onPlayButtonClicked()
                 }
-
-             }
+            }
         }
     }
 
