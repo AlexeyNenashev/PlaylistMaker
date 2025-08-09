@@ -9,12 +9,12 @@ import org.koin.core.module.dsl.viewModel
 
 val viewModelModule = module {
 
-    viewModel { (url: String) ->
-        PlayerViewModel(url, get())
+    viewModel { (json: String) ->
+        PlayerViewModel(json, get(), get())
     }
 
     viewModel {
-        SearchViewModel(get(), get(), androidContext())
+        SearchViewModel(get(), get(), androidContext(), get())
     }
 
     viewModel {

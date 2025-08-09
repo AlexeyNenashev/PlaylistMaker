@@ -1,6 +1,7 @@
 package com.example.playlistmaker.ui.search.view_model
 
 import android.content.Context
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
@@ -11,11 +12,15 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.search.SearchHistoryInteractor
 import com.example.playlistmaker.domain.search.TracksInteractor
 import com.example.playlistmaker.domain.search.model.Track
+import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.example.playlistmaker.ui.search.TracksState
+import com.example.playlistmaker.ui.search.activity.SearchActivity.Companion.EXTRA_TRACK
+import com.google.gson.Gson
 
 class SearchViewModel(private val tracksInteractor: TracksInteractor,
                       private val historyInteractor: SearchHistoryInteractor,
-                      private val context: Context): ViewModel() {
+                      private val context: Context,
+                      private val gson: Gson): ViewModel() {
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
@@ -129,6 +134,14 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor,
                 }
             }
         })
+    }
+
+    fun launchPlayerScreen(t: Track) {
+        val json: String = gson.toJson(t)
+        val displayIntent = Intent(context, PlayerActivity::class.java)
+        displayIntent.putExtra(EXTRA_TRACK, json)
+        displayIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(displayIntent)
     }
 
 }

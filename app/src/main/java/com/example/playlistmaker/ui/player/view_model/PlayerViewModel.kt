@@ -7,10 +7,12 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.player.PlayerState
+import com.google.gson.Gson
 import java.util.Locale
 
-class PlayerViewModel(private val url: String, private val mediaPlayer: MediaPlayer) : ViewModel() {
+class PlayerViewModel(private val json: String, private val mediaPlayer: MediaPlayer, private val gson: Gson) : ViewModel() {
 
     companion object {
         private const val COUNTER_DELAY = 500L
@@ -24,9 +26,11 @@ class PlayerViewModel(private val url: String, private val mediaPlayer: MediaPla
         PAUSED
     }
 
+    private val track: Track = gson.fromJson(json, Track::class.java)
+    private val url = track.previewUrl
     private var playerMode = PlayerMode.DEFAULT
     private var progressTime = ZERO_TIME
-    private val playerStateLiveData = MutableLiveData(PlayerState(false, progressTime))
+    private val playerStateLiveData = MutableLiveData<PlayerState>()
     fun observePlayerState(): LiveData<PlayerState> = playerStateLiveData
 
     private val handler = Handler(Looper.getMainLooper())
@@ -39,6 +43,7 @@ class PlayerViewModel(private val url: String, private val mediaPlayer: MediaPla
 
     init {
         preparePlayer()
+        renderState()
     }
 
     override fun onCleared() {
@@ -104,7 +109,17 @@ class PlayerViewModel(private val url: String, private val mediaPlayer: MediaPla
     }
 
     private fun renderState() {
-        playerStateLiveData.postValue(PlayerState(playerMode == PlayerMode.PLAYING, progressTime))
+        playerStateLiveData.postValue(PlayerState(
+            playerMode == PlayerMode.PLAYING,
+            progressTime,
+            track.artworkUrlCover,
+            track.trackName,
+            track.artistName,
+            track.trackTime,
+            track.collectionName,
+            track.year,
+            track.primaryGenreName,
+            track.country))
     }
 
 }

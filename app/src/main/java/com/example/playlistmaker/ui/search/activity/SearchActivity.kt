@@ -1,6 +1,5 @@
 package com.example.playlistmaker.ui.search.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -12,9 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.ui.search.TracksState
-import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
-import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
@@ -30,20 +27,14 @@ class SearchActivity : AppCompatActivity() {
     private val trackAdapter = TrackAdapter {
         if (clickDebounce()) {
             viewModel.addToHistory(it)
-            val json: String = Gson().toJson(it)
-            val displayIntent = Intent(this, PlayerActivity::class.java)
-            displayIntent.putExtra(EXTRA_TRACK, json)
-            startActivity(displayIntent)
+            viewModel.launchPlayerScreen(it)
         }
     }
 
     private val historyAdapter = TrackAdapter {
         if (clickDebounce()) {
             viewModel.addToHistory(it)
-            val json: String = Gson().toJson(it)
-            val displayIntent = Intent(this, PlayerActivity::class.java)
-            displayIntent.putExtra(EXTRA_TRACK, json)
-            startActivity(displayIntent)
+            viewModel.launchPlayerScreen(it)
         }
     }
 
