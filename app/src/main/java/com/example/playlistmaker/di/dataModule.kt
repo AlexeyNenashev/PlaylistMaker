@@ -26,13 +26,14 @@ import com.example.playlistmaker.domain.sharing.SharingInteractor
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 val dataModule = module {
 
-    single<StorageClient<ArrayList<Track>>> {
+    single<StorageClient<ArrayList<Track>>>(named("historyStorage")) {
         PrefsStorageClient<ArrayList<Track>>(get(), get(), "history",
             object : TypeToken<ArrayList<Track>>() {}.type
         )
@@ -57,7 +58,7 @@ val dataModule = module {
             .build()
     }
 
-    single<StorageClient<ThemeSettings>> {
+    single<StorageClient<ThemeSettings>>(named("themeStorage")) {
         PrefsStorageClient<ThemeSettings>(get(), get(),"dark_theme",
             object : TypeToken<ThemeSettings>() {}.type
         )

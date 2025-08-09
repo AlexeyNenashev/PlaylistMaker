@@ -26,6 +26,7 @@ import com.example.playlistmaker.domain.sharing.SharingInteractor
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -33,7 +34,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 val repositoryModule = module {
 
     single<SearchHistoryRepository> {
-        SearchHistoryRepositoryImpl(get())
+        SearchHistoryRepositoryImpl(get(qualifier = named("historyStorage")))
     }
 
     single<TracksRepository> {
@@ -41,7 +42,7 @@ val repositoryModule = module {
     }
 
     single<SettingsRepository> {
-        SettingsRepositoryImpl(get())
+        SettingsRepositoryImpl(get(qualifier = named("themeStorage")))
     }
 
     single<ExternalNavigator> {
