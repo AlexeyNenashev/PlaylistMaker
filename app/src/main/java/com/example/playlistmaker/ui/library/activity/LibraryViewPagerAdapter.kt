@@ -7,8 +7,12 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 
 class LibraryViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle)  {
 
+    companion object {
+        const val HOW_MANY_FRAGMENTS = 2
+    }
+
     override fun getItemCount(): Int {
-        return 2
+        return HOW_MANY_FRAGMENTS
     }
 
     override fun createFragment(position: Int): Fragment {

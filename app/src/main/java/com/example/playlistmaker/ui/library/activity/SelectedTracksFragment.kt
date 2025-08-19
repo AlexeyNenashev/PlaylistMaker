@@ -11,8 +11,8 @@ import com.example.playlistmaker.ui.library.view_model.SelectedTracksViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SelectedTracksFragment : Fragment() {
-
-    private lateinit var binding: FragmentSelectedTracksBinding
+    private var _binding: FragmentSelectedTracksBinding? = null
+    private val binding get() = _binding!!
     private val viewModel: SelectedTracksViewModel by viewModel()
 
     override fun onCreateView(
@@ -20,8 +20,14 @@ class SelectedTracksFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentSelectedTracksBinding.inflate(inflater, container, false)
-        return binding.root
+        _binding = FragmentSelectedTracksBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
