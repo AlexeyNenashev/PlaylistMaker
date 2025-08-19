@@ -5,22 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
-import com.example.playlistmaker.ui.library.PlaylistsState
-import com.example.playlistmaker.ui.library.view_model.PlaylistsViewModel
+import com.example.playlistmaker.databinding.FragmentSelectedTracksBinding
+import com.example.playlistmaker.ui.library.SelectedTracksState
+import com.example.playlistmaker.ui.library.view_model.SelectedTracksViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PlaylistsFragment : Fragment() {
+class SelectedTracksFragment : Fragment() {
 
-    private lateinit var binding: FragmentPlaylistsBinding
-    private val viewModel: PlaylistsViewModel by viewModel()
+    private lateinit var binding: FragmentSelectedTracksBinding
+    private val viewModel: SelectedTracksViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
+        binding = FragmentSelectedTracksBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -29,17 +29,17 @@ class PlaylistsFragment : Fragment() {
 
         viewModel.observeState().observe(viewLifecycleOwner) {
             when (it) {
-                is PlaylistsState.NoPlaylists -> showNoPlaylists()
+                is SelectedTracksState.NoTracks -> showNoTracks()
             }
         }
     }
 
-    private fun showNoPlaylists() {
+    private fun showNoTracks() {
         binding.messageLayout.visibility = View.VISIBLE
     }
 
 
     companion object {
-        fun newInstance() = PlaylistsFragment()
+        fun newInstance() = SelectedTracksFragment()
     }
 }
