@@ -9,10 +9,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.player.PlayerState
-import com.google.gson.Gson
 import java.util.Locale
 
-class PlayerViewModel(private val json: String, private val mediaPlayer: MediaPlayer, private val gson: Gson) : ViewModel() {
+class PlayerViewModel(private val track: Track, private val mediaPlayer: MediaPlayer) : ViewModel() {
 
     companion object {
         private const val COUNTER_DELAY = 500L
@@ -26,7 +25,6 @@ class PlayerViewModel(private val json: String, private val mediaPlayer: MediaPl
         PAUSED
     }
 
-    private val track: Track = gson.fromJson(json, Track::class.java)
     private val url = track.previewUrl
     private var playerMode = PlayerMode.DEFAULT
     private var progressTime = ZERO_TIME
