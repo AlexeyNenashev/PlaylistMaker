@@ -16,6 +16,14 @@
         android:theme="@style/Theme.PlaylistMaker"
         tools:targetApi="31">
         <activity
+            android:name=".ui.root.RootActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".ui.player.activity.PlayerActivity"
             android:exported="false" />
         <activity
@@ -27,15 +35,6 @@
         <activity
             android:name=".ui.settings.activity.SettingsActivity"
             android:exported="false" />
-        <activity
-            android:name=".ui.main.activity.MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>
