@@ -26,15 +26,15 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         binding.buttonSearch.setOnClickListener {
-            findNavController().navigate(R.id.action_mainFragment_to_searchFragment)
+            //findNavController().navigate(R.id.action_mainFragment_to_searchFragment)
         }
 
         binding.buttonLibrary.setOnClickListener {
-            findNavController().navigate(R.id.action_mainFragment_to_libraryFragment)
+            //findNavController().navigate(R.id.action_mainFragment_to_libraryFragment)
         }
 
         binding.buttonSettings.setOnClickListener {
-            findNavController().navigate(R.id.action_mainFragment_to_settingsFragment)
+            //findNavController().navigate(R.id.action_mainFragment_to_settingsFragment)
         }
 
     }

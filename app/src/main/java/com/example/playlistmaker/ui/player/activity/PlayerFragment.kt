@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
@@ -52,7 +53,7 @@ class PlayerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.menuButton.setOnClickListener { }  // finish()
+        binding.menuButton.setOnClickListener { findNavController().navigateUp() }
         track = requireArguments().getParcelable(ARGS_TRACK)
         if (track != null) {
             viewModel.observePlayerState().observe(viewLifecycleOwner) {

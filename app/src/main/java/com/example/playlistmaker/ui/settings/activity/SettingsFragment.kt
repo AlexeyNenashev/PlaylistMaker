@@ -34,9 +34,9 @@ class SettingsFragment : Fragment() {
             binding.nightTheme.isChecked = it
         }
 
-        binding.toolbar.setNavigationOnClickListener {
-            findNavController().navigateUp()
-        }
+        //binding.toolbar.setNavigationOnClickListener {
+        //    findNavController().navigateUp()
+        //}
 
         binding.nightTheme.setOnCheckedChangeListener { switcher, checked ->
             viewModel.rememberDarkTheme(checked)

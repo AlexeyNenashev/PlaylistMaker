@@ -15,8 +15,7 @@ tools:context=".ui.library.activity.LibraryFragment">
     android:layout_height="wrap_content"
     android:fontFamily="@font/ys_display_medium"
     app:titleTextColor="?attr/colorOnSecondary"
-    app:title="@string/library"
-    app:navigationIcon="@drawable/arrowback"/>
+    app:title="@string/library" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"

@@ -15,8 +15,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/ys_display_medium"
         app:titleTextColor="?attr/colorOnSecondary"
-        app:title="@string/search"
-        app:navigationIcon="@drawable/arrowback"/>
+        app:title="@string/search" />
 
     <FrameLayout
         android:layout_width="match_parent"

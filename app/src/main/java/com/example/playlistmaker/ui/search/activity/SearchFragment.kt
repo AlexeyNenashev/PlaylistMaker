@@ -72,9 +72,9 @@ class SearchFragment : Fragment() {
         //binding = ActivitySearchBinding.inflate(layoutInflater)
         //setContentView(binding.root)
 
-        binding.toolbar.setNavigationOnClickListener {
-            findNavController().navigateUp()
-        }
+        //binding.toolbar.setNavigationOnClickListener {
+        //    findNavController().navigateUp()
+        //}
 
         binding.rvTrack.adapter = trackAdapter
         binding.historyTracks.adapter = historyAdapter
