@@ -11,7 +11,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentMainBinding
 import com.example.playlistmaker.ui.library.activity.LibraryFragment
 import com.example.playlistmaker.ui.search.activity.SearchFragment
-import com.example.playlistmaker.ui.settings.activity.SettingsActivity
+import com.example.playlistmaker.ui.settings.activity.SettingsFragment
 
 class MainFragment : Fragment() {
 
@@ -59,8 +59,20 @@ class MainFragment : Fragment() {
         }
 
         binding.buttonSettings.setOnClickListener {
-            val displayIntent = Intent(requireContext(), SettingsActivity::class.java)
-            startActivity(displayIntent)
+            //val displayIntent = Intent(requireContext(), SettingsFragment::class.java)
+            //startActivity(displayIntent)
+            parentFragmentManager.commit {
+                replace(
+                    // Указали, в каком контейнере работаем
+                    R.id.rootFragmentContainerView,
+                    // Создали фрагмент
+                    SettingsFragment(),
+                    // Указали тег фрагмента
+                    SettingsFragment.TAG
+                )
+                // Добавляем фрагмент в Back Stack
+                addToBackStack(SettingsFragment.TAG)
+            }
         }
 
     }
