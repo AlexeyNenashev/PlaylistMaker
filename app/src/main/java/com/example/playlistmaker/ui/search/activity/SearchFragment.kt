@@ -1,20 +1,29 @@
 package com.example.playlistmaker.ui.search.activity
 
+import android.content.Context.INPUT_METHOD_SERVICE
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.getDrawable
+import androidx.fragment.app.Fragment
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivitySearchBinding
+import com.example.playlistmaker.databinding.FragmentSearchBinding
+import com.example.playlistmaker.domain.search.model.Track
+import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.example.playlistmaker.ui.search.TracksState
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
+
 
     companion object {
         private const val CLICK_DEBOUNCE_DELAY = 1000L
@@ -22,19 +31,18 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private val viewModel by viewModel<SearchViewModel>()
-    private lateinit var binding: ActivitySearchBinding
 
     private val trackAdapter = TrackAdapter {
         if (clickDebounce()) {
             viewModel.addToHistory(it)
-            viewModel.launchPlayerScreen(it)
+            launchPlayerScreen(it)
         }
     }
 
     private val historyAdapter = TrackAdapter {
         if (clickDebounce()) {
             viewModel.addToHistory(it)
-            viewModel.launchPlayerScreen(it)
+            launchPlayerScreen(it)
         }
     }
 
@@ -43,17 +51,28 @@ class SearchActivity : AppCompatActivity() {
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
 
+    private lateinit var binding: FragmentSearchBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        binding.toolbar.setNavigationOnClickListener { finish() }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        //override fun onCreate(savedInstanceState: Bundle?) {
+        //super.onCreate(savedInstanceState)
+        //binding = ActivitySearchBinding.inflate(layoutInflater)
+        //setContentView(binding.root)
+
+        binding.toolbar.setNavigationOnClickListener { }   ///////// finish()
         binding.rvTrack.adapter = trackAdapter
         binding.historyTracks.adapter = historyAdapter
 
-        viewModel.observeState().observe(this) {
+        viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
 
@@ -72,7 +91,7 @@ class SearchActivity : AppCompatActivity() {
 
         binding.clearIcon.setOnClickListener {
             binding.inputEditText.setText("")
-            val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager
+            val inputMethodManager = requireContext().getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(binding.clearIcon.windowToken, 0)
         }
 
@@ -95,8 +114,8 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         textWatcher?.let { binding.inputEditText.removeTextChangedListener(it) }
     }
 
@@ -127,7 +146,7 @@ class SearchActivity : AppCompatActivity() {
         when(msg) {
             Msg.NOTHING_FOUND -> {
                 binding.apply {
-                    messageIcon.setImageDrawable(getDrawable(R.drawable.nothing_found))
+                    messageIcon.setImageDrawable(getDrawable(requireContext(), R.drawable.nothing_found))
                     messageText.text = getString(R.string.message_nothing_found)
                     messageButton.visibility = View.GONE
                     messageLayout.visibility = View.VISIBLE
@@ -137,7 +156,7 @@ class SearchActivity : AppCompatActivity() {
             }
             Msg.SOMETHING_WRONG -> {
                 binding.apply {
-                    messageIcon.setImageDrawable(getDrawable(R.drawable.something_wrong))
+                    messageIcon.setImageDrawable(getDrawable(requireContext(),R.drawable.something_wrong))
                     messageText.text = getString(R.string.message_something_wrong)
                     messageButton.visibility = View.VISIBLE
                     messageLayout.visibility = View.VISIBLE
@@ -200,5 +219,13 @@ class SearchActivity : AppCompatActivity() {
             }
         }
     }
+
+    fun launchPlayerScreen(t: Track) {
+        val displayIntent = Intent(requireContext(), PlayerActivity::class.java)
+        displayIntent.putExtra(EXTRA_TRACK, t)
+        displayIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(displayIntent)
+    }
+
 
 }

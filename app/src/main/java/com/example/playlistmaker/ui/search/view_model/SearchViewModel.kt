@@ -14,7 +14,7 @@ import com.example.playlistmaker.domain.search.TracksInteractor
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.example.playlistmaker.ui.search.TracksState
-import com.example.playlistmaker.ui.search.activity.SearchActivity.Companion.EXTRA_TRACK
+import com.example.playlistmaker.ui.search.activity.SearchFragment.Companion.EXTRA_TRACK
 
 class SearchViewModel(private val tracksInteractor: TracksInteractor,
                       private val historyInteractor: SearchHistoryInteractor,
@@ -134,11 +134,11 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor,
         })
     }
 
-    fun launchPlayerScreen(t: Track) {
-        val displayIntent = Intent(context, PlayerActivity::class.java)
-        displayIntent.putExtra(EXTRA_TRACK, t)
-        displayIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(displayIntent)
-    }
+    //fun launchPlayerScreen(t: Track) {
+    //    val displayIntent = Intent(context, PlayerActivity::class.java)
+    //    displayIntent.putExtra(EXTRA_TRACK, t)
+    //    displayIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    //    context.startActivity(displayIntent)
+    //}
 
 }

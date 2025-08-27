@@ -6,10 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentMainBinding
 import com.example.playlistmaker.ui.library.activity.LibraryActivity
-import com.example.playlistmaker.ui.search.activity.SearchActivity
+import com.example.playlistmaker.ui.search.activity.SearchFragment
 import com.example.playlistmaker.ui.settings.activity.SettingsActivity
 
 class MainFragment : Fragment() {
@@ -24,7 +23,7 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         binding.buttonSearch.setOnClickListener {
-            val displayIntent = Intent(requireContext(), SearchActivity::class.java)
+            val displayIntent = Intent(requireContext(), SearchFragment::class.java)
             startActivity(displayIntent)
         }
 

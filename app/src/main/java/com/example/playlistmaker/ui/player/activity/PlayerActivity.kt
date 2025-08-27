@@ -1,10 +1,8 @@
 package com.example.playlistmaker.ui.player.activity
 
-import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -13,7 +11,7 @@ import com.example.playlistmaker.databinding.ActivityPlayerBinding
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.player.PlayerState
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
-import com.example.playlistmaker.ui.search.activity.SearchActivity
+import com.example.playlistmaker.ui.search.activity.SearchFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -31,7 +29,7 @@ class PlayerActivity : AppCompatActivity() {
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.menuButton.setOnClickListener { finish() }
-        track = intent.getParcelableExtra(SearchActivity.Companion.EXTRA_TRACK)
+        track = intent.getParcelableExtra(SearchFragment.Companion.EXTRA_TRACK)
         if (track != null) {
             viewModel.observePlayerState().observe(this) {
                 render(it)
