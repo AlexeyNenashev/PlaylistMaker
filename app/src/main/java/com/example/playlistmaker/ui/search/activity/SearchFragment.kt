@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.getDrawable
 import androidx.fragment.app.Fragment
 import com.example.playlistmaker.R
@@ -28,6 +27,9 @@ class SearchFragment : Fragment() {
     companion object {
         private const val CLICK_DEBOUNCE_DELAY = 1000L
         const val EXTRA_TRACK = "EXTRA_TRACK"
+
+        // Тег для использования во FragmentManager
+        const val TAG = "SearchFragment"
     }
 
     private val viewModel by viewModel<SearchViewModel>()

@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.commit
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentMainBinding
 import com.example.playlistmaker.ui.library.activity.LibraryActivity
 import com.example.playlistmaker.ui.search.activity.SearchFragment
@@ -23,8 +25,20 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         binding.buttonSearch.setOnClickListener {
-            val displayIntent = Intent(requireContext(), SearchFragment::class.java)
-            startActivity(displayIntent)
+            //val displayIntent = Intent(requireContext(), SearchFragment::class.java)
+            //startActivity(displayIntent)
+            parentFragmentManager.commit {
+                replace(
+                    // Указали, в каком контейнере работаем
+                    R.id.rootFragmentContainerView,
+                    // Создали фрагмент
+                    SearchFragment(),
+                    // Указали тег фрагмента
+                    SearchFragment.TAG
+                )
+                // Добавляем фрагмент в Back Stack
+                addToBackStack(SearchFragment.TAG)
+            }
         }
 
         binding.buttonLibrary.setOnClickListener {
