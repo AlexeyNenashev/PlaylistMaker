@@ -13,10 +13,11 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat.getDrawable
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.ui.player.activity.PlayerActivity
+import com.example.playlistmaker.ui.player.activity.PlayerFragment
 import com.example.playlistmaker.ui.search.TracksState
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -26,7 +27,7 @@ class SearchFragment : Fragment() {
 
     companion object {
         private const val CLICK_DEBOUNCE_DELAY = 1000L
-        const val EXTRA_TRACK = "EXTRA_TRACK"
+        //const val EXTRA_TRACK = "EXTRA_TRACK"
 
         // Тег для использования во FragmentManager
         const val TAG = "SearchFragment"
@@ -223,11 +224,22 @@ class SearchFragment : Fragment() {
     }
 
     fun launchPlayerScreen(t: Track) {
-        val displayIntent = Intent(requireContext(), PlayerActivity::class.java)
-        displayIntent.putExtra(EXTRA_TRACK, t)
-        displayIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(displayIntent)
+        //val displayIntent = Intent(requireContext(), PlayerFragment::class.java)
+        //displayIntent.putExtra(EXTRA_TRACK, t)
+        //displayIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        //startActivity(displayIntent)
+        parentFragmentManager.commit {
+            replace(
+                // Указали, в каком контейнере работаем
+                R.id.rootFragmentContainerView,
+                // Создали фрагмент
+                PlayerFragment.newInstance(t),
+                // Указали тег фрагмента
+                PlayerFragment.TAG
+            )
+            // Добавляем фрагмент в Back Stack
+            addToBackStack(PlayerFragment.TAG)
+        }
     }
-
 
 }

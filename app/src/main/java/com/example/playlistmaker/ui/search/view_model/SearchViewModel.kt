@@ -1,7 +1,6 @@
 package com.example.playlistmaker.ui.search.view_model
 
 import android.content.Context
-import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
@@ -12,9 +11,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.search.SearchHistoryInteractor
 import com.example.playlistmaker.domain.search.TracksInteractor
 import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.example.playlistmaker.ui.search.TracksState
-import com.example.playlistmaker.ui.search.activity.SearchFragment.Companion.EXTRA_TRACK
 
 class SearchViewModel(private val tracksInteractor: TracksInteractor,
                       private val historyInteractor: SearchHistoryInteractor,

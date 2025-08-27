@@ -2,12 +2,15 @@ package com.example.playlistmaker.ui.player.activity
 
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivityPlayerBinding
+import com.example.playlistmaker.databinding.FragmentPlayerBinding
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.player.PlayerState
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
@@ -15,23 +18,42 @@ import com.example.playlistmaker.ui.search.activity.SearchFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class PlayerActivity : AppCompatActivity() {
+class PlayerFragment : Fragment() {
+
+    companion object {
+
+        private const val ARGS_TRACK = "track"
+
+        // Тег для использования во FragmentManager
+        const val TAG = "PlayerFragment"
+
+        fun newInstance(track: Track): Fragment {
+            return PlayerFragment().apply {
+                arguments = bundleOf(ARGS_TRACK to track)
+            }
+        }
+
+    }
 
     private var track: Track? = null
     private val viewModel by viewModel<PlayerViewModel> {
         parametersOf(track)
     }
-    private lateinit var binding: ActivityPlayerBinding
+    private lateinit var binding: FragmentPlayerBinding
     private var isTextRendered = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityPlayerBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        binding.menuButton.setOnClickListener { finish() }
-        track = intent.getParcelableExtra(SearchFragment.Companion.EXTRA_TRACK)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = FragmentPlayerBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.menuButton.setOnClickListener { }  // finish()
+        track = requireArguments().getParcelable(ARGS_TRACK)
         if (track != null) {
-            viewModel.observePlayerState().observe(this) {
+            viewModel.observePlayerState().observe(viewLifecycleOwner) {
                 render(it)
             }
             binding.playButton.setOnClickListener {
