@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.commit
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentMainBinding
-import com.example.playlistmaker.ui.library.activity.LibraryActivity
+import com.example.playlistmaker.ui.library.activity.LibraryFragment
 import com.example.playlistmaker.ui.search.activity.SearchFragment
 import com.example.playlistmaker.ui.settings.activity.SettingsActivity
 
@@ -42,8 +42,20 @@ class MainFragment : Fragment() {
         }
 
         binding.buttonLibrary.setOnClickListener {
-            val displayIntent = Intent(requireContext(), LibraryActivity::class.java)
-            startActivity(displayIntent)
+            //val displayIntent = Intent(requireContext(), LibraryFragment::class.java)
+            //startActivity(displayIntent)
+            parentFragmentManager.commit {
+                replace(
+                    // Указали, в каком контейнере работаем
+                    R.id.rootFragmentContainerView,
+                    // Создали фрагмент
+                    LibraryFragment(),
+                    // Указали тег фрагмента
+                    LibraryFragment.TAG
+                )
+                // Добавляем фрагмент в Back Stack
+                addToBackStack(LibraryFragment.TAG)
+            }
         }
 
         binding.buttonSettings.setOnClickListener {
