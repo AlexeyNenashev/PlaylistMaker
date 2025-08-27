@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.commit
+import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentMainBinding
 import com.example.playlistmaker.ui.library.activity.LibraryFragment
@@ -25,54 +26,15 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         binding.buttonSearch.setOnClickListener {
-            //val displayIntent = Intent(requireContext(), SearchFragment::class.java)
-            //startActivity(displayIntent)
-            parentFragmentManager.commit {
-                replace(
-                    // Указали, в каком контейнере работаем
-                    R.id.rootFragmentContainerView,
-                    // Создали фрагмент
-                    SearchFragment(),
-                    // Указали тег фрагмента
-                    SearchFragment.TAG
-                )
-                // Добавляем фрагмент в Back Stack
-                addToBackStack(SearchFragment.TAG)
-            }
+            findNavController().navigate(R.id.action_mainFragment_to_searchFragment)
         }
 
         binding.buttonLibrary.setOnClickListener {
-            //val displayIntent = Intent(requireContext(), LibraryFragment::class.java)
-            //startActivity(displayIntent)
-            parentFragmentManager.commit {
-                replace(
-                    // Указали, в каком контейнере работаем
-                    R.id.rootFragmentContainerView,
-                    // Создали фрагмент
-                    LibraryFragment(),
-                    // Указали тег фрагмента
-                    LibraryFragment.TAG
-                )
-                // Добавляем фрагмент в Back Stack
-                addToBackStack(LibraryFragment.TAG)
-            }
+            findNavController().navigate(R.id.action_mainFragment_to_libraryFragment)
         }
 
         binding.buttonSettings.setOnClickListener {
-            //val displayIntent = Intent(requireContext(), SettingsFragment::class.java)
-            //startActivity(displayIntent)
-            parentFragmentManager.commit {
-                replace(
-                    // Указали, в каком контейнере работаем
-                    R.id.rootFragmentContainerView,
-                    // Создали фрагмент
-                    SettingsFragment(),
-                    // Указали тег фрагмента
-                    SettingsFragment.TAG
-                )
-                // Добавляем фрагмент в Back Stack
-                addToBackStack(SettingsFragment.TAG)
-            }
+            findNavController().navigate(R.id.action_mainFragment_to_settingsFragment)
         }
 
     }

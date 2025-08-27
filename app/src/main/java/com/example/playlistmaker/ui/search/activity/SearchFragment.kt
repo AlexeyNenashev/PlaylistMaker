@@ -14,6 +14,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat.getDrawable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.domain.search.model.Track
@@ -30,7 +31,7 @@ class SearchFragment : Fragment() {
         //const val EXTRA_TRACK = "EXTRA_TRACK"
 
         // Тег для использования во FragmentManager
-        const val TAG = "SearchFragment"
+        //const val TAG = "SearchFragment"
     }
 
     private val viewModel by viewModel<SearchViewModel>()
@@ -71,7 +72,10 @@ class SearchFragment : Fragment() {
         //binding = ActivitySearchBinding.inflate(layoutInflater)
         //setContentView(binding.root)
 
-        binding.toolbar.setNavigationOnClickListener { }   ///////// finish()
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
+
         binding.rvTrack.adapter = trackAdapter
         binding.historyTracks.adapter = historyAdapter
 
@@ -224,22 +228,10 @@ class SearchFragment : Fragment() {
     }
 
     fun launchPlayerScreen(t: Track) {
-        //val displayIntent = Intent(requireContext(), PlayerFragment::class.java)
-        //displayIntent.putExtra(EXTRA_TRACK, t)
-        //displayIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        //startActivity(displayIntent)
-        parentFragmentManager.commit {
-            replace(
-                // Указали, в каком контейнере работаем
-                R.id.rootFragmentContainerView,
-                // Создали фрагмент
-                PlayerFragment.newInstance(t),
-                // Указали тег фрагмента
-                PlayerFragment.TAG
+        findNavController().navigate(
+            R.id.action_searchFragment_to_playerFragment,
+            PlayerFragment.createArgs(t)
             )
-            // Добавляем фрагмент в Back Stack
-            addToBackStack(PlayerFragment.TAG)
-        }
     }
 
 }

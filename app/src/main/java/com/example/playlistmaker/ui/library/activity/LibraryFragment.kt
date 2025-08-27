@@ -5,16 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentLibraryBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
 class LibraryFragment : Fragment() {
 
-    companion object {
+    //companion object {
         // Тег для использования во FragmentManager
-        const val TAG = "LibraryFragment"
-    }
+        //const val TAG = "LibraryFragment"
+    //}
 
     private lateinit var binding: FragmentLibraryBinding
     private lateinit var tabMediator: TabLayoutMediator
@@ -28,7 +29,9 @@ class LibraryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.toolbar.setNavigationOnClickListener { } // finish()
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
 
         binding.viewPager.adapter = LibraryViewPagerAdapter(
             fragmentManager = childFragmentManager,

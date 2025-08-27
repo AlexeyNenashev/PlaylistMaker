@@ -14,7 +14,6 @@ import com.example.playlistmaker.databinding.FragmentPlayerBinding
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.player.PlayerState
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
-import com.example.playlistmaker.ui.search.activity.SearchFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -25,13 +24,16 @@ class PlayerFragment : Fragment() {
         private const val ARGS_TRACK = "track"
 
         // Тег для использования во FragmentManager
-        const val TAG = "PlayerFragment"
+        //const val TAG = "PlayerFragment"
 
-        fun newInstance(track: Track): Fragment {
-            return PlayerFragment().apply {
-                arguments = bundleOf(ARGS_TRACK to track)
-            }
-        }
+        //fun newInstance(track: Track): Fragment {
+        //    return PlayerFragment().apply {
+        //        arguments = bundleOf(ARGS_TRACK to track)
+        //    }
+        //}
+
+        fun createArgs(track: Track): Bundle =
+            bundleOf(ARGS_TRACK to track)
 
     }
 
