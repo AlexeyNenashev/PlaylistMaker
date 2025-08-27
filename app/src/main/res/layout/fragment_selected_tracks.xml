@@ -5,7 +5,8 @@
     android:id="@+id/messageLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ui.library.activity.SelectedTracksFragment">
 
     <ImageView
         android:id="@+id/messageIcon"
