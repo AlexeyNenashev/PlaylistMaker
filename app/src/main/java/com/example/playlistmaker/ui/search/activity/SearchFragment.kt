@@ -1,7 +1,6 @@
 package com.example.playlistmaker.ui.search.activity
 
 import android.content.Context.INPUT_METHOD_SERVICE
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -13,7 +12,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat.getDrawable
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
@@ -25,13 +23,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
 
-
     companion object {
         private const val CLICK_DEBOUNCE_DELAY = 1000L
-        //const val EXTRA_TRACK = "EXTRA_TRACK"
-
-        // Тег для использования во FragmentManager
-        //const val TAG = "SearchFragment"
     }
 
     private val viewModel by viewModel<SearchViewModel>()
@@ -63,18 +56,8 @@ class SearchFragment : Fragment() {
         return binding.root
     }
 
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //override fun onCreate(savedInstanceState: Bundle?) {
-        //super.onCreate(savedInstanceState)
-        //binding = ActivitySearchBinding.inflate(layoutInflater)
-        //setContentView(binding.root)
-
-        //binding.toolbar.setNavigationOnClickListener {
-        //    findNavController().navigateUp()
-        //}
 
         binding.rvTrack.adapter = trackAdapter
         binding.historyTracks.adapter = historyAdapter

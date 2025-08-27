@@ -131,11 +131,4 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor,
         })
     }
 
-    //fun launchPlayerScreen(t: Track) {
-    //    val displayIntent = Intent(context, PlayerActivity::class.java)
-    //    displayIntent.putExtra(EXTRA_TRACK, t)
-    //    displayIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    //    context.startActivity(displayIntent)
-    //}
-
 }

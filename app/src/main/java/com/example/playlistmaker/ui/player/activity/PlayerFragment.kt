@@ -24,15 +24,6 @@ class PlayerFragment : Fragment() {
 
         private const val ARGS_TRACK = "track"
 
-        // Тег для использования во FragmentManager
-        //const val TAG = "PlayerFragment"
-
-        //fun newInstance(track: Track): Fragment {
-        //    return PlayerFragment().apply {
-        //        arguments = bundleOf(ARGS_TRACK to track)
-        //    }
-        //}
-
         fun createArgs(track: Track): Bundle =
             bundleOf(ARGS_TRACK to track)
 

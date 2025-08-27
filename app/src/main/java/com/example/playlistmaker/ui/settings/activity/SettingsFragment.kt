@@ -5,18 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.databinding.FragmentSettingsBinding
 import com.example.playlistmaker.ui.App
 import com.example.playlistmaker.ui.settings.view_model.SettingsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsFragment : Fragment() {
-
-    //companion object {
-        // Тег для использования во FragmentManager
-        //const val TAG = "SettingsFragment"
-    //}
 
     private val viewModel by viewModel<SettingsViewModel>()
     private lateinit var binding: FragmentSettingsBinding
@@ -33,10 +27,6 @@ class SettingsFragment : Fragment() {
             (requireContext().applicationContext as App).switchTheme(it)
             binding.nightTheme.isChecked = it
         }
-
-        //binding.toolbar.setNavigationOnClickListener {
-        //    findNavController().navigateUp()
-        //}
 
         binding.nightTheme.setOnCheckedChangeListener { switcher, checked ->
             viewModel.rememberDarkTheme(checked)
