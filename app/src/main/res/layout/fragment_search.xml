@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="?attr/colorPrimary"
-    tools:context=".ui.search.activity.SearchActivity">
+    tools:context=".ui.search.activity.SearchFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -15,8 +15,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/ys_display_medium"
         app:titleTextColor="?attr/colorOnSecondary"
-        app:title="@string/search"
-        app:navigationIcon="@drawable/arrowback"/>
+        app:title="@string/search" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -142,6 +141,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 app:cornerRadius="18dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
                 android:layout_gravity="center_horizontal"
                 android:backgroundTint="?attr/colorOnSecondary"
                 android:textColor="?attr/colorOnTertiary"
