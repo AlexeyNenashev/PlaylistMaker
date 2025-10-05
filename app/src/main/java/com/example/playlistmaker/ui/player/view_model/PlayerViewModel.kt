@@ -2,19 +2,21 @@ package com.example.playlistmaker.ui.player.view_model
 
 import android.icu.text.SimpleDateFormat
 import android.media.MediaPlayer
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.player.PlayerState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 class PlayerViewModel(private val track: Track, private val mediaPlayer: MediaPlayer) : ViewModel() {
 
     companion object {
-        private const val COUNTER_DELAY = 500L
+        private const val UPDATE_TIME_INTERVAL = 300L
         private const val ZERO_TIME = "00:00"
     }
 
@@ -25,19 +27,13 @@ class PlayerViewModel(private val track: Track, private val mediaPlayer: MediaPl
         PAUSED
     }
 
+    private var timerJob: Job? = null
+
     private val url = track.previewUrl
     private var playerMode = PlayerMode.DEFAULT
     private var progressTime = ZERO_TIME
     private val playerStateLiveData = MutableLiveData<PlayerState>()
     fun observePlayerState(): LiveData<PlayerState> = playerStateLiveData
-
-    private val handler = Handler(Looper.getMainLooper())
-
-    private val timerRunnable = Runnable {
-        if (playerMode == PlayerMode.PLAYING) {
-            startTimerUpdate()
-        }
-    }
 
     init {
         preparePlayer()
@@ -87,17 +83,22 @@ class PlayerViewModel(private val track: Track, private val mediaPlayer: MediaPl
     }
 
     private fun startTimerUpdate() {
-        progressTime = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
-        renderState()
-        handler.postDelayed(timerRunnable, COUNTER_DELAY)
+
+        timerJob = viewModelScope.launch {
+            while (mediaPlayer.isPlaying) {
+                progressTime = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+                renderState()
+                delay(UPDATE_TIME_INTERVAL)
+            }
+        }
     }
 
     private fun pauseTimer() {
-        handler.removeCallbacks(timerRunnable)
+        timerJob?.cancel()
     }
 
     private fun resetTimer() {
-        handler.removeCallbacks(timerRunnable)
+        timerJob?.cancel()
         progressTime = ZERO_TIME
         renderState()
     }
