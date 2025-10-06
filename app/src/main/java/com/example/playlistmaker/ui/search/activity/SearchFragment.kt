@@ -24,7 +24,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class SearchFragment : Fragment() {
 
     companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val CLICK_DEBOUNCE_DELAY = 300L
     }
 
     private val viewModel by viewModel<SearchViewModel>()
@@ -36,8 +36,6 @@ class SearchFragment : Fragment() {
     private val historyAdapter = TrackAdapter { onClickDebounce(it) }
 
     private var textWatcher: TextWatcher? = null
-
-    //private var isClickAllowed = true
 
     private lateinit var binding: FragmentSearchBinding
 
@@ -87,11 +85,6 @@ class SearchFragment : Fragment() {
         }
 
         binding.messageButton.setOnClickListener { onRefreshButtonPressDebounce(binding.inputEditText.text.toString()) }
-            //debounce<Unit>(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) {
-                //showOrHideMessage(Msg.HIDE)
-                //viewModel.searchRequest(binding.inputEditText.text.toString())
-            //}
-        //}
 
         binding.clearHistoryButton.setOnClickListener {
             viewModel.clearHistory()
@@ -109,15 +102,6 @@ class SearchFragment : Fragment() {
         super.onDestroyView()
         textWatcher?.let { binding.inputEditText.removeTextChangedListener(it) }
     }
-
-    //private fun clickDebounce() : Boolean {
-    //    val current = isClickAllowed
-    //    if (isClickAllowed) {
-    //        isClickAllowed = false
-    //        handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-    //    }
-    //    return current
-    //}
 
     private enum class Msg{
         NOTHING_FOUND,
