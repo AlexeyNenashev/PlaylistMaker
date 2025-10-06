@@ -2,8 +2,6 @@ package com.example.playlistmaker.ui.search.activity
 
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -12,6 +10,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat.getDrawable
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
@@ -19,6 +18,7 @@ import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.player.activity.PlayerFragment
 import com.example.playlistmaker.ui.search.TracksState
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
+import com.example.playlistmaker.utils.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
@@ -29,24 +29,15 @@ class SearchFragment : Fragment() {
 
     private val viewModel by viewModel<SearchViewModel>()
 
-    private val trackAdapter = TrackAdapter {
-        if (clickDebounce()) {
-            viewModel.addToHistory(it)
-            launchPlayerScreen(it)
-        }
-    }
+    private lateinit var onClickDebounce: (Track) -> Unit
 
-    private val historyAdapter = TrackAdapter {
-        if (clickDebounce()) {
-            viewModel.addToHistory(it)
-            launchPlayerScreen(it)
-        }
-    }
+    private val trackAdapter = TrackAdapter { onClickDebounce(it) }
+
+    private val historyAdapter = TrackAdapter { onClickDebounce(it) }
 
     private var textWatcher: TextWatcher? = null
 
-    private var isClickAllowed = true
-    private val handler = Handler(Looper.getMainLooper())
+    //private var isClickAllowed = true
 
     private lateinit var binding: FragmentSearchBinding
 
@@ -61,6 +52,11 @@ class SearchFragment : Fragment() {
 
         binding.rvTrack.adapter = trackAdapter
         binding.historyTracks.adapter = historyAdapter
+
+        onClickDebounce = debounce<Track>(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
+            viewModel.addToHistory(track)
+            launchPlayerScreen(track)
+        }
 
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
@@ -85,12 +81,17 @@ class SearchFragment : Fragment() {
             inputMethodManager?.hideSoftInputFromWindow(binding.clearIcon.windowToken, 0)
         }
 
-        binding.messageButton.setOnClickListener {
-            if (clickDebounce()) {
-                showOrHideMessage(Msg.HIDE)
-                viewModel.searchRequest(binding.inputEditText.text.toString())
-            }
+        val onRefreshButtonPressDebounce = debounce<String>(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { string ->
+            showOrHideMessage(Msg.HIDE)
+            viewModel.searchRequest(string)
         }
+
+        binding.messageButton.setOnClickListener { onRefreshButtonPressDebounce(binding.inputEditText.text.toString()) }
+            //debounce<Unit>(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) {
+                //showOrHideMessage(Msg.HIDE)
+                //viewModel.searchRequest(binding.inputEditText.text.toString())
+            //}
+        //}
 
         binding.clearHistoryButton.setOnClickListener {
             viewModel.clearHistory()
@@ -109,14 +110,14 @@ class SearchFragment : Fragment() {
         textWatcher?.let { binding.inputEditText.removeTextChangedListener(it) }
     }
 
-    private fun clickDebounce() : Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-        }
-        return current
-    }
+    //private fun clickDebounce() : Boolean {
+    //    val current = isClickAllowed
+    //    if (isClickAllowed) {
+    //        isClickAllowed = false
+    //        handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+    //    }
+    //    return current
+    //}
 
     private enum class Msg{
         NOTHING_FOUND,
