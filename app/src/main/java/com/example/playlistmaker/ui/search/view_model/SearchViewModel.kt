@@ -13,6 +13,7 @@ import com.example.playlistmaker.domain.search.TracksInteractor
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.search.TracksState
 import com.example.playlistmaker.utils.debounce
+import kotlinx.coroutines.launch
 
 class SearchViewModel(private val tracksInteractor: TracksInteractor,
                       private val historyInteractor: SearchHistoryInteractor,
@@ -22,12 +23,12 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor,
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 
+    private val handler = Handler(Looper.getMainLooper())
+
     private val stateLiveData = MutableLiveData<TracksState>()
     fun observeState(): LiveData<TracksState> = stateLiveData
 
     private var latestSearchText: String? = null
-
-    private val handler = Handler(Looper.getMainLooper())
 
     private val trackSearchDebounce = debounce<String>(SEARCH_DEBOUNCE_DELAY, viewModelScope, true) { changedText ->
         searchRequest(changedText)
@@ -45,46 +46,48 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor,
             renderState(
                 TracksState.Loading
             )
-
-            tracksInteractor.searchTracks(newSearchText, object : TracksInteractor.TracksConsumer {
-                override fun consume(foundTracks: List<Track>?, errorMessage: String?) {
-                    handler.post {
-
-                        val tracks = mutableListOf<Track>()
-                        if (foundTracks != null) {
-                            tracks.addAll(foundTracks)
-                        }
-
-                        when {
-                            errorMessage != null -> {
-                                renderState(
-                                    TracksState.Error(
-                                        errorMessage = context.getString(R.string.message_something_wrong),
-                                    )
-                                )
-
-                           }
-
-                            tracks.isEmpty() -> {
-                                renderState(
-                                    TracksState.Empty(
-                                        message = context.getString(R.string.message_nothing_found),
-                                    )
-                                )
-                            }
-
-                            else -> {
-                                renderState(
-                                    TracksState.Content(
-                                        tracks = tracks,
-                                    )
-                                )
-                            }
-                        }
-
+            viewModelScope.launch {
+                tracksInteractor
+                    .searchTracks(newSearchText)
+                    .collect { pair ->
+                        processResult(pair.first, pair.second)
                     }
-                }
-            })
+            }
+        }
+    }
+
+    private fun processResult(foundTracks: List<Track>?, errorMessage: String?) {
+
+        val tracks = mutableListOf<Track>()
+        if (foundTracks != null) {
+            tracks.addAll(foundTracks)
+        }
+
+        when {
+            errorMessage != null -> {
+                renderState(
+                    TracksState.Error(
+                        errorMessage = context.getString(R.string.message_something_wrong),
+                    )
+                )
+
+            }
+
+            tracks.isEmpty() -> {
+                renderState(
+                    TracksState.Empty(
+                        message = context.getString(R.string.message_nothing_found),
+                    )
+                )
+            }
+
+            else -> {
+                renderState(
+                    TracksState.Content(
+                        tracks = tracks,
+                    )
+                )
+            }
         }
     }
 
