@@ -17,7 +17,7 @@ val viewModelModule = module {
     }
 
     viewModel {
-        SearchViewModel(get(), get(), androidContext())
+        SearchViewModel(get(), get())
     }
 
     viewModel {

@@ -1,13 +1,11 @@
 package com.example.playlistmaker.ui.search.view_model
 
-import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.search.SearchHistoryInteractor
 import com.example.playlistmaker.domain.search.TracksInteractor
 import com.example.playlistmaker.domain.search.model.Track
@@ -16,8 +14,7 @@ import com.example.playlistmaker.utils.debounce
 import kotlinx.coroutines.launch
 
 class SearchViewModel(private val tracksInteractor: TracksInteractor,
-                      private val historyInteractor: SearchHistoryInteractor,
-                      private val context: Context): ViewModel() {
+                      private val historyInteractor: SearchHistoryInteractor): ViewModel() {
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
@@ -64,21 +61,13 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor,
         }
 
         when {
-            errorMessage != null -> {
-                renderState(
-                    TracksState.Error(
-                        errorMessage = context.getString(R.string.message_something_wrong),
-                    )
-                )
 
+            errorMessage != null -> {
+                renderState(TracksState.Error)
             }
 
             tracks.isEmpty() -> {
-                renderState(
-                    TracksState.Empty(
-                        message = context.getString(R.string.message_nothing_found),
-                    )
-                )
+                renderState(TracksState.Empty)
             }
 
             else -> {
