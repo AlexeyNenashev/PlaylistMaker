@@ -1,5 +1,6 @@
 package com.example.playlistmaker.di
 
+import com.example.playlistmaker.data.converters.TrackDbConverter
 import com.example.playlistmaker.data.search.impl.SearchHistoryRepositoryImpl
 import com.example.playlistmaker.data.search.impl.TracksRepositoryImpl
 import com.example.playlistmaker.data.settings.impl.SettingsRepositoryImpl
@@ -29,5 +30,7 @@ val repositoryModule = module {
     factory<ExternalNavigator> {
         ExternalNavigatorImpl(androidContext())
     }
+
+    factory { TrackDbConverter() }
 
 }
