@@ -31,7 +31,7 @@ val interactorModule = module {
         SettingsInteractorImpl(get())
     }
 
-    single<SelectedTracksInteractor> {
+    factory<SelectedTracksInteractor> {
         SelectedTracksInteractorImpl(get())
     }
 

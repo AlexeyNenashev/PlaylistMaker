@@ -1,6 +1,6 @@
 package com.example.playlistmaker.data.search.impl
 
-import com.example.playlistmaker.data.db.AppDatabase
+import com.example.playlistmaker.data.db.TrackDao
 import com.example.playlistmaker.data.search.NetworkClient
 import com.example.playlistmaker.data.search.network.TracksSearchRequest
 import com.example.playlistmaker.data.search.network.TracksSearchResponse
@@ -12,14 +12,15 @@ import kotlinx.coroutines.flow.flow
 
 class TracksRepositoryImpl(
     private val networkClient: NetworkClient,
-    private val appDatabase: AppDatabase) : TracksRepository {
+    private val trackDao: TrackDao
+) : TracksRepository {
 
     override fun searchTracks(expression: String): Flow<Resource<List<Track>>> = flow {
             val response = networkClient.doRequest(TracksSearchRequest(expression))
             if (response.resultCode != 200) {
                 emit(Resource.Error("No internet connection"))
             } else {
-                val selectedTrackIDs = appDatabase.trackDao().getTrackIDs()
+                val selectedTrackIDs = trackDao.getTrackIDs()
                 val tracks = (response as TracksSearchResponse).results.map {
                     Track(
                         it.trackId ?: 0,

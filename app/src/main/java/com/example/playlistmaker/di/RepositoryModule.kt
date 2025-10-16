@@ -35,7 +35,7 @@ val repositoryModule = module {
 
     factory { TrackDbConverter() }
 
-    single<SelectedTracksRepository> {
+    factory<SelectedTracksRepository> {
         SelectedTracksRepositoryImpl(get(), get())
     }
 
