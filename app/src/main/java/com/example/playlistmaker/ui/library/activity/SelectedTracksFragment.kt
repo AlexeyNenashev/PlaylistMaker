@@ -36,6 +36,7 @@ class SelectedTracksFragment : Fragment() {
         viewModel.observeState().observe(viewLifecycleOwner) {
             when (it) {
                 is SelectedTracksState.NoTracks -> showNoTracks()
+                is SelectedTracksState.Content -> { }
             }
         }
     }

@@ -11,4 +11,5 @@ data class PlayerState(
     val year: String,
     val primaryGenreName: String,
     val country: String,
+    val isFavorite: Boolean
     )
