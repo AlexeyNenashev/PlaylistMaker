@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.playlistmaker.databinding.FragmentSelectedTracksBinding
+import com.example.playlistmaker.domain.model.Track
 import com.example.playlistmaker.ui.library.SelectedTracksState
 import com.example.playlistmaker.ui.library.view_model.SelectedTracksViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -36,12 +37,16 @@ class SelectedTracksFragment : Fragment() {
         viewModel.observeState().observe(viewLifecycleOwner) {
             when (it) {
                 is SelectedTracksState.NoTracks -> showNoTracks()
-                is SelectedTracksState.Content -> { }
+                is SelectedTracksState.Content -> showTracks(it.tracks)
             }
         }
     }
 
     private fun showNoTracks() {
+        binding.messageLayout.visibility = View.VISIBLE
+    }
+
+    private fun showTracks(tracks: List<Track>) {
         binding.messageLayout.visibility = View.VISIBLE
     }
 

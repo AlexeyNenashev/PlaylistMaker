@@ -53,6 +53,9 @@ class PlayerFragment : Fragment() {
             binding.playButton.setOnClickListener {
                 viewModel.onPlayButtonClicked()
             }
+            binding.heartButton.setOnClickListener {
+                viewModel.onFavoriteClicked()
+            }
         }
     }
 
@@ -63,6 +66,7 @@ class PlayerFragment : Fragment() {
 
     private fun render(state: PlayerState) {
         setPlayButtonState(state.isPlaying)
+        setHeartButtonState(state.isFavorite)
         binding.timeNow.text = state.progressTime
         if (!isTextRendered) {
             isTextRendered = true
@@ -99,6 +103,14 @@ class PlayerFragment : Fragment() {
             binding.playButton.setImageResource(R.drawable.button_pause)
         } else {
             binding.playButton.setImageResource(R.drawable.button_play)
+        }
+    }
+
+    private fun setHeartButtonState(isFavorite: Boolean) {
+        if (isFavorite) {
+            binding.heartButton.setImageResource(R.drawable.button_heart_on)
+        } else {
+            binding.heartButton.setImageResource(R.drawable.button_heart_off)
         }
     }
 
