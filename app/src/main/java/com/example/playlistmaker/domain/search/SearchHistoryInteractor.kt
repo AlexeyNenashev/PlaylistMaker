@@ -1,14 +1,11 @@
 package com.example.playlistmaker.domain.search
 
 import com.example.playlistmaker.domain.model.Track
+import kotlinx.coroutines.flow.Flow
 
 interface SearchHistoryInteractor {
 
-    fun getHistory(consumer: HistoryConsumer)
-    fun saveToHistory(t: Track)
-    fun clearHistory()
-
-    interface HistoryConsumer {
-        fun consume(searchHistory: List<Track>?)
-    }
+    fun getHistory(): Flow<List<Track>?>
+    suspend fun saveToHistory(t: Track)
+    suspend fun clearHistory()
 }

@@ -12,11 +12,11 @@ class PrefsStorageClient<T>(
     private val type: Type
 ) : StorageClient<T> {
 
-    override fun storeData(data: T) {
+    override suspend fun storeData(data: T) {
         prefs.edit().putString(dataKey, gson.toJson(data, type)).apply()
     }
 
-    override fun getData(): T? {
+    override suspend fun getData(): T? {
         val dataJson = prefs.getString(dataKey, null)
         if (dataJson == null) {
             return null

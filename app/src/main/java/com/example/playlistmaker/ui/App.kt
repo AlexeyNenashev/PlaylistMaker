@@ -9,6 +9,8 @@ import com.example.playlistmaker.di.repositoryModule
 import com.example.playlistmaker.di.viewModelModule
 import com.example.playlistmaker.domain.settings.SettingsInteractor
 import com.example.playlistmaker.domain.settings.model.ThemeSettings
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -26,9 +28,16 @@ class App : Application() {
         val settingsInteractor: SettingsInteractor by inject()
         val darkTheme = (resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES)
         val themeSettingsDefault = ThemeSettings(darkTheme)
-        val themeSettings = settingsInteractor.getThemeSettings() ?: themeSettingsDefault
-        switchTheme(themeSettings.darkTheme)
-        settingsInteractor.updateThemeSetting(themeSettings)
+        var themeSettings = themeSettingsDefault
+        MainScope().launch {
+            settingsInteractor.getThemeSettings().collect { settings ->
+                if (settings != null) {
+                    themeSettings = settings
+                }
+            }
+            switchTheme(themeSettings.darkTheme)
+            settingsInteractor.updateThemeSetting(themeSettings)
+        }
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {

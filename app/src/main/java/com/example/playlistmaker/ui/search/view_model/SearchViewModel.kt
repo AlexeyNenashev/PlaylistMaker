@@ -85,11 +85,15 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor,
     }
 
     fun addToHistory(t: Track) {
-        historyInteractor.saveToHistory(t)
+        viewModelScope.launch {
+            historyInteractor.saveToHistory(t)
+        }
     }
 
     fun clearHistory() {
-        historyInteractor.clearHistory()
+        viewModelScope.launch {
+            historyInteractor.clearHistory()
+        }
         renderState(
             TracksState.History(
                 listOf<Track>()
@@ -98,17 +102,15 @@ class SearchViewModel(private val tracksInteractor: TracksInteractor,
     }
 
     fun showHistory() {
-        historyInteractor.getHistory(object : SearchHistoryInteractor.HistoryConsumer {
-            override fun consume(searchHistory: List<Track>?) {
-                handler.post {
-                    renderState(
-                        TracksState.History(
-                            searchHistory ?: listOf<Track>()
-                        )
+        viewModelScope.launch {
+            historyInteractor.getHistory().collect { searchHistory ->
+                renderState(
+                    TracksState.History(
+                        searchHistory ?: listOf<Track>()
                     )
-                }
+                )
             }
-        })
+        }
     }
 
 }

@@ -1,6 +1,6 @@
 package com.example.playlistmaker.data.search
 
 interface StorageClient<T> {
-    fun storeData(data: T)
-    fun getData(): T?
+    suspend fun storeData(data: T)
+    suspend fun getData(): T?
 }

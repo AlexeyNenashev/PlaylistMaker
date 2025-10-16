@@ -3,20 +3,23 @@ package com.example.playlistmaker.domain.search.impl
 import com.example.playlistmaker.domain.search.SearchHistoryInteractor
 import com.example.playlistmaker.domain.search.SearchHistoryRepository
 import com.example.playlistmaker.domain.model.Track
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+
 
 class SearchHistoryInteractorImpl(
     private val repository: SearchHistoryRepository
 ) : SearchHistoryInteractor {
 
-    override fun getHistory(consumer: SearchHistoryInteractor.HistoryConsumer) {
-        consumer.consume(repository.getHistory().data)
+    override fun getHistory(): Flow<List<Track>?> {
+        return repository.getHistory().map {result -> result.data }
     }
 
-    override fun saveToHistory(t: Track) {
+    override suspend fun saveToHistory(t: Track) {
         repository.saveToHistory(t)
     }
 
-    override fun clearHistory() {
+    override suspend fun clearHistory() {
         repository.clearHistory()
     }
 }
