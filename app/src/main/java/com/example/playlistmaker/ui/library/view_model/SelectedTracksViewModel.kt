@@ -14,6 +14,10 @@ class SelectedTracksViewModel(private val selectedTracksInteractor: SelectedTrac
     fun observeState(): LiveData<SelectedTracksState> = stateLiveData
 
     init {
+        getSelectedTracks()
+    }
+
+    fun getSelectedTracks() {
         viewModelScope.launch {
             selectedTracksInteractor.getTracks().collect { tracks ->
                 if(tracks.isEmpty()) {
@@ -24,7 +28,6 @@ class SelectedTracksViewModel(private val selectedTracksInteractor: SelectedTrac
                 }
             }
         }
-
     }
 
 }

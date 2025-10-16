@@ -58,6 +58,11 @@ class SelectedTracksFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getSelectedTracks()
+    }
+
     private fun showNoTracks() {
         binding.messageLayout.visibility = View.VISIBLE
         binding.rvTrack.visibility = View.GONE
