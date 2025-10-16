@@ -18,7 +18,11 @@
         android:id="@+id/libraryFragment"
         android:name="com.example.playlistmaker.ui.library.activity.LibraryFragment"
         android:label="fragment_library"
-        tools:layout="@layout/fragment_library" />
+        tools:layout="@layout/fragment_library" >
+        <action
+            android:id="@+id/action_libraryFragment_to_playerFragment"
+            app:destination="@id/playerFragment" />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.playlistmaker.ui.settings.activity.SettingsFragment"
@@ -39,8 +43,5 @@
         android:name="com.example.playlistmaker.ui.library.activity.SelectedTracksFragment"
         android:label="fragment_selected_tracks"
         tools:layout="@layout/fragment_selected_tracks" >
-        <action
-            android:id="@+id/action_selectedTracksFragment_to_playerFragment"
-            app:destination="@id/playerFragment" />
     </fragment>
 </navigation>

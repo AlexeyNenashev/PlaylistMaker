@@ -59,8 +59,8 @@ class SelectedTracksFragment : Fragment() {
     }
 
     private fun showNoTracks() {
-        binding.rvTrack.visibility = View.GONE
         binding.messageLayout.visibility = View.VISIBLE
+        binding.rvTrack.visibility = View.GONE
     }
 
     private fun showTracks(tracks: List<Track>) {
@@ -68,12 +68,12 @@ class SelectedTracksFragment : Fragment() {
         trackAdapter.tracks.clear()
         trackAdapter.tracks.addAll(tracks)
         trackAdapter.notifyDataSetChanged()
-        binding.messageLayout.visibility = View.VISIBLE
+        binding.rvTrack.visibility = View.VISIBLE
     }
 
     fun launchPlayerScreen(t: Track) {
         findNavController().navigate(
-            R.id.action_selectedTracksFragment_to_playerFragment,
+            R.id.action_libraryFragment_to_playerFragment,
             PlayerFragment.createArgs(t)
         )
     }

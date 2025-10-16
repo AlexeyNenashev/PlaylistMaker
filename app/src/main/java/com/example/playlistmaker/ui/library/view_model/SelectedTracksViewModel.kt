@@ -19,6 +19,7 @@ class SelectedTracksViewModel(private val selectedTracksInteractor: SelectedTrac
                 if(tracks.isEmpty()) {
                     stateLiveData.postValue(SelectedTracksState.NoTracks)
                 } else {
+                    tracks.forEach { track -> track.isFavorite = true }
                     stateLiveData.postValue(SelectedTracksState.Content(tracks))
                 }
             }

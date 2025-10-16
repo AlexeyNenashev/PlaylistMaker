@@ -1,10 +1,12 @@
 package com.example.playlistmaker.data.search.impl
 
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.data.db.AppDatabase
 import com.example.playlistmaker.data.search.StorageClient
 import com.example.playlistmaker.domain.search.SearchHistoryRepository
 import com.example.playlistmaker.domain.model.Track
 import com.example.playlistmaker.domain.search.util.Resource
+import kotlinx.coroutines.launch
 
 class SearchHistoryRepositoryImpl(
     private val storage: StorageClient<ArrayList<Track>>,
