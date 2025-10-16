@@ -1,12 +1,11 @@
 package com.example.playlistmaker.di
 
-import com.example.playlistmaker.domain.search.model.Track
+import com.example.playlistmaker.domain.model.Track
 import com.example.playlistmaker.ui.library.view_model.PlaylistsViewModel
 import com.example.playlistmaker.ui.library.view_model.SelectedTracksViewModel
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
 import com.example.playlistmaker.ui.settings.view_model.SettingsViewModel
-import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import org.koin.core.module.dsl.viewModel
 

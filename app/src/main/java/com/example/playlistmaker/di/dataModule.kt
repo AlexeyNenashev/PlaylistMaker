@@ -8,7 +8,7 @@ import com.example.playlistmaker.data.search.NetworkClient
 import com.example.playlistmaker.data.search.StorageClient
 import com.example.playlistmaker.data.search.network.RetrofitNetworkClient
 import com.example.playlistmaker.data.search.storage.PrefsStorageClient
-import com.example.playlistmaker.domain.search.model.Track
+import com.example.playlistmaker.domain.model.Track
 import com.example.playlistmaker.domain.settings.model.ThemeSettings
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken

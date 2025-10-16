@@ -1,6 +1,8 @@
 package com.example.playlistmaker.di
 
 import com.example.playlistmaker.data.sharing.impl.SharingInteractorImpl
+import com.example.playlistmaker.domain.library.SelectedTracksInteractor
+import com.example.playlistmaker.domain.library.impl.SelectedTracksInteractorImpl
 import com.example.playlistmaker.domain.search.SearchHistoryInteractor
 import com.example.playlistmaker.domain.search.TracksInteractor
 import com.example.playlistmaker.domain.search.impl.SearchHistoryInteractorImpl
@@ -27,6 +29,10 @@ val interactorModule = module {
 
     factory<SettingsInteractor> {
         SettingsInteractorImpl(get())
+    }
+
+    single<SelectedTracksInteractor> {
+        SelectedTracksInteractorImpl(get())
     }
 
 }

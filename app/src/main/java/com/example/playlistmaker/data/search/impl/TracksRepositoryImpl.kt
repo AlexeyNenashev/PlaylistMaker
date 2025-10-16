@@ -1,21 +1,25 @@
 package com.example.playlistmaker.data.search.impl
 
+import com.example.playlistmaker.data.db.AppDatabase
 import com.example.playlistmaker.data.search.NetworkClient
 import com.example.playlistmaker.data.search.network.TracksSearchRequest
 import com.example.playlistmaker.data.search.network.TracksSearchResponse
 import com.example.playlistmaker.domain.search.TracksRepository
-import com.example.playlistmaker.domain.search.model.Track
+import com.example.playlistmaker.domain.model.Track
 import com.example.playlistmaker.domain.search.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRepository {
+class TracksRepositoryImpl(
+    private val networkClient: NetworkClient,
+    private val appDatabase: AppDatabase) : TracksRepository {
 
     override fun searchTracks(expression: String): Flow<Resource<List<Track>>> = flow {
             val response = networkClient.doRequest(TracksSearchRequest(expression))
             if (response.resultCode != 200) {
                 emit(Resource.Error("No internet connection"))
             } else {
+                val selectedTrackIDs = appDatabase.trackDao().getTrackIDs()
                 val tracks = (response as TracksSearchResponse).results.map {
                     Track(
                         it.trackId ?: 0,
@@ -28,7 +32,8 @@ class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRep
                         it.getYear(),
                         it.primaryGenreName ?: "",
                         it.country ?: "",
-                        it.previewUrl ?: ""
+                        it.previewUrl ?: "",
+                        selectedTrackIDs.contains(it.trackId)
                     )
                 }
                 emit(Resource.Success(tracks))

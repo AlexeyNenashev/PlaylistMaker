@@ -1,4 +1,4 @@
-package com.example.playlistmaker.domain.search.model
+package com.example.playlistmaker.domain.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
@@ -16,4 +16,5 @@ data class Track(
     val primaryGenreName: String, // Жанр трека
     val country: String, // Страна исполнителя
     val previewUrl: String, // Ссылка на аудио
+    var isFavorite: Boolean = false
 ) : Parcelable

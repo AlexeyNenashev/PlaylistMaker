@@ -1,12 +1,14 @@
 package com.example.playlistmaker.data.search.impl
 
+import com.example.playlistmaker.data.db.AppDatabase
 import com.example.playlistmaker.data.search.StorageClient
 import com.example.playlistmaker.domain.search.SearchHistoryRepository
-import com.example.playlistmaker.domain.search.model.Track
+import com.example.playlistmaker.domain.model.Track
 import com.example.playlistmaker.domain.search.util.Resource
 
 class SearchHistoryRepositoryImpl(
-    private val storage: StorageClient<ArrayList<Track>>
+    private val storage: StorageClient<ArrayList<Track>>,
+    private val appDatabase: AppDatabase
 ): SearchHistoryRepository {
 
     override fun saveToHistory(t: Track) {
@@ -21,6 +23,10 @@ class SearchHistoryRepositoryImpl(
 
     override fun getHistory(): Resource<List<Track>> {
         val tracks = storage.getData() ?: listOf()
+        //val selectedTrackIDs = appDatabase.trackDao().getTrackIDs()
+        //tracks.forEach {
+        //    it.isFavorite = selectedTrackIDs.contains(it.trackId)
+        //}
         return Resource.Success(tracks)
     }
 
