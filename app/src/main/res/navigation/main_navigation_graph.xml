@@ -38,5 +38,9 @@
         android:id="@+id/selectedTracksFragment"
         android:name="com.example.playlistmaker.ui.library.activity.SelectedTracksFragment"
         android:label="fragment_selected_tracks"
-        tools:layout="@layout/fragment_selected_tracks" />
+        tools:layout="@layout/fragment_selected_tracks" >
+        <action
+            android:id="@+id/action_selectedTracksFragment_to_playerFragment"
+            app:destination="@id/playerFragment" />
+    </fragment>
 </navigation>
