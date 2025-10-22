@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.ui.library.PlaylistsState
 import com.example.playlistmaker.ui.library.view_model.PlaylistsViewModel
@@ -39,10 +41,18 @@ class PlaylistsFragment : Fragment() {
                 is PlaylistsState.NoPlaylists -> showNoPlaylists()
             }
         }
+
+        binding.messageButton.setOnClickListener { launchNewPlaylistScreen() }
     }
 
     private fun showNoPlaylists() {
         binding.messageLayout.visibility = View.VISIBLE
+    }
+
+    fun launchNewPlaylistScreen() {
+        findNavController().navigate(
+            R.id.action_libraryFragment_to_createPlaylistFragment
+        )
     }
 
 
