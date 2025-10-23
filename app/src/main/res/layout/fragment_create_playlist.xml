@@ -45,7 +45,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/addPhotoButton"
-        app:layout_constraintBottom_toTopOf="@id/nameDescriptionLayout" >
+        app:layout_constraintBottom_toTopOf="@id/descriptionInputLayout" >
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/nameInput"
@@ -56,7 +56,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/nameDescriptionLayout"
+        android:id="@+id/descriptionInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/playlist_description"
@@ -69,7 +69,7 @@
         app:layout_constraintTop_toBottomOf="@id/nameInputLayout" >
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/nameDescription"
+            android:id="@+id/descriptionInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
