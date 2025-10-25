@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
+import com.example.playlistmaker.domain.model.Playlist
 import com.example.playlistmaker.ui.library.PlaylistsState
 import com.example.playlistmaker.ui.library.view_model.PlaylistsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -39,14 +40,26 @@ class PlaylistsFragment : Fragment() {
         viewModel.observeState().observe(viewLifecycleOwner) {
             when (it) {
                 is PlaylistsState.NoPlaylists -> showNoPlaylists()
+                is PlaylistsState.Content -> showPlaylists(it.playlists)
             }
         }
 
         binding.messageButton.setOnClickListener { launchNewPlaylistScreen() }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.showPlaylists()
+    }
+
     private fun showNoPlaylists() {
-        binding.messageLayout.visibility = View.VISIBLE
+        binding.noPlaylistsMessage.visibility = View.VISIBLE
+        binding.recyclerView.visibility = View.GONE
+    }
+
+    private fun showPlaylists(playlists: List<Playlist>) {
+        binding.noPlaylistsMessage.visibility = View.GONE
+        binding.recyclerView.visibility = View.GONE
     }
 
     fun launchNewPlaylistScreen() {
