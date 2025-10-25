@@ -37,34 +37,34 @@
             android:layout_marginBottom="16dp"
             android:visibility="gone"/>
 
-    <LinearLayout
-        android:id="@+id/noPlaylistsMessage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone">
+        <LinearLayout
+            android:id="@+id/noPlaylistsMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
 
 
-    <ImageView
-        android:id="@+id/messageIcon"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="46dp"
-        android:src="@drawable/nothing_found"/>
-    <TextView
-        android:id="@+id/messageText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        android:layout_marginHorizontal="24dp"
-        android:textColor="?attr/colorOnSecondary"
-        android:fontFamily="@font/ys_display_medium"
-        android:textSize="19sp"
-        android:text="@string/no_playlists"/>
+            <ImageView
+                android:id="@+id/messageIcon"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="46dp"
+                android:src="@drawable/nothing_found"/>
+            <TextView
+                android:id="@+id/messageText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="24dp"
+                android:textColor="?attr/colorOnSecondary"
+                android:fontFamily="@font/ys_display_medium"
+                android:textSize="19sp"
+                android:text="@string/no_playlists"/>
 
-    </LinearLayout>
+        </LinearLayout>
 
     </FrameLayout>
 
