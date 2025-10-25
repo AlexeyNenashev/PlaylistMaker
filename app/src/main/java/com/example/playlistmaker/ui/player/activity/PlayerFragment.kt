@@ -1,6 +1,7 @@
 package com.example.playlistmaker.ui.player.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -8,11 +9,14 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlayerBinding
+import com.example.playlistmaker.domain.model.Playlist
 import com.example.playlistmaker.domain.model.Track
+import com.example.playlistmaker.ui.library.PlaylistsState
 import com.example.playlistmaker.ui.player.PlayerState
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -35,6 +39,7 @@ class PlayerFragment : Fragment() {
     }
     private lateinit var binding: FragmentPlayerBinding
     private var isTextRendered = false
+    private val playlistsForAdapter = ArrayList<Playlist>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentPlayerBinding.inflate(inflater, container, false)
@@ -43,6 +48,10 @@ class PlayerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.recyclerView.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.recyclerView.adapter = PlaylistAdapterInPlayer(playlistsForAdapter)
 
         binding.menuButton.setOnClickListener { findNavController().navigateUp() }
         track = requireArguments().getParcelable(ARGS_TRACK)
@@ -57,6 +66,14 @@ class PlayerFragment : Fragment() {
                 viewModel.onFavoriteClicked()
             }
         }
+
+        viewModel.observePlaylistsState().observe(viewLifecycleOwner) {
+            showPlaylists(it)
+        }
+
+        Log.d("playlist", "viewModel.showPlaylists - starting")
+        viewModel.showPlaylists()
+        Log.d("playlist", "viewModel.showPlaylists - done")
     }
 
     override fun onPause() {
@@ -112,6 +129,14 @@ class PlayerFragment : Fragment() {
         } else {
             binding.heartButton.setImageResource(R.drawable.button_heart_off)
         }
+    }
+
+    private fun showPlaylists(playlists: List<Playlist>) {
+        playlistsForAdapter.clear()
+        playlistsForAdapter.addAll(playlists)
+        binding.recyclerView.adapter?.notifyDataSetChanged()
+        Log.d("playlist", "${playlists.size} playlists found.")
+        Log.d("playlist", "showPlaylists - done")
     }
 
 }

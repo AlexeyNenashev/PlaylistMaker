@@ -1,5 +1,6 @@
 package com.example.playlistmaker.ui.library.activity
 
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -15,6 +16,7 @@ class PlaylistViewHolder(view: View): RecyclerView.ViewHolder(view) {
     private val pictureView: ImageView = itemView.findViewById(R.id.picture)
 
     fun bind(playlist: Playlist) {
+        Log.d("playlist", playlist.name)
         titleView.text = playlist.name
         numTracksView.text = "${playlist.trackIds.size} треков"
         if (playlist.imageUri.isEmpty()) {

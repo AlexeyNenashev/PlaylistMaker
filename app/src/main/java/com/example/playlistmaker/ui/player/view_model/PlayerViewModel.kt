@@ -8,7 +8,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.library.PlaylistInteractor
 import com.example.playlistmaker.domain.library.SelectedTracksInteractor
+import com.example.playlistmaker.domain.model.Playlist
 import com.example.playlistmaker.domain.model.Track
+import com.example.playlistmaker.ui.library.PlaylistsState
 import com.example.playlistmaker.ui.player.PlayerState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -33,6 +35,9 @@ class PlayerViewModel(
         PLAYING,
         PAUSED
     }
+
+    private val playlistsLiveData = MutableLiveData<List<Playlist>>()
+    fun observePlaylistsState(): LiveData<List<Playlist>> = playlistsLiveData
 
     private var timerJob: Job? = null
 
@@ -140,5 +145,14 @@ class PlayerViewModel(
             track.country,
             track.isFavorite))
     }
+
+    fun showPlaylists() {
+        viewModelScope.launch {
+            playlistInteractor.getPlaylists().collect { playlists ->
+                playlistsLiveData.postValue(playlists)
+            }
+        }
+    }
+
 
 }
