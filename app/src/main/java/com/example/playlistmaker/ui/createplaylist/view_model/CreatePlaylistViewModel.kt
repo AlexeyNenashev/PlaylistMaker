@@ -4,17 +4,21 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.library.CreatePlaylistInteractor
+import com.example.playlistmaker.domain.library.SavePictureUseCase
 import com.example.playlistmaker.domain.model.Playlist
 import kotlinx.coroutines.launch
 
-class CreatePlaylistViewModel(private val createPlaylistInteractor: CreatePlaylistInteractor) : ViewModel() {
+class CreatePlaylistViewModel(
+    private val createPlaylistInteractor: CreatePlaylistInteractor,
+    private val savePictureUseCase : SavePictureUseCase
+) : ViewModel() {
 
     fun createPlaylist(
         playlistName: String,
         playlistDescription: String,
         imageUri: Uri?
     ) {
-        val savedImageFilePath = savePicture(imageUri)
+        val savedImageFilePath = savePictureUseCase.savePicture(imageUri)
         val playlist = Playlist(
             name = playlistName,
             description = playlistDescription,
@@ -22,13 +26,6 @@ class CreatePlaylistViewModel(private val createPlaylistInteractor: CreatePlayli
             trackIds = emptyList()
         )
         viewModelScope.launch { createPlaylistInteractor.createPlaylist(playlist) }
-    }
-
-    fun savePicture(imageUri: Uri?): String {
-        if (imageUri == null) {
-            return ""
-        }
-                return ""
     }
 
 }

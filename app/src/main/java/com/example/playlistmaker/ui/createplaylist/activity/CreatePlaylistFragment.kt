@@ -35,7 +35,7 @@ class CreatePlaylistFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
+        binding.toolbar.setNavigationOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
         binding.createButton.isEnabled = false
         binding.createButton.setOnClickListener {
             viewModel.createPlaylist(
@@ -45,6 +45,7 @@ class CreatePlaylistFragment : Fragment() {
             )
             Toast.makeText(requireContext(), "Плейлист ${binding.nameInput.text.toString()} создан", Toast.LENGTH_SHORT).show()
             findNavController().navigateUp()
+            //requireActivity().onBackPressedDispatcher.onBackPressed()
         }
 
         val pickMedia =
@@ -84,15 +85,16 @@ class CreatePlaylistFragment : Fragment() {
                 this,
                 object : OnBackPressedCallback(true) {
                     override fun handleOnBackPressed() {
-                        isEnabled = (imageUri == null) && binding.nameInput.text.isNullOrEmpty() && binding.descriptionInput.text.isNullOrEmpty()
+                        //isEnabled = (imageUri == null) && binding.nameInput.text.isNullOrEmpty() && binding.descriptionInput.text.isNullOrEmpty()
 
                         //Log.d(TAG, "Fragment back pressed invoked")
                         // Do custom work here
 
                         // if you want onBackPressed() to be called as normal afterwards
-                        if (isEnabled) {
+                        if (imageUri == null && binding.nameInput.text.isNullOrEmpty() && binding.descriptionInput.text.isNullOrEmpty()) {
                             //isEnabled = false
-                            requireActivity().onBackPressedDispatcher.onBackPressed()
+                            //requireActivity().onBackPressedDispatcher.onBackPressed()
+                            findNavController().navigateUp()
                         } else {
                             MaterialAlertDialogBuilder(requireContext(), R.style.MyAlertDialogTheme)
                                 .setTitle("Завершить создание плейлиста?") // Заголовок диалога
