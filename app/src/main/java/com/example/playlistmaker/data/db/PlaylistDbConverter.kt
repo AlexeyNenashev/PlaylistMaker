@@ -1,13 +1,12 @@
 package com.example.playlistmaker.data.db
 
 import com.example.playlistmaker.domain.model.Playlist
-import com.example.playlistmaker.domain.model.Track
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 class PlaylistDbConverter(private val gson: Gson) {
 
-    val type = object : TypeToken<ArrayList<Track>>() {}.type
+    val type = object : TypeToken<ArrayList<Int>>() {}.type
 
     fun map(playlist: Playlist): PlaylistEntity {
         return PlaylistEntity(
@@ -15,8 +14,8 @@ class PlaylistDbConverter(private val gson: Gson) {
             name = playlist.name,
             description = playlist.description,
             imageUri = playlist.imageUri,
-            tracks = gson.toJson(playlist.tracks, type),
-            numberOfTracks = playlist.tracks.size
+            trackIds = gson.toJson(playlist.trackIds, type),
+            numberOfTracks = playlist.trackIds.size
         )
     }
 
@@ -25,7 +24,7 @@ class PlaylistDbConverter(private val gson: Gson) {
             name = playlist.name,
             description = playlist.description,
             imageUri = playlist.imageUri,
-            tracks = gson.fromJson(playlist.tracks, type)
+            trackIds = gson.fromJson(playlist.trackIds, type)
         )
     }
 
