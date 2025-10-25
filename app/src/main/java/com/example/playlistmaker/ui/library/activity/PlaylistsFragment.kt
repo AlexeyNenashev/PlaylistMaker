@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.domain.model.Playlist
@@ -18,6 +19,7 @@ class PlaylistsFragment : Fragment() {
     private var _binding: FragmentPlaylistsBinding? = null
     private val binding get() = _binding!!
     private val viewModel: PlaylistsViewModel by viewModel()
+    private val playlistsForAdapter = ArrayList<Playlist>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,6 +38,9 @@ class PlaylistsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.recyclerView.adapter = PlaylistAdapter(playlistsForAdapter)
 
         viewModel.observeState().observe(viewLifecycleOwner) {
             when (it) {
@@ -59,7 +64,10 @@ class PlaylistsFragment : Fragment() {
 
     private fun showPlaylists(playlists: List<Playlist>) {
         binding.noPlaylistsMessage.visibility = View.GONE
-        binding.recyclerView.visibility = View.GONE
+        playlistsForAdapter.clear()
+        playlistsForAdapter.addAll(playlists)
+        binding.recyclerView.adapter?.notifyDataSetChanged()
+        binding.recyclerView.visibility = View.VISIBLE
     }
 
     fun launchNewPlaylistScreen() {
