@@ -22,8 +22,10 @@ class ImageFileRepositoryImpl(private val context: Context) : ImageFileRepositor
         if (!filePath.exists()){
             filePath.mkdirs()
         }
+        val timestamp = System.currentTimeMillis()
+        val filename = "playlist_cover_$timestamp.jpg"
         //создаём экземпляр класса File, который указывает на файл внутри каталога
-        val file = File(filePath, "playlist_cover.jpg")
+        val file = File(filePath, filename)
         // создаём входящий поток байтов из выбранной картинки
         val inputStream = context.contentResolver.openInputStream(imageUri)
         // создаём исходящий поток байтов в созданный выше файл
