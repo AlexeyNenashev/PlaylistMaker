@@ -45,19 +45,14 @@ class CreatePlaylistFragment : Fragment() {
             )
             Toast.makeText(requireContext(), "Плейлист ${binding.nameInput.text.toString()} создан", Toast.LENGTH_SHORT).show()
             findNavController().navigateUp()
-            //requireActivity().onBackPressedDispatcher.onBackPressed()
         }
 
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-                //обрабатываем событие выбора пользователем фотографии
                 if (uri != null) {
                     binding.addPhotoButton.setImageURI(uri)
                     imageUri = uri
-                    //saveImageToPrivateStorage(uri)
-                } //else {
-                    //Log.d("PhotoPicker", "No media selected")
-                //}
+                }
             }
 
         binding.addPhotoButton.setOnClickListener {
@@ -85,25 +80,15 @@ class CreatePlaylistFragment : Fragment() {
                 this,
                 object : OnBackPressedCallback(true) {
                     override fun handleOnBackPressed() {
-                        //isEnabled = (imageUri == null) && binding.nameInput.text.isNullOrEmpty() && binding.descriptionInput.text.isNullOrEmpty()
-
-                        //Log.d(TAG, "Fragment back pressed invoked")
-                        // Do custom work here
-
-                        // if you want onBackPressed() to be called as normal afterwards
                         if (imageUri == null && binding.nameInput.text.isNullOrEmpty() && binding.descriptionInput.text.isNullOrEmpty()) {
-                            //isEnabled = false
-                            //requireActivity().onBackPressedDispatcher.onBackPressed()
                             findNavController().navigateUp()
                         } else {
                             MaterialAlertDialogBuilder(requireContext(), R.style.MyAlertDialogTheme)
-                                .setTitle("Завершить создание плейлиста?") // Заголовок диалога
-                                .setMessage("Все несохраненные данные будут потеряны") // Описание диалога
-                                .setNegativeButton("Отмена") { dialog, which -> // Добавляет кнопку «Нет»
-                                    // Действия, выполняемые при нажатии на кнопку «Нет»
+                                .setTitle("Завершить создание плейлиста?")
+                                .setMessage("Все несохраненные данные будут потеряны")
+                                .setNegativeButton("Отмена") { dialog, which ->
                                 }
-                                .setPositiveButton("Завершить") { dialog, which -> // Добавляет кнопку «Да»
-                                    // Действия, выполняемые при нажатии на кнопку «Да»
+                                .setPositiveButton("Завершить") { dialog, which ->
                                     findNavController().navigateUp()
                                 }
                                 .show()

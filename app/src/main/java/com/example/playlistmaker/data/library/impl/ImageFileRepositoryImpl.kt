@@ -16,25 +16,16 @@ class ImageFileRepositoryImpl(private val context: Context) : ImageFileRepositor
             return ""
         }
 
-        //создаём экземпляр класса File, который указывает на нужный каталог
         val filePath = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "playlist_album")
-        //создаем каталог, если он не создан
-        if (!filePath.exists()){
-            filePath.mkdirs()
-        }
+        if (!filePath.exists()) { filePath.mkdirs() }
         val timestamp = System.currentTimeMillis()
         val filename = "playlist_cover_$timestamp.jpg"
-        //создаём экземпляр класса File, который указывает на файл внутри каталога
         val file = File(filePath, filename)
-        // создаём входящий поток байтов из выбранной картинки
         val inputStream = context.contentResolver.openInputStream(imageUri)
-        // создаём исходящий поток байтов в созданный выше файл
         val outputStream = FileOutputStream(file)
-        // записываем картинку с помощью BitmapFactory
         BitmapFactory
             .decodeStream(inputStream)
             .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
-
 
         return file.toString()
     }

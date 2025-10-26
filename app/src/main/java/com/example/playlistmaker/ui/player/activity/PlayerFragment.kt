@@ -1,7 +1,6 @@
 package com.example.playlistmaker.ui.player.activity
 
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -37,9 +36,7 @@ class PlayerFragment : Fragment() {
     }
 
     private var track: Track? = null
-    private val viewModel by viewModel<PlayerViewModel> {
-        parametersOf(track)
-    }
+    private val viewModel by viewModel<PlayerViewModel> { parametersOf(track) }
     private lateinit var binding: FragmentPlayerBinding
     private var isTextRendered = false
     private val playlistsForAdapter = ArrayList<Playlist>()
@@ -56,7 +53,6 @@ class PlayerFragment : Fragment() {
 
         bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-        //Log.d("playlists", "hide bottom sheet")
 
         bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
@@ -85,33 +81,13 @@ class PlayerFragment : Fragment() {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             launchNewPlaylistScreen()
         }
-        //track = requireArguments().getParcelable(ARGS_TRACK)
-        //if (track != null) {
-        viewModel.observePlayerState().observe(viewLifecycleOwner) {
-            render(it)
-        }
-        binding.playButton.setOnClickListener {
-            viewModel.onPlayButtonClicked()
-        }
-        binding.heartButton.setOnClickListener {
-            viewModel.onFavoriteClicked()
-        }
-        binding.plusButton.setOnClickListener {
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        }
-        //}
-
-        viewModel.observePlaylistsState().observe(viewLifecycleOwner) {
-            showPlaylists(it)
-        }
-
-        viewModel.observeAddTrack().observe(viewLifecycleOwner) {
-            reactToAddTrack(it)
-        }
-
-        //Log.d("playlists", "viewModel.showPlaylists - starting")
+        viewModel.observePlayerState().observe(viewLifecycleOwner) { render(it) }
+        binding.playButton.setOnClickListener { viewModel.onPlayButtonClicked() }
+        binding.heartButton.setOnClickListener { viewModel.onFavoriteClicked() }
+        binding.plusButton.setOnClickListener { bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED }
+        viewModel.observePlaylistsState().observe(viewLifecycleOwner) { showPlaylists(it) }
+        viewModel.observeAddTrack().observe(viewLifecycleOwner) { reactToAddTrack(it) }
         viewModel.showPlaylists()
-        //Log.d("playlists", "viewModel.showPlaylists - done")
     }
 
     override fun onPause() {
@@ -122,11 +98,8 @@ class PlayerFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         isTextRendered = false
-        //track = requireArguments().getParcelable(ARGS_TRACK)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-        //viewModel.preparePlayer()
         viewModel.renderState()
-        //Log.d("playlists", "viewModel.renderState() - done")
     }
 
     private fun render(state: PlayerState) {
@@ -161,7 +134,6 @@ class PlayerFragment : Fragment() {
             binding.genre.text = state.primaryGenreName
             binding.country.text = state.country
         }
-        //Log.d("playlists", "render - done")
     }
 
     private fun setPlayButtonState(isPlaying: Boolean) {
@@ -184,14 +156,10 @@ class PlayerFragment : Fragment() {
         playlistsForAdapter.clear()
         playlistsForAdapter.addAll(playlists)
         binding.recyclerView.adapter?.notifyDataSetChanged()
-        //Log.d("playlists", "${playlists.size} playlists found.")
-        //Log.d("playlists", "showPlaylists - done")
     }
 
     private fun launchNewPlaylistScreen() {
-        findNavController().navigate(
-            R.id.action_playerFragment_to_createPlaylistFragment
-        )
+        findNavController().navigate(R.id.action_playerFragment_to_createPlaylistFragment)
     }
 
     private fun addTrackToPlaylist(playlist: Playlist, position: Int) {

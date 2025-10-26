@@ -2,7 +2,6 @@ package com.example.playlistmaker.ui.player.view_model
 
 import android.icu.text.SimpleDateFormat
 import android.media.MediaPlayer
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +10,6 @@ import com.example.playlistmaker.domain.library.PlaylistInteractor
 import com.example.playlistmaker.domain.library.SelectedTracksInteractor
 import com.example.playlistmaker.domain.model.Playlist
 import com.example.playlistmaker.domain.model.Track
-import com.example.playlistmaker.ui.library.PlaylistsState
 import com.example.playlistmaker.ui.player.AddTrackToPlaylistResult
 import com.example.playlistmaker.ui.player.PlayerState
 import kotlinx.coroutines.Job
@@ -64,13 +62,11 @@ class PlayerViewModel(
     }
 
     fun onPlayButtonClicked() {
-        Log.d("playlists", "before: playerMode = $playerMode")
         when(playerMode) {
             PlayerMode.PLAYING -> pausePlayer()
             PlayerMode.PREPARED, PlayerMode.PAUSED -> startPlayer()
             PlayerMode.DEFAULT -> {}
         }
-        Log.d("playlists", "after: playerMode = $playerMode")
     }
 
     fun onFavoriteClicked() {
