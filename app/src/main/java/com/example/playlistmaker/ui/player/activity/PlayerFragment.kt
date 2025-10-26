@@ -19,6 +19,7 @@ import com.example.playlistmaker.domain.model.Track
 import com.example.playlistmaker.ui.library.PlaylistsState
 import com.example.playlistmaker.ui.player.PlayerState
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -49,11 +50,37 @@ class PlayerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        //Log.d("playlists", "hide bottom sheet")
+
+        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        binding.overlay.visibility = View.GONE
+                    }
+                    else -> {
+                        binding.overlay.visibility = View.VISIBLE
+                    }
+                }
+            }
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                var alpha = slideOffset + 1f
+                if (alpha > 1f) { alpha = 1f }
+                binding.overlay.alpha = alpha
+            }
+        })
+
         binding.recyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerView.adapter = PlaylistAdapterInPlayer(playlistsForAdapter)
 
         binding.menuButton.setOnClickListener { findNavController().navigateUp() }
+        binding.newPlaylistButton.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            launchNewPlaylistScreen()
+        }
         track = requireArguments().getParcelable(ARGS_TRACK)
         if (track != null) {
             viewModel.observePlayerState().observe(viewLifecycleOwner) {
@@ -65,15 +92,18 @@ class PlayerFragment : Fragment() {
             binding.heartButton.setOnClickListener {
                 viewModel.onFavoriteClicked()
             }
+            binding.plusButton.setOnClickListener {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            }
         }
 
         viewModel.observePlaylistsState().observe(viewLifecycleOwner) {
             showPlaylists(it)
         }
 
-        Log.d("playlist", "viewModel.showPlaylists - starting")
+        //Log.d("playlists", "viewModel.showPlaylists - starting")
         viewModel.showPlaylists()
-        Log.d("playlist", "viewModel.showPlaylists - done")
+        //Log.d("playlists", "viewModel.showPlaylists - done")
     }
 
     override fun onPause() {
@@ -135,8 +165,14 @@ class PlayerFragment : Fragment() {
         playlistsForAdapter.clear()
         playlistsForAdapter.addAll(playlists)
         binding.recyclerView.adapter?.notifyDataSetChanged()
-        Log.d("playlist", "${playlists.size} playlists found.")
-        Log.d("playlist", "showPlaylists - done")
+        //Log.d("playlists", "${playlists.size} playlists found.")
+        //Log.d("playlists", "showPlaylists - done")
+    }
+
+    fun launchNewPlaylistScreen() {
+        findNavController().navigate(
+            R.id.action_playerFragment_to_createPlaylistFragment
+        )
     }
 
 }
