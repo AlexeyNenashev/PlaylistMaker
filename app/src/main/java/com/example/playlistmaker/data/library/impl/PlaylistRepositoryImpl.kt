@@ -23,7 +23,7 @@ class PlaylistRepositoryImpl(
     }
 
     override fun getPlaylists(): Flow<List<Playlist>> = flow {
-        val playlists = playlistDao.getPlaylists()
+        val playlists = playlistDao.getPlaylists().sortedByDescending { it.id }
         emit(convertFromPlaylistEntity(playlists))
     }
 
@@ -36,6 +36,7 @@ class PlaylistRepositoryImpl(
         val updatedTrackIds = ArrayList<Int>(playlist.trackIds)
         updatedTrackIds.add(track.trackId)
         val updatedPlaylist = Playlist(
+            playlist.id,
             playlist.name,
             playlist.description,
             playlist.imageUri,

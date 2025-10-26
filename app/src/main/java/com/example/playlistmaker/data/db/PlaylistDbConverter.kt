@@ -10,7 +10,7 @@ class PlaylistDbConverter(private val gson: Gson) {
 
     fun map(playlist: Playlist): PlaylistEntity {
         return PlaylistEntity(
-            id = 0,
+            id = playlist.id,
             name = playlist.name,
             description = playlist.description,
             imageUri = playlist.imageUri,
@@ -21,6 +21,7 @@ class PlaylistDbConverter(private val gson: Gson) {
 
     fun map(playlist: PlaylistEntity): Playlist {
         return Playlist(
+            id = playlist.id,
             name = playlist.name,
             description = playlist.description,
             imageUri = playlist.imageUri,

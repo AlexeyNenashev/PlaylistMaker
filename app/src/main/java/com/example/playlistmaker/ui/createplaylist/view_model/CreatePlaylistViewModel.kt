@@ -20,6 +20,7 @@ class CreatePlaylistViewModel(
     ) {
         val savedImageFilePath = savePictureUseCase.savePicture(imageUri)
         val playlist = Playlist(
+            id = 0,
             name = playlistName,
             description = playlistDescription,
             imageUri = savedImageFilePath,
