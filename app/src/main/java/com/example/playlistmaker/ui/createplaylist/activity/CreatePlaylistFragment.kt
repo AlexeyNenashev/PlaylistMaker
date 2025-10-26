@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -51,6 +52,7 @@ class CreatePlaylistFragment : Fragment() {
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {
                     binding.addPhotoButton.setImageURI(uri)
+                    binding.addPhotoButton.scaleType = ImageView.ScaleType.CENTER_CROP
                     imageUri = uri
                 }
             }

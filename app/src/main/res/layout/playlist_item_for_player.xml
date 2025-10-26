@@ -6,13 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="60dp">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/picture"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_gravity="center_vertical"
-        android:scaleType="centerInside"
-        android:background="@drawable/rounded_rectangle_small"
+        android:scaleType="centerCrop"
+        app:shapeAppearanceOverlay="@style/roundedImageForBottomSheet"
         tools:src="@drawable/placeholder_big"
         android:layout_marginEnd="8dp"/>
 

@@ -36,4 +36,14 @@
         <item name="backgroundTint">@color/blue</item>
     </style>
 
+    <style name="roundedImageForCard" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
+    <style name="roundedImageForBottomSheet" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">2dp</item>
+    </style>
+
 </resources>

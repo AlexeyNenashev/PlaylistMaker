@@ -7,13 +7,13 @@
     android:layout_marginHorizontal="4dp"
     android:layout_marginBottom="16dp">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/picture"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintDimensionRatio="1:1"
-        android:scaleType="centerInside"
-        android:background="@drawable/rounded_rectangle"
+        android:scaleType="centerCrop"
+        app:shapeAppearanceOverlay="@style/roundedImageForCard"
         tools:src="@drawable/placeholder_big"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
