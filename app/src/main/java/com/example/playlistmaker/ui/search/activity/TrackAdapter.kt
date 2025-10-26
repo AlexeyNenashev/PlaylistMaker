@@ -19,7 +19,7 @@ class TrackAdapter (private val clickListener: TrackClickListener) :
     override fun getItemCount(): Int = tracks.size
 
     fun interface TrackClickListener {
-        fun onTrackClick(movie: Track)
+        fun onTrackClick(track: Track)
     }
 
 }

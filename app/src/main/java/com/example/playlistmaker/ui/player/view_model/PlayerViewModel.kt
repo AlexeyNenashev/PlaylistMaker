@@ -11,6 +11,7 @@ import com.example.playlistmaker.domain.library.SelectedTracksInteractor
 import com.example.playlistmaker.domain.model.Playlist
 import com.example.playlistmaker.domain.model.Track
 import com.example.playlistmaker.ui.library.PlaylistsState
+import com.example.playlistmaker.ui.player.AddTrackToPlaylistResult
 import com.example.playlistmaker.ui.player.PlayerState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -38,6 +39,9 @@ class PlayerViewModel(
 
     private val playlistsLiveData = MutableLiveData<List<Playlist>>()
     fun observePlaylistsState(): LiveData<List<Playlist>> = playlistsLiveData
+
+    private val addTrackLiveData = MutableLiveData<AddTrackToPlaylistResult>()
+    fun observeAddTrack(): LiveData<AddTrackToPlaylistResult> = addTrackLiveData
 
     private var timerJob: Job? = null
 
@@ -154,5 +158,16 @@ class PlayerViewModel(
         }
     }
 
+    fun addTrackToPlaylist(playlist: Playlist, position: Int) {
+        if (track.trackId in playlist.trackIds) {
+            addTrackLiveData.postValue(AddTrackToPlaylistResult.TrackWasAlreadyAdded(playlist.name))
+        } else {
+            viewModelScope.launch {
+                playlistInteractor.addTrackToPlaylist(track, playlist).collect { updatedPlaylist ->
+                    addTrackLiveData.postValue(AddTrackToPlaylistResult.Success(updatedPlaylist, position))
+                }
+            }
+        }
+    }
 
 }
