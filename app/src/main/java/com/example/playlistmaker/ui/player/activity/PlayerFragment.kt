@@ -47,6 +47,7 @@ class PlayerFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentPlayerBinding.inflate(inflater, container, false)
+        track = requireArguments().getParcelable(ARGS_TRACK)
         return binding.root
     }
 
@@ -84,21 +85,21 @@ class PlayerFragment : Fragment() {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             launchNewPlaylistScreen()
         }
-        track = requireArguments().getParcelable(ARGS_TRACK)
-        if (track != null) {
-            viewModel.observePlayerState().observe(viewLifecycleOwner) {
-                render(it)
-            }
-            binding.playButton.setOnClickListener {
-                viewModel.onPlayButtonClicked()
-            }
-            binding.heartButton.setOnClickListener {
-                viewModel.onFavoriteClicked()
-            }
-            binding.plusButton.setOnClickListener {
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-            }
+        //track = requireArguments().getParcelable(ARGS_TRACK)
+        //if (track != null) {
+        viewModel.observePlayerState().observe(viewLifecycleOwner) {
+            render(it)
         }
+        binding.playButton.setOnClickListener {
+            viewModel.onPlayButtonClicked()
+        }
+        binding.heartButton.setOnClickListener {
+            viewModel.onFavoriteClicked()
+        }
+        binding.plusButton.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+        //}
 
         viewModel.observePlaylistsState().observe(viewLifecycleOwner) {
             showPlaylists(it)
@@ -116,6 +117,16 @@ class PlayerFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         viewModel.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        isTextRendered = false
+        //track = requireArguments().getParcelable(ARGS_TRACK)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        //viewModel.preparePlayer()
+        viewModel.renderState()
+        //Log.d("playlists", "viewModel.renderState() - done")
     }
 
     private fun render(state: PlayerState) {
@@ -150,6 +161,7 @@ class PlayerFragment : Fragment() {
             binding.genre.text = state.primaryGenreName
             binding.country.text = state.country
         }
+        //Log.d("playlists", "render - done")
     }
 
     private fun setPlayButtonState(isPlaying: Boolean) {

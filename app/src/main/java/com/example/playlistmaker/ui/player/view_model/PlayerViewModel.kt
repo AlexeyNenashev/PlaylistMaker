@@ -2,6 +2,7 @@ package com.example.playlistmaker.ui.player.view_model
 
 import android.icu.text.SimpleDateFormat
 import android.media.MediaPlayer
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -46,7 +47,7 @@ class PlayerViewModel(
     private var timerJob: Job? = null
 
     private val url = track.previewUrl
-    private var playerMode = PlayerMode.DEFAULT
+    private var playerMode = PlayerMode.PREPARED
     private var progressTime = ZERO_TIME
     private val playerStateLiveData = MutableLiveData<PlayerState>()
     fun observePlayerState(): LiveData<PlayerState> = playerStateLiveData
@@ -63,11 +64,13 @@ class PlayerViewModel(
     }
 
     fun onPlayButtonClicked() {
+        Log.d("playlists", "before: playerMode = $playerMode")
         when(playerMode) {
             PlayerMode.PLAYING -> pausePlayer()
             PlayerMode.PREPARED, PlayerMode.PAUSED -> startPlayer()
             PlayerMode.DEFAULT -> {}
         }
+        Log.d("playlists", "after: playerMode = $playerMode")
     }
 
     fun onFavoriteClicked() {
@@ -83,6 +86,7 @@ class PlayerViewModel(
     }
 
     private fun preparePlayer() {
+        playerMode = PlayerMode.DEFAULT
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
@@ -135,7 +139,7 @@ class PlayerViewModel(
         pausePlayer()
     }
 
-    private fun renderState() {
+    fun renderState() {
         playerStateLiveData.postValue(PlayerState(
             playerMode == PlayerMode.PLAYING,
             progressTime,
