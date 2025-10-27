@@ -41,10 +41,9 @@
         android:id="@+id/nameInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/ys_display_regular"
-        android:textColorHint="?attr/colorOnSecondary"
         android:hint="@string/playlist_name"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/CustomInputStyle"
+        app:boxStrokeColor="@color/text_input_box_stroke_color"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="32dp"
@@ -57,6 +56,10 @@
             android:id="@+id/nameInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/ys_display_regular"
+            android:textSize="16sp"
+            android:textColor="?attr/colorOnSecondary"
+            android:textColorHint="?attr/colorOnSecondary"
             />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -65,10 +68,9 @@
         android:id="@+id/descriptionInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/ys_display_regular"
-        android:textColorHint="?attr/colorOnSecondary"
         android:hint="@string/playlist_description"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/CustomInputStyle"
+        app:boxStrokeColor="@color/text_input_box_stroke_color"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
@@ -80,6 +82,10 @@
             android:id="@+id/descriptionInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/ys_display_regular"
+            android:textSize="16sp"
+            android:textColor="?attr/colorOnSecondary"
+            android:textColorHint="?attr/colorOnSecondary"
             />
 
     </com.google.android.material.textfield.TextInputLayout>

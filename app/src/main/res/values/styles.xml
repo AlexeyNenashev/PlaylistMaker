@@ -46,4 +46,13 @@
         <item name="cornerSize">2dp</item>
     </style>
 
+    <style name="CustomInputStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="hintTextColor">?attr/colorPrimaryVariant</item>
+        <item name="boxStrokeColor">?attr/colorPrimaryVariant</item>
+        <item name="android:colorAccent">?attr/colorPrimaryVariant</item>
+        <item name="android:textColorHint">?attr/colorPrimaryVariant</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+    </style>
+
 </resources>
