@@ -24,13 +24,20 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class CreatePlaylistFragment : Fragment() {
 
     private val viewModel: CreatePlaylistViewModel by viewModel()
-    private lateinit var binding: FragmentCreatePlaylistBinding
+    private var _binding: FragmentCreatePlaylistBinding? = null
+    private val binding get() = _binding!!
     private var textWatcher: TextWatcher? = null
     private var imageUri: Uri? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentCreatePlaylistBinding.inflate(inflater, container, false)
-        return binding.root
+        _binding = FragmentCreatePlaylistBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

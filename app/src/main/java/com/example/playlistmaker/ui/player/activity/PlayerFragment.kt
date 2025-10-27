@@ -37,15 +37,22 @@ class PlayerFragment : Fragment() {
 
     private var track: Track? = null
     private val viewModel by viewModel<PlayerViewModel> { parametersOf(track) }
-    private lateinit var binding: FragmentPlayerBinding
+    private var _binding: FragmentPlayerBinding? = null
+    private val binding get() = _binding!!
     private var isTextRendered = false
     private val playlistsForAdapter = ArrayList<Playlist>()
     lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentPlayerBinding.inflate(inflater, container, false)
+        _binding = FragmentPlayerBinding.inflate(inflater, container, false)
         track = requireArguments().getParcelable(ARGS_TRACK)
-        return binding.root
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
