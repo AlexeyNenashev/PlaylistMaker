@@ -17,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import androidx.activity.OnBackPressedCallback
+import androidx.core.widget.doOnTextChanged
 import com.example.playlistmaker.ui.createplaylist.view_model.CreatePlaylistViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -68,20 +69,15 @@ class CreatePlaylistFragment : Fragment() {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
-        textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
-            override fun afterTextChanged(s: Editable?) { }
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s.isNullOrEmpty()) {
-                    binding.createButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.light_gray))
-                    binding.createButton.isEnabled = false
-                } else {
-                    binding.createButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.blue))
-                    binding.createButton.isEnabled = true
-                }
+        binding.nameInput.doOnTextChanged { text, start, count, after ->
+            if (text.isNullOrEmpty()) {
+                binding.createButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.light_gray))
+                binding.createButton.isEnabled = false
+            } else {
+                binding.createButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.blue))
+                binding.createButton.isEnabled = true
             }
         }
-        textWatcher?.let { binding.nameInput.addTextChangedListener(it) }
 
         requireActivity()
             .onBackPressedDispatcher
