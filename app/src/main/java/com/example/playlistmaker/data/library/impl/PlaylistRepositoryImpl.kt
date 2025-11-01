@@ -45,4 +45,14 @@ class PlaylistRepositoryImpl(
         emit(updatedPlaylist)
     }
 
+    override fun getPlaylistAndItsTracksById(playlistId: Int): Flow<Pair<Playlist, List<Track>>> = flow {
+        val playlist: Playlist = playlistDbConverter.map(
+            playlistDao.getPlaylistById(playlistId)
+        )
+        val tracksInPlaylists = trackInPlaylistDao.getAllTracksInPlaylists()
+            .filter { it.trackId in playlist.trackIds }
+            .map { track -> trackDbConverter.mapInPlaylist(track) }
+        emit(Pair(playlist, tracksInPlaylists))
+    }
+
 }

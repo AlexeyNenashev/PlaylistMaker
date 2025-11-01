@@ -21,4 +21,8 @@ class PlaylistInteractorImpl(private val playlistRepository: PlaylistRepository)
         return playlistRepository.addTrackToPlaylist(track, playlist)
     }
 
+    override fun getPlaylistAndItsTracksById(playlistId: Int): Flow<Pair<Playlist, List<Track>>> {
+        return playlistRepository.getPlaylistAndItsTracksById(playlistId)
+    }
+
 }

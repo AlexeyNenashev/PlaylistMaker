@@ -46,18 +46,9 @@ class PlaylistInfoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.arrowBack.setOnClickListener { findNavController().navigateUp() }
-
-        render(PlaylistInfoState(
-            "My best songs",
-            "My description, playlist $playlistId",
-            "",
-            331,
-            16,
-            emptyList()
-        ))
-
+        viewModel.observeState().observe(viewLifecycleOwner) { render(it) }
+        viewModel.showPlaylistInfo()
     }
 
     private fun render(state: PlaylistInfoState) {

@@ -8,4 +8,5 @@ interface PlaylistInteractor {
     suspend fun createPlaylist(playlist: Playlist)
     fun getPlaylists(): Flow<List<Playlist>>
     fun addTrackToPlaylist(track: Track, playlist: Playlist): Flow<Playlist>
+    fun getPlaylistAndItsTracksById(playlistId: Int): Flow<Pair<Playlist, List<Track>>>
 }
