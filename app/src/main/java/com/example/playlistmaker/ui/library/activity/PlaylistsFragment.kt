@@ -12,6 +12,7 @@ import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.domain.model.Playlist
 import com.example.playlistmaker.ui.library.PlaylistsState
 import com.example.playlistmaker.ui.library.view_model.PlaylistsViewModel
+import com.example.playlistmaker.ui.playlistinfo.activity.PlaylistInfoFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment : Fragment() {
@@ -40,7 +41,7 @@ class PlaylistsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        binding.recyclerView.adapter = PlaylistAdapter(playlistsForAdapter)
+        binding.recyclerView.adapter = PlaylistAdapter(playlistsForAdapter) { launchPlaylistInfoScreen(it) }
 
         viewModel.observeState().observe(viewLifecycleOwner) {
             when (it) {
@@ -73,6 +74,13 @@ class PlaylistsFragment : Fragment() {
     fun launchNewPlaylistScreen() {
         findNavController().navigate(
             R.id.action_libraryFragment_to_createPlaylistFragment
+        )
+    }
+
+    fun launchPlaylistInfoScreen(p: Playlist) {
+        findNavController().navigate(
+            R.id.action_libraryFragment_to_playlistInfoFragment,
+            PlaylistInfoFragment.createArgs(p.id)
         )
     }
 

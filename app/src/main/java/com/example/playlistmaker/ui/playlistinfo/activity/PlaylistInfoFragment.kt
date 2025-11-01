@@ -5,56 +5,85 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.net.toUri
+import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
+import com.example.playlistmaker.databinding.FragmentPlaylistInfoBinding
+import com.example.playlistmaker.ui.playlistinfo.PlaylistInfoState
+import com.example.playlistmaker.ui.playlistinfo.view_model.PlaylistInfoViewModel
+import org.koin.core.parameter.parametersOf
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [PlaylistInfoFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class PlaylistInfoFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    companion object {
+
+        private const val ARGS_PLAYLIST_ID = "playlist_id"
+
+        fun createArgs(playlistId: Int): Bundle =
+            bundleOf(ARGS_PLAYLIST_ID to playlistId)
+
+    }
+
+    private var playlistId: Int? = null
+    private val viewModel by viewModel<PlaylistInfoViewModel> { parametersOf(playlistId) }
+    private var _binding: FragmentPlaylistInfoBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        _binding = FragmentPlaylistInfoBinding.inflate(inflater, container, false)
+        playlistId = requireArguments().getInt(ARGS_PLAYLIST_ID)
+        val view = binding.root
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.arrowBack.setOnClickListener { findNavController().navigateUp() }
+
+        render(PlaylistInfoState(
+            "My best songs",
+            "My description, playlist $playlistId",
+            "",
+            331,
+            16,
+            emptyList()
+        ))
+
+    }
+
+    private fun render(state: PlaylistInfoState) {
+        binding.playlistName.text = state.name
+        binding.playlistDescription.text = state.description
+        binding.howManyMinutes.text = numberToString(state.howManyMinutes, "минут", "минута", "минуты")
+        binding.howManyTracks.text = numberToString(state.howManyTracks, "треков", "трек", "трека")
+        if (state.imageFileName.isEmpty()) {
+            binding.coverImage.setImageResource(R.drawable.placeholder_big)
+        } else {
+            val params = binding.coverImage.layoutParams as ConstraintLayout.LayoutParams
+            params.setMargins(0, 0, 0, 0)
+            binding.coverImage.layoutParams = params
+            binding.coverImage.setImageURI(state.imageFileName.toUri())
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_playlist_info, container, false)
+    private fun numberToString(number: Int, string0: String, string1: String, string2: String): String {
+        val n10  = number % 10
+        val n100 = number % 100
+        var s = "$number $string0"
+        if (n10 == 1 && n100 != 11) { s = "$number $string1" }
+        if (n10 == 2 && n100 != 12) { s = "$number $string2" }
+        if (n10 == 3 && n100 != 13) { s = "$number $string2" }
+        if (n10 == 4 && n100 != 14) { s = "$number $string2" }
+        return s
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PlaylistInfoFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PlaylistInfoFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }

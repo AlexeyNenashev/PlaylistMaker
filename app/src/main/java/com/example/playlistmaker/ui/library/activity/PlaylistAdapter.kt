@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.model.Playlist
 
-class PlaylistAdapter(private val playlists: List<Playlist>): RecyclerView.Adapter<PlaylistViewHolder>() {
+class PlaylistAdapter(private val playlists: List<Playlist>, private val clickListener: PlaylistClickListener): RecyclerView.Adapter<PlaylistViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.playlist_card_item, parent, false)
@@ -19,5 +19,11 @@ class PlaylistAdapter(private val playlists: List<Playlist>): RecyclerView.Adapt
 
     override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
         holder.bind(playlists[position])
+        holder.itemView.setOnClickListener { clickListener.onPlaylistClick(playlists[position]) }
     }
+
+    fun interface PlaylistClickListener {
+        fun onPlaylistClick(playlist: Playlist)
+    }
+
 }
