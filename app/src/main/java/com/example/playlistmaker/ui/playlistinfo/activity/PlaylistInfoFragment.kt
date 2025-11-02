@@ -36,6 +36,7 @@ class PlaylistInfoFragment : Fragment() {
 
     private var playlistId: Int? = null
     private var howManyTracks = 0
+    private var playlistName = ""
     private val viewModel by viewModel<PlaylistInfoViewModel> { parametersOf(playlistId) }
     private val trackAdapter = TrackAdapter({ launchPlayerScreen(it) }, { deleteTrackDialog(it) })
     private var _binding: FragmentPlaylistInfoBinding? = null
@@ -60,6 +61,8 @@ class PlaylistInfoFragment : Fragment() {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         binding.shareButton.setOnClickListener { sharePlaylist() }
         binding.shareInBottomSheet.setOnClickListener { sharePlaylist() }
+        binding.deleteInBottomSheet.setOnClickListener { deletePlaylist() }
+        binding.editInBottomSheet.setOnClickListener { editPlaylist() }
         binding.menuButton.setOnClickListener { bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED }
         binding.recyclerView.adapter = trackAdapter
         binding.arrowBack.setOnClickListener { findNavController().navigateUp() }
@@ -106,6 +109,7 @@ class PlaylistInfoFragment : Fragment() {
         trackAdapter.tracks.addAll(state.tracks)
         trackAdapter.notifyDataSetChanged()
         howManyTracks = state.howManyTracks
+        playlistName = state.name
     }
 
     private fun numberToString(number: Int, string0: String, string1: String, string2: String): String {
@@ -128,7 +132,7 @@ class PlaylistInfoFragment : Fragment() {
 
     private fun deleteTrackDialog(track: Track): Boolean {
         binding.overlay.visibility = View.VISIBLE
-        MaterialAlertDialogBuilder(requireContext(), R.style.MyAlertDialogTheme)
+        MaterialAlertDialogBuilder(requireContext(), R.style.MyAlertDialogTheme2)
             .setTitle("Хотите удалить трек?")
             .setNegativeButton("НЕТ") { dialog, which ->
                 binding.overlay.visibility = View.GONE
@@ -151,5 +155,22 @@ class PlaylistInfoFragment : Fragment() {
                 getString(R.string.no_tracks_for_sharing), Toast.LENGTH_SHORT).show()
         }
     }
+
+    private fun deletePlaylist() {
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        binding.overlay2.visibility = View.VISIBLE
+        MaterialAlertDialogBuilder(requireContext(), R.style.MyAlertDialogTheme2)
+            .setTitle("Хотите удалить плейлист \"$playlistName\"?")
+            .setNegativeButton("НЕТ") { dialog, which ->
+                binding.overlay2.visibility = View.GONE
+            }
+            .setPositiveButton("ДА") { dialog, which ->
+                viewModel.deletePlaylist()
+                findNavController().navigateUp()
+            }
+            .show()
+    }
+
+    private fun editPlaylist() {}
 
 }

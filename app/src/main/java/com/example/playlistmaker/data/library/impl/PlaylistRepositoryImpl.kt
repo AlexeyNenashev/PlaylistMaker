@@ -70,4 +70,8 @@ class PlaylistRepositoryImpl(
         playlistDao.updatePlaylist(playlistDbConverter.map(updatedPlaylist))
     }
 
+    override suspend fun deletePlaylistById(playlistId: Int) {
+        playlistDao.deletePlaylistById(playlistId)
+    }
+
 }
