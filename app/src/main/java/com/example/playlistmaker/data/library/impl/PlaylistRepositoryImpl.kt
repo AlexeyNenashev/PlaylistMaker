@@ -55,4 +55,19 @@ class PlaylistRepositoryImpl(
         emit(Pair(playlist, tracksInPlaylists))
     }
 
+    override suspend fun deleteTrackFromPlaylist(trackId: Int, playlistId: Int) {
+        val playlist: Playlist = playlistDbConverter.map(
+            playlistDao.getPlaylistById(playlistId)
+        )
+        val updatedTrackIds = ArrayList<Int>(playlist.trackIds)
+        updatedTrackIds.remove(trackId)
+        val updatedPlaylist = Playlist(
+            playlist.id,
+            playlist.name,
+            playlist.description,
+            playlist.imageUri,
+            trackIds = updatedTrackIds)
+        playlistDao.updatePlaylist(playlistDbConverter.map(updatedPlaylist))
+    }
+
 }

@@ -11,8 +11,12 @@ import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistInfoBinding
+import com.example.playlistmaker.domain.model.Track
+import com.example.playlistmaker.ui.player.activity.PlayerFragment
 import com.example.playlistmaker.ui.playlistinfo.PlaylistInfoState
 import com.example.playlistmaker.ui.playlistinfo.view_model.PlaylistInfoViewModel
+import com.example.playlistmaker.ui.search.activity.TrackAdapter
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.core.parameter.parametersOf
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -29,6 +33,7 @@ class PlaylistInfoFragment : Fragment() {
 
     private var playlistId: Int? = null
     private val viewModel by viewModel<PlaylistInfoViewModel> { parametersOf(playlistId) }
+    private val trackAdapter = TrackAdapter({ launchPlayerScreen(it) }, { deleteTrackDialog(it) })
     private var _binding: FragmentPlaylistInfoBinding? = null
     private val binding get() = _binding!!
 
@@ -46,6 +51,7 @@ class PlaylistInfoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.recyclerView.adapter = trackAdapter
         binding.arrowBack.setOnClickListener { findNavController().navigateUp() }
         viewModel.observeState().observe(viewLifecycleOwner) { render(it) }
         viewModel.showPlaylistInfo()
@@ -64,6 +70,9 @@ class PlaylistInfoFragment : Fragment() {
             binding.coverImage.layoutParams = params
             binding.coverImage.setImageURI(state.imageFileName.toUri())
         }
+        trackAdapter.tracks.clear()
+        trackAdapter.tracks.addAll(state.tracks)
+        trackAdapter.notifyDataSetChanged()
     }
 
     private fun numberToString(number: Int, string0: String, string1: String, string2: String): String {
@@ -75,6 +84,25 @@ class PlaylistInfoFragment : Fragment() {
         if (n10 == 3 && n100 != 13) { s = "$number $string2" }
         if (n10 == 4 && n100 != 14) { s = "$number $string2" }
         return s
+    }
+
+    fun launchPlayerScreen(t: Track) {
+        findNavController().navigate(
+            R.id.action_playlistInfoFragment_to_playerFragment,
+            PlayerFragment.createArgs(t)
+        )
+    }
+
+    private fun deleteTrackDialog(track: Track): Boolean {
+        MaterialAlertDialogBuilder(requireContext(), R.style.MyAlertDialogTheme)
+            .setTitle("Хотите удалить трек?")
+            .setNegativeButton("НЕТ") { dialog, which ->
+            }
+            .setPositiveButton("ДА") { dialog, which ->
+                viewModel.deleteTrackFromPlaylist(track)
+            }
+            .show()
+        return true
     }
 
 }
