@@ -33,8 +33,8 @@ val viewModelModule = module {
         PlaylistsViewModel(get())
     }
 
-    viewModel {
-        CreatePlaylistViewModel(get(), get())
+    viewModel { (playlistId: Int?) ->
+        CreatePlaylistViewModel(playlistId,get(), get())
     }
 
     viewModel { (playlistId: Int) ->
