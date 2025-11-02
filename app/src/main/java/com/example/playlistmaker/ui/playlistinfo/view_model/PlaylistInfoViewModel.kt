@@ -7,12 +7,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.library.PlaylistInteractor
 import com.example.playlistmaker.domain.model.Track
+import com.example.playlistmaker.domain.sharing.SharingInteractor
 import com.example.playlistmaker.ui.playlistinfo.PlaylistInfoState
 import kotlinx.coroutines.launch
 
 class PlaylistInfoViewModel(
     private val playlistId: Int,
-    private val playlistInteractor: PlaylistInteractor
+    private val playlistInteractor: PlaylistInteractor,
+    private val sharingInteractor: SharingInteractor
 ) : ViewModel() {
 
     private val stateLiveData = MutableLiveData<PlaylistInfoState>()
@@ -29,6 +31,10 @@ class PlaylistInfoViewModel(
             playlistInteractor.deleteTrackFromPlaylist(track.trackId, playlistId)
             showPlaylistInfoSuspend()
         }
+    }
+
+    fun sharePlaylist() {
+        sharingInteractor.shareText("some text")
     }
 
     suspend fun showPlaylistInfoSuspend() {

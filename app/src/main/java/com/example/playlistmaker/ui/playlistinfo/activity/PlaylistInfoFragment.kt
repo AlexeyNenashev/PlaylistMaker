@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
@@ -34,6 +35,7 @@ class PlaylistInfoFragment : Fragment() {
     }
 
     private var playlistId: Int? = null
+    private var howManyTracks = 0
     private val viewModel by viewModel<PlaylistInfoViewModel> { parametersOf(playlistId) }
     private val trackAdapter = TrackAdapter({ launchPlayerScreen(it) }, { deleteTrackDialog(it) })
     private var _binding: FragmentPlaylistInfoBinding? = null
@@ -56,6 +58,8 @@ class PlaylistInfoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet2)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        binding.shareButton.setOnClickListener { sharePlaylist() }
+        binding.shareInBottomSheet.setOnClickListener { sharePlaylist() }
         binding.menuButton.setOnClickListener { bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED }
         binding.recyclerView.adapter = trackAdapter
         binding.arrowBack.setOnClickListener { findNavController().navigateUp() }
@@ -101,6 +105,7 @@ class PlaylistInfoFragment : Fragment() {
         trackAdapter.tracks.clear()
         trackAdapter.tracks.addAll(state.tracks)
         trackAdapter.notifyDataSetChanged()
+        howManyTracks = state.howManyTracks
     }
 
     private fun numberToString(number: Int, string0: String, string1: String, string2: String): String {
@@ -134,6 +139,17 @@ class PlaylistInfoFragment : Fragment() {
             }
             .show()
         return true
+    }
+
+    private fun sharePlaylist() {
+        if (howManyTracks > 0) {
+            binding.overlay2.visibility = View.VISIBLE
+            viewModel.sharePlaylist()
+            binding.overlay2.visibility = View.GONE
+        } else {
+            Toast.makeText(requireContext(),
+                getString(R.string.no_tracks_for_sharing), Toast.LENGTH_SHORT).show()
+        }
     }
 
 }
