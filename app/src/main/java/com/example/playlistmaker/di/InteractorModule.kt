@@ -14,6 +14,8 @@ import com.example.playlistmaker.domain.search.impl.TracksInteractorImpl
 import com.example.playlistmaker.domain.settings.SettingsInteractor
 import com.example.playlistmaker.domain.settings.impl.SettingsInteractorImpl
 import com.example.playlistmaker.domain.sharing.SharingInteractor
+import com.example.playlistmaker.ui.playlistinfo.view_model.StringProvider
+import com.example.playlistmaker.ui.playlistinfo.view_model.StringProviderImpl
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -45,6 +47,10 @@ val interactorModule = module {
 
     factory<SavePictureUseCase> {
         SavePictureUseCaseImpl(get())
+    }
+
+    factory<StringProvider> {
+        StringProviderImpl(androidContext())
     }
 
 }

@@ -27,7 +27,6 @@
     <string name="mediateka_empty">Ваша медиатека пуста</string>
     <string name="selected_tracks">Избранные треки</string>
     <string name="playlists">Плейлисты</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="menu_search">Поиск</string>
     <string name="menu_library">Медиатека</string>
@@ -40,4 +39,18 @@
     <string name="edit_playlist">Редактировать информацию</string>
     <string name="delete_playlist">Удалить плейлист</string>
     <string name="no_tracks_for_sharing">В этом плейлисте нет списка треков, которым можно поделиться</string>
+    <plurals name="tracksCount">
+        <item quantity="zero" >%d треков</item>
+        <item quantity="one"  >%d трек</item>
+        <item quantity="few"  >%d трека</item>
+        <item quantity="many" >%d треков</item>
+        <item quantity="other">%d треков</item>
+    </plurals>
+    <plurals name="minutesCount">
+        <item quantity="zero" >%d минут</item>
+        <item quantity="one"  >%d минута</item>
+        <item quantity="few"  >%d минуты</item>
+        <item quantity="many" >%d минут</item>
+        <item quantity="other">%d минут</item>
+    </plurals>
 </resources>
