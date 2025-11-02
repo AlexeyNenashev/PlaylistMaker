@@ -1,6 +1,5 @@
 package com.example.playlistmaker.ui.playlistinfo.view_model
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,6 +18,7 @@ class PlaylistInfoViewModel(
 
     private val stateLiveData = MutableLiveData<PlaylistInfoState>()
     fun observeState(): LiveData<PlaylistInfoState> = stateLiveData
+    private var state: PlaylistInfoState? = null
 
     fun showPlaylistInfo() {
         viewModelScope.launch {
@@ -34,7 +34,14 @@ class PlaylistInfoViewModel(
     }
 
     fun sharePlaylist() {
-        sharingInteractor.shareText("some text")
+        if (state != null) {
+            val howManyTracksString = numberToString(state?.howManyTracks ?: 0, "треков", "трек", "трека")
+            var textToShare = "${state?.name}\n${state?.description}\n$howManyTracksString"
+            state?.tracks?.forEachIndexed { index, track ->
+                textToShare += "\n${index + 1}. ${track.artistName} - ${track.trackName} (${track.trackTime})"
+            }
+            sharingInteractor.shareText(textToShare)
+        }
     }
 
     suspend fun showPlaylistInfoSuspend() {
@@ -47,14 +54,15 @@ class PlaylistInfoViewModel(
                 val sec: Int = minSec[1].toInt()
                 min * 60 + sec
             }
-            stateLiveData.postValue(PlaylistInfoState(
+            state = PlaylistInfoState(
                 playlist.name,
                 playlist.description,
                 playlist.imageUri,
                 secondsInPlaylist / 60,
                 tracks.size,
                 tracks
-            ))
+            )
+            stateLiveData.postValue(state!!)
         }
     }
 
@@ -62,6 +70,17 @@ class PlaylistInfoViewModel(
         viewModelScope.launch {
             playlistInteractor.deletePlaylistById(playlistId)
         }
+    }
+
+    private fun numberToString(number: Int, string0: String, string1: String, string2: String): String {
+        val n10  = number % 10
+        val n100 = number % 100
+        var s = "$number $string0"
+        if (n10 == 1 && n100 != 11) { s = "$number $string1" }
+        if (n10 == 2 && n100 != 12) { s = "$number $string2" }
+        if (n10 == 3 && n100 != 13) { s = "$number $string2" }
+        if (n10 == 4 && n100 != 14) { s = "$number $string2" }
+        return s
     }
 
 }
