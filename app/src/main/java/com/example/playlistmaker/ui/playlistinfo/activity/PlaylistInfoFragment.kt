@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
@@ -16,6 +17,7 @@ import com.example.playlistmaker.ui.player.activity.PlayerFragment
 import com.example.playlistmaker.ui.playlistinfo.PlaylistInfoState
 import com.example.playlistmaker.ui.playlistinfo.view_model.PlaylistInfoViewModel
 import com.example.playlistmaker.ui.search.activity.TrackAdapter
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.core.parameter.parametersOf
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -36,6 +38,7 @@ class PlaylistInfoFragment : Fragment() {
     private val trackAdapter = TrackAdapter({ launchPlayerScreen(it) }, { deleteTrackDialog(it) })
     private var _binding: FragmentPlaylistInfoBinding? = null
     private val binding get() = _binding!!
+    lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentPlaylistInfoBinding.inflate(inflater, container, false)
@@ -51,10 +54,31 @@ class PlaylistInfoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet2)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        binding.menuButton.setOnClickListener { bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED }
         binding.recyclerView.adapter = trackAdapter
         binding.arrowBack.setOnClickListener { findNavController().navigateUp() }
         viewModel.observeState().observe(viewLifecycleOwner) { render(it) }
         viewModel.showPlaylistInfo()
+
+        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        binding.overlay.visibility = View.GONE
+                    }
+                    else -> {
+                        binding.overlay.visibility = View.VISIBLE
+                    }
+                }
+            }
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                var alpha = slideOffset + 1f
+                if (alpha > 1f) { alpha = 1f }
+                binding.overlay.alpha = alpha
+            }
+        })
     }
 
     private fun render(state: PlaylistInfoState) {
@@ -62,13 +86,17 @@ class PlaylistInfoFragment : Fragment() {
         binding.playlistDescription.text = state.description
         binding.howManyMinutes.text = numberToString(state.howManyMinutes, "минут", "минута", "минуты")
         binding.howManyTracks.text = numberToString(state.howManyTracks, "треков", "трек", "трека")
+        binding.titleInBottomSheet.text = state.name
+        binding.numTracksInBottomSheet.text = numberToString(state.howManyTracks, "треков", "трек", "трека")
         if (state.imageFileName.isEmpty()) {
             binding.coverImage.setImageResource(R.drawable.placeholder_big)
+            binding.pictureInBottomSheet.setImageResource(R.drawable.placeholder_big)
         } else {
             val params = binding.coverImage.layoutParams as ConstraintLayout.LayoutParams
             params.setMargins(0, 0, 0, 0)
             binding.coverImage.layoutParams = params
             binding.coverImage.setImageURI(state.imageFileName.toUri())
+            binding.pictureInBottomSheet.setImageURI(state.imageFileName.toUri())
         }
         trackAdapter.tracks.clear()
         trackAdapter.tracks.addAll(state.tracks)
@@ -94,12 +122,15 @@ class PlaylistInfoFragment : Fragment() {
     }
 
     private fun deleteTrackDialog(track: Track): Boolean {
+        binding.overlay.visibility = View.VISIBLE
         MaterialAlertDialogBuilder(requireContext(), R.style.MyAlertDialogTheme)
             .setTitle("Хотите удалить трек?")
             .setNegativeButton("НЕТ") { dialog, which ->
+                binding.overlay.visibility = View.GONE
             }
             .setPositiveButton("ДА") { dialog, which ->
                 viewModel.deleteTrackFromPlaylist(track)
+                binding.overlay.visibility = View.GONE
             }
             .show()
         return true

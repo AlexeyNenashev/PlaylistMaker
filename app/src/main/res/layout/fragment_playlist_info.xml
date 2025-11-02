@@ -110,11 +110,13 @@
             android:layout_marginHorizontal="16dp">
 
             <ImageView
+                android:id="@+id/shareButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/share_black"/>
 
             <ImageView
+                android:id="@+id/menuButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -154,6 +156,131 @@
             tools:itemCount="5" />
 
     </LinearLayout>
+
+
+
+
+
+    <View android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99000000"
+        android:visibility="gone"/>
+
+
+
+
+    <LinearLayout
+        android:id="@+id/standard_bottom_sheet2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/bottom_sheet_background"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="383dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/bottom_sheet_bar"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="12dp"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginHorizontal="12dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/pictureInBottomSheet"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center_vertical"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/roundedImageForBottomSheet"
+                tools:src="@drawable/placeholder_big"
+                android:layout_marginEnd="8dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/titleInBottomSheet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="?attr/colorOnSecondary"
+                    android:fontFamily="@font/ys_display_regular"
+                    android:textSize="16sp"
+                    tools:text="Название"/>
+
+                <TextView
+                    android:id="@+id/numTracksInBottomSheet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="?attr/colorPrimaryVariant"
+                    android:fontFamily="@font/ys_display_regular"
+                    android:textSize="11sp"
+                    tools:text="98 треков"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/shareInBottomSheet"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="16dp"
+            android:textColor="?attr/colorOnSecondary"
+            android:fontFamily="@font/ys_display_regular"
+            android:textSize="16sp"
+            android:text="@string/share_playlist"/>
+
+        <TextView
+            android:id="@+id/editInBottomSheet"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="16dp"
+            android:textColor="?attr/colorOnSecondary"
+            android:fontFamily="@font/ys_display_regular"
+            android:textSize="16sp"
+            android:text="@string/edit_playlist"/>
+
+        <TextView
+            android:id="@+id/deleteInBottomSheet"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="16dp"
+            android:textColor="?attr/colorOnSecondary"
+            android:fontFamily="@font/ys_display_regular"
+            android:textSize="16sp"
+            android:text="@string/delete_playlist"/>
+
+    </LinearLayout>
+
+
+
+
+
+    <View android:id="@+id/overlay2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99000000"
+        android:visibility="gone"/>
 
 
 
