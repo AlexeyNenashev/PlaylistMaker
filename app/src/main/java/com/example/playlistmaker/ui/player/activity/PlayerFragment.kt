@@ -17,6 +17,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlayerBinding
 import com.example.playlistmaker.domain.model.Playlist
 import com.example.playlistmaker.domain.model.Track
+import com.example.playlistmaker.ui.createplaylist.activity.CreatePlaylistFragment
 import com.example.playlistmaker.ui.player.AddTrackToPlaylistResult
 import com.example.playlistmaker.ui.player.PlayerState
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
@@ -73,9 +74,9 @@ class PlayerFragment : Fragment() {
                 }
             }
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                var alpha = slideOffset + 1f
-                if (alpha > 1f) { alpha = 1f }
-                binding.overlay.alpha = alpha
+            //    var alpha = slideOffset + 1f
+            //    if (alpha > 1f) { alpha = 1f }
+            //    binding.overlay.alpha = alpha
             }
         })
 
@@ -166,7 +167,10 @@ class PlayerFragment : Fragment() {
     }
 
     private fun launchNewPlaylistScreen() {
-        findNavController().navigate(R.id.action_playerFragment_to_createPlaylistFragment)
+        findNavController().navigate(
+            R.id.action_playerFragment_to_createPlaylistFragment,
+            CreatePlaylistFragment.createArgs(CreatePlaylistFragment.NEW_PLAYLIST)
+        )
     }
 
     private fun addTrackToPlaylist(playlist: Playlist, position: Int) {

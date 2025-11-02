@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistInfoBinding
 import com.example.playlistmaker.domain.model.Track
+import com.example.playlistmaker.ui.createplaylist.activity.CreatePlaylistFragment
 import com.example.playlistmaker.ui.player.activity.PlayerFragment
 import com.example.playlistmaker.ui.playlistinfo.PlaylistInfoState
 import com.example.playlistmaker.ui.playlistinfo.view_model.PlaylistInfoViewModel
@@ -171,6 +172,12 @@ class PlaylistInfoFragment : Fragment() {
             .show()
     }
 
-    private fun editPlaylist() {}
+    private fun editPlaylist() {
+        findNavController().navigate(
+            R.id.action_playlistInfoFragment_to_createPlaylistFragment,
+            CreatePlaylistFragment.createArgs(playlistId ?: CreatePlaylistFragment.NEW_PLAYLIST)
+        )
+    }
+
 
 }

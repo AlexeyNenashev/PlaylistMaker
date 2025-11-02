@@ -17,21 +17,33 @@ import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import androidx.activity.OnBackPressedCallback
+import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
 import com.example.playlistmaker.ui.createplaylist.view_model.CreatePlaylistViewModel
+import com.example.playlistmaker.ui.playlistinfo.activity.PlaylistInfoFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CreatePlaylistFragment : Fragment() {
 
+    companion object {
+        private const val ARGS_PLAYLIST_ID = "playlist_id"
+        fun createArgs(playlistId: Int): Bundle = bundleOf(ARGS_PLAYLIST_ID to playlistId)
+        const val NEW_PLAYLIST = -1
+    }
+
+    private var playlistId: Int? = null
     private val viewModel: CreatePlaylistViewModel by viewModel()
     private var _binding: FragmentCreatePlaylistBinding? = null
     private val binding get() = _binding!!
-    private var textWatcher: TextWatcher? = null
+    //private var textWatcher: TextWatcher? = null
     private var imageUri: Uri? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentCreatePlaylistBinding.inflate(inflater, container, false)
+        playlistId = requireArguments().getInt(ARGS_PLAYLIST_ID)
+        if (playlistId == NEW_PLAYLIST) { playlistId = null }
+        //else { Toast.makeText(requireContext(), "Плейлист $playlistId подгружен", Toast.LENGTH_SHORT).show() }
         val view = binding.root
         return view
     }
