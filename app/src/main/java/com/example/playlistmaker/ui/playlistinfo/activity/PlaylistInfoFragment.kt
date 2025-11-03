@@ -96,11 +96,8 @@ class PlaylistInfoFragment : Fragment() {
         val tracksString = resources.getQuantityString(R.plurals.tracksCount, state.howManyTracks, state.howManyTracks)
         binding.howManyMinutes.text = minutesString
         binding.howManyTracks.text = tracksString
-        //binding.howManyMinutes.text = numberToString(state.howManyMinutes, "минут", "минута", "минуты")
-        //binding.howManyTracks.text = numberToString(state.howManyTracks, "треков", "трек", "трека")
         binding.titleInBottomSheet.text = state.name
         binding.numTracksInBottomSheet.text = minutesString
-        //binding.numTracksInBottomSheet.text = numberToString(state.howManyTracks, "треков", "трек", "трека")
         if (state.imageFileName.isEmpty()) {
             binding.coverImage.setImageResource(R.drawable.placeholder_big)
             binding.pictureInBottomSheet.setImageResource(R.drawable.placeholder_big)
@@ -117,17 +114,6 @@ class PlaylistInfoFragment : Fragment() {
         howManyTracks = state.howManyTracks
         playlistName = state.name
     }
-
-    //private fun numberToString(number: Int, string0: String, string1: String, string2: String): String {
-    //    val n10  = number % 10
-    //    val n100 = number % 100
-    //    var s = "$number $string0"
-    //    if (n10 == 1 && n100 != 11) { s = "$number $string1" }
-    //    if (n10 == 2 && n100 != 12) { s = "$number $string2" }
-    //    if (n10 == 3 && n100 != 13) { s = "$number $string2" }
-    //    if (n10 == 4 && n100 != 14) { s = "$number $string2" }
-    //    return s
-    //}
 
     fun launchPlayerScreen(t: Track) {
         findNavController().navigate(

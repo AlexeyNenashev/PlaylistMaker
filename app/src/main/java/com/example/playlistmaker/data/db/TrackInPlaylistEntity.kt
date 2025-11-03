@@ -2,6 +2,7 @@ package com.example.playlistmaker.data.db
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlin.String
 
 @Entity(tableName = "track_in_playlist_table")
 data class TrackInPlaylistEntity(
@@ -17,4 +18,5 @@ data class TrackInPlaylistEntity(
     val primaryGenreName: String, // Жанр трека
     val country: String, // Страна исполнителя
     val previewUrl: String, // Ссылка на аудио
+    val playlistsCount: Int // Сколько плейлистов содержит этот трек
 )

@@ -9,6 +9,7 @@ import com.example.playlistmaker.domain.library.PlaylistInteractor
 import com.example.playlistmaker.domain.model.Track
 import com.example.playlistmaker.domain.sharing.SharingInteractor
 import com.example.playlistmaker.ui.playlistinfo.PlaylistInfoState
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class PlaylistInfoViewModel(
@@ -42,7 +43,6 @@ class PlaylistInfoViewModel(
                 state?.howManyTracks ?: 0,
                 state?.howManyTracks ?: 0
             )
-            //val howManyTracksString = numberToString(state?.howManyTracks ?: 0, "треков", "трек", "трека")
             var textToShare = "${state?.name}\n${state?.description}\n$howManyTracksString"
             state?.tracks?.forEachIndexed { index, track ->
                 textToShare += "\n${index + 1}. ${track.artistName} - ${track.trackName} (${track.trackTime})"
@@ -74,20 +74,10 @@ class PlaylistInfoViewModel(
     }
 
     fun deletePlaylist() {
-        viewModelScope.launch {
+        GlobalScope.launch {
             playlistInteractor.deletePlaylistById(playlistId)
         }
     }
 
-    //private fun numberToString(number: Int, string0: String, string1: String, string2: String): String {
-    //    val n10  = number % 10
-    //    val n100 = number % 100
-    //    var s = "$number $string0"
-    //    if (n10 == 1 && n100 != 11) { s = "$number $string1" }
-    //    if (n10 == 2 && n100 != 12) { s = "$number $string2" }
-    //    if (n10 == 3 && n100 != 13) { s = "$number $string2" }
-    //    if (n10 == 4 && n100 != 14) { s = "$number $string2" }
-    //    return s
-    //}
 
 }

@@ -1,5 +1,6 @@
 package com.example.playlistmaker.data.library.impl
 
+import android.util.Log
 import com.example.playlistmaker.data.db.PlaylistDao
 import com.example.playlistmaker.data.db.PlaylistDbConverter
 import com.example.playlistmaker.data.db.PlaylistEntity
@@ -36,15 +37,10 @@ class PlaylistRepositoryImpl(
     }
 
     override fun addTrackToPlaylist(track: Track, playlist: Playlist): Flow<Playlist> = flow {
-        trackInPlaylistDao.insertTrack(trackDbConverter.mapInPlaylist(track))
+        addTrackToTable(track)
         val updatedTrackIds = ArrayList<Int>(playlist.trackIds)
         updatedTrackIds.add(track.trackId)
-        val updatedPlaylist = Playlist(
-            playlist.id,
-            playlist.name,
-            playlist.description,
-            playlist.imageUri,
-            trackIds = updatedTrackIds)
+        val updatedPlaylist = playlist.copy(trackIds = updatedTrackIds)
         playlistDao.updatePlaylist(playlistDbConverter.map(updatedPlaylist))
         emit(updatedPlaylist)
     }
@@ -65,22 +61,52 @@ class PlaylistRepositoryImpl(
     }
 
     override suspend fun deleteTrackFromPlaylist(trackId: Int, playlistId: Int) {
+        deleteTrackFromTable(trackId)
         val playlist: Playlist = playlistDbConverter.map(
             playlistDao.getPlaylistById(playlistId)
         )
         val updatedTrackIds = ArrayList<Int>(playlist.trackIds)
         updatedTrackIds.remove(trackId)
-        val updatedPlaylist = Playlist(
-            playlist.id,
-            playlist.name,
-            playlist.description,
-            playlist.imageUri,
-            trackIds = updatedTrackIds)
+        val updatedPlaylist = playlist.copy(trackIds = updatedTrackIds)
         playlistDao.updatePlaylist(playlistDbConverter.map(updatedPlaylist))
     }
 
     override suspend fun deletePlaylistById(playlistId: Int) {
+        //Log.d("playlists","deleting playlist $playlistId...")
+        val playlist: Playlist = playlistDbConverter.map(
+            playlistDao.getPlaylistById(playlistId)
+        )
+        playlist.trackIds.forEach { trackId ->
+            deleteTrackFromTable(trackId)
+        }
         playlistDao.deletePlaylistById(playlistId)
+        //Log.d("playlists","Playlist $playlistId deleted.")
+    }
+
+    private suspend fun addTrackToTable(track: Track) {
+        val tracksInTable = trackInPlaylistDao.getTrackById(track.trackId)
+        if (tracksInTable.isEmpty()) {
+            trackInPlaylistDao.insertTrack(trackDbConverter.mapInPlaylist(track))
+            //Log.d("playlists","Track ${track.trackId} added (count = 1)")
+        } else {
+            val updatedPlaylistsCount = tracksInTable[0].playlistsCount + 1
+            trackInPlaylistDao.updateTrack(tracksInTable[0].copy(playlistsCount = updatedPlaylistsCount))
+            //Log.d("playlists","Track ${track.trackId} incremented (count = $updatedPlaylistsCount)")
+        }
+    }
+
+    private suspend fun deleteTrackFromTable(trackId: Int) {
+        val tracksInTable = trackInPlaylistDao.getTrackById(trackId)
+        if (tracksInTable.isNotEmpty()) {
+            val updatedPlaylistsCount = tracksInTable[0].playlistsCount - 1
+            if (updatedPlaylistsCount > 0) {
+                trackInPlaylistDao.updateTrack(tracksInTable[0].copy(playlistsCount = updatedPlaylistsCount))
+                //Log.d("playlists","Track $trackId decremented (count = $updatedPlaylistsCount)")
+            } else {
+                trackInPlaylistDao.deleteTrackById(trackId)
+                //Log.d("playlists","Track $trackId deleted")
+            }
+        }
     }
 
 }
