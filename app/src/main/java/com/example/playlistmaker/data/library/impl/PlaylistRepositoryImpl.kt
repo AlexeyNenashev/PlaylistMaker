@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.playlistmaker.data.db.PlaylistDao
 import com.example.playlistmaker.data.db.PlaylistDbConverter
 import com.example.playlistmaker.data.db.PlaylistEntity
+import com.example.playlistmaker.data.db.TrackDao
 import com.example.playlistmaker.data.db.TrackDbConverter
 import com.example.playlistmaker.data.db.TrackInPlaylistDao
 import com.example.playlistmaker.domain.library.PlaylistRepository
@@ -16,7 +17,8 @@ class PlaylistRepositoryImpl(
     private val playlistDao: PlaylistDao,
     private val playlistDbConverter: PlaylistDbConverter,
     private val trackInPlaylistDao: TrackInPlaylistDao,
-    private val trackDbConverter: TrackDbConverter
+    private val trackDbConverter: TrackDbConverter,
+    private val trackDao: TrackDao
 ) : PlaylistRepository {
 
     override suspend fun createPlaylist(playlist: Playlist) {
@@ -50,10 +52,12 @@ class PlaylistRepositoryImpl(
             playlistDao.getPlaylistById(playlistId)
         )
         if (doTracksRequest) {
-            val tracksInPlaylists = trackInPlaylistDao.getAllTracksInPlaylists()
+            val tracksInPlaylist = trackInPlaylistDao.getAllTracksInPlaylists()
                 .filter { it.trackId in playlist.trackIds }
                 .map { track -> trackDbConverter.mapInPlaylist(track) }
-            emit(Pair(playlist, tracksInPlaylists))
+            val selectedTrackIDs = trackDao.getTrackIDs()
+            tracksInPlaylist.forEach { it.isFavorite = selectedTrackIDs.contains(it.trackId) }
+            emit(Pair(playlist, tracksInPlaylist))
         }
         else {
             emit(Pair(playlist, emptyList()))
