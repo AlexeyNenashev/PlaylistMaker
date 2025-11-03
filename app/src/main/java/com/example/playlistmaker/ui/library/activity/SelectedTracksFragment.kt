@@ -20,7 +20,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class SelectedTracksFragment : Fragment() {
 
     private lateinit var onClickDebounce: (Track) -> Unit
-    private val trackAdapter = TrackAdapter { onClickDebounce(it) }
+    private val trackAdapter = TrackAdapter( { onClickDebounce(it) }, null)
 
     private var _binding: FragmentSelectedTracksBinding? = null
     private val binding get() = _binding!!

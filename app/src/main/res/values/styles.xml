@@ -36,6 +36,16 @@
         <item name="backgroundTint">@color/blue</item>
     </style>
 
+    <style name="MyAlertDialogTheme2" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="buttonBarPositiveButtonStyle">@style/MyButton2</item>
+        <item name="buttonBarNegativeButtonStyle">@style/MyButton2</item>
+    </style>
+
+    <style name="MyButton2" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="backgroundTint">@color/white</item>
+        <item name="android:textColor">@color/blue</item>
+    </style>
+
     <style name="roundedImageForCard" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">8dp</item>

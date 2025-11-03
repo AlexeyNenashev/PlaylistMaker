@@ -48,7 +48,8 @@ class TrackDbConverter {
             track.year,
             track.primaryGenreName,
             track.country,
-            track.previewUrl
+            track.previewUrl,
+            playlistsCount = 1
         )
     }
 

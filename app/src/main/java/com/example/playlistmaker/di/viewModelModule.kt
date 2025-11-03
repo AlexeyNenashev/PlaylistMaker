@@ -5,6 +5,7 @@ import com.example.playlistmaker.ui.createplaylist.view_model.CreatePlaylistView
 import com.example.playlistmaker.ui.library.view_model.PlaylistsViewModel
 import com.example.playlistmaker.ui.library.view_model.SelectedTracksViewModel
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
+import com.example.playlistmaker.ui.playlistinfo.view_model.PlaylistInfoViewModel
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
 import com.example.playlistmaker.ui.settings.view_model.SettingsViewModel
 import org.koin.dsl.module
@@ -32,8 +33,13 @@ val viewModelModule = module {
         PlaylistsViewModel(get())
     }
 
-    viewModel {
-        CreatePlaylistViewModel(get(), get())
+    viewModel { (playlistId: Int?) ->
+        CreatePlaylistViewModel(playlistId,get(), get())
     }
+
+    viewModel { (playlistId: Int) ->
+        PlaylistInfoViewModel(playlistId, get(), get(), get())
+    }
+
 
 }
